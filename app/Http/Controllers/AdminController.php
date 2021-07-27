@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Members;
-use App\Models\User;
 
-class HomeController extends Controller
+class AdminController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -22,11 +20,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function login()
     {
-        $getMembersCount = Members::get()->count();
-        $getUserCount = User::get()->count();
-        return view('index')->with(['memcount'=>$getMembersCount,'usercount'=>$getUserCount]);
+        return view('adminlogin');
     }
 
 }

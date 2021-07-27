@@ -292,7 +292,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{$usercount}}</h3>
 
                 <p>Active User</p>
               </div>
@@ -307,7 +307,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>{{53}}</h3>
+                <h3>{{$memcount}}</h3>
 
                 <p>Members</p>
               </div>
@@ -322,7 +322,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+                <h3>{{$usercount}}</h3>
 
                 <p>User Registration</p>
               </div>

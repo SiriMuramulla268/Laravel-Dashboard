@@ -36,14 +36,3 @@ Route::post('/adduser',[App\Http\Controllers\UserController::class, 'addUser'])-
 Route::get('/userlist',[App\Http\Controllers\UserController::class, 'userlist'])->name('user-list');
 
 
-// Route::get('/admin', function () {
-//     return view('index');
-// });
-// Route::get('/register', function () {
-//     return redirect('register');
-// });
-// Route::get('/userlist', function () {
-//     return view('userlist');
-// });
-// Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
-
