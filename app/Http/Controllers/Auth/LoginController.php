@@ -1,16 +1,17 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Login Controller
+    |  Controller
     |--------------------------------------------------------------------------
     |
     | This controller handles authenticating users for the application and
@@ -22,12 +23,12 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Where to redirect users after .
      *
      * @var string
      */
     // protected $redirectTo = RouteServiceProvider::HOME;
-    protected $redirectTo = '/admin-dashboard';
+    protected $redirectTo = '/admin/dashboard';
 
     /**
      * Create a new controller instance.
@@ -37,6 +38,13 @@ class LoginController extends Controller
     public function __construct()
     {
         // $this->middleware('guest')->except('logout');
+    }
+   
+    public function authenticate(Request $request){
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            return redirect()->intended('admin/dashboard');
+        }
     }
 
     public function logOut() {

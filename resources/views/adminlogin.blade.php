@@ -26,7 +26,7 @@
       <p class="login-box-msg">Sign In</p>
 
       <!-- action="../../admin" -->
-      <form  method="POST" action="{{ route('login') }}">
+      <form  method="POST" action="{{ route('logins') }}">
         @csrf
         <div class="input-group mb-3">
           <input type="email" id="email" name="email" class="form-control" placeholder="Email">

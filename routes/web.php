@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,26 +16,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/admin-dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('admin-dashboard');
 
+Route::post('/logins',[LoginController::class, 'authenticate'])->name('logins');
+
+Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin/dashboard');
+
+Route::post('/adduser',[UserController::class, 'addUser'])->name('add-user');
+
+Route::get('/admin/userlist',[UserController::class, 'userlist'])->name('user-list');
+
+Route::get('admin/logout',[LoginController::class, 'logOut']);
 
 Route::get('/admin', function () {
     return view('adminlogin');
 });
 
-Route::get('/logout',[App\Http\Controllers\Auth\LoginController::class, 'logOut']);
+Route::get('admin/userform', function () {
+    return view('userform',['tabname'=>'userform']);
+})->middleware('auth');
 
-Route::get('/userform', function () {
-    return view('userform');
-});
-Route::get('/logoutpage', function () {
-    return view('logoutpage');
-});
-
-Route::post('/adduser',[App\Http\Controllers\UserController::class, 'addUser'])->name('add-user');
-
-Route::get('/userlist',[App\Http\Controllers\UserController::class, 'userlist'])->name('user-list');
-
-
+Route::get('admin/logoutpage', function () {
+    return view('logoutpage',['tabname'=>'logout']);
+})->middleware('auth');
