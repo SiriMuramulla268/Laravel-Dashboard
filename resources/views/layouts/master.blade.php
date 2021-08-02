@@ -13,23 +13,18 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
   <link rel="stylesheet" href="../vendors/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="../vendors/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="../vendors/plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../vendors/dist/css/adminlte.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="../vendors/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="../vendors/plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="../vendors/plugins/summernote/summernote-bs4.min.css">
-  <!-- DataTables -->
-    <link rel="stylesheet" href="../vendors/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../vendors/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../vendors/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 </head>
+<style>
+    /* to show form clientside error in red */
+    label.error {
+         color: #dc3545;
+         font-size: 12px;
+    }
+    /* to remove extra pagination style  */
+    .w-5{display:none} 
+</style>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     @yield('content')
@@ -80,7 +75,7 @@
                     @endif
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
-                        Dashboard {{$tabname}}
+                        Dashboard
                         <!-- <i class="right fas fa-angle-left"></i> -->
                     </p>
                     </a>
@@ -94,7 +89,7 @@
                     @else
                         <a href="#" class="nav-link">
                     @endif
-                    <i class="nav-icon fas fa-copy"></i>
+                    <i class="nav-icon fas fa-users"></i>
                     <p>
                         Users
                         <!-- <i class="fas fa-angle-left right"></i> -->
@@ -127,11 +122,11 @@
 
                 <li class="nav-item menu-open">
                     @if ($tabname == 'logout')
-                        <a href="../../admin/logoutpage" class="nav-link active">
+                        <a href="../../admin/logout" class="nav-link active">
                     @else
-                        <a href="../../admin/logoutpage" class="nav-link">
+                        <a href="../../admin/logout" class="nav-link">
                     @endif
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
                     <p>
                         Logout
                         <!-- <i class="right fas fa-angle-left"></i> -->
@@ -149,7 +144,7 @@
 
     @section('footer')
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+            <strong>Copyright &copy; 2021 <a href="https://adminlte.io">{{config('app.name')}}</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
             <b>Version</b> 3.1.0
@@ -168,62 +163,39 @@
     </script>
     <!-- Bootstrap 4 -->
     <script src="../vendors/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="../vendors/plugins/chart.js/Chart.min.js"></script>
-    <!-- Sparkline -->
-    <script src="../vendors/plugins/sparklines/sparkline.js"></script>
-    <!-- JQVMap -->
-    <script src="../vendors/plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="../vendors/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="../vendors/plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="../vendors/plugins/moment/moment.min.js"></script>
-    <script src="../vendors/plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="../vendors/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- Summernote -->
-    <script src="../vendors/plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="../vendors/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../vendors/dist/js/adminlte.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="../vendors/dist/js/demo.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="../vendors/dist/js/pages/dashboard.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 
-    <!-- DataTables  & Plugins -->
-    <script src="../vendors/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="../vendors/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../vendors/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../vendors/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="../vendors/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="../vendors/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="../vendors/plugins/jszip/jszip.min.js"></script>
-    <script src="../vendors/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="../vendors/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="../vendors/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="../vendors/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="../vendors/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../vendors/dist/js/adminlte.min.js"></script>
     <!-- Page specific script -->
     <script>
     $(function () {
-        $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        });
+        $("#adduser").validate({
+            rules: {
+                name: "required",
+                email: "required",
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                company: "required",
+                mobile: {   
+                    required: true,
+                    minlength: 10
+                },
+            },
+            messages: {
+                name: "Name is required",
+                email: "Email is required",
+                password: {
+                    required: "Password is required",
+                    minlength: "Password must be of 6 digits"
+                },
+                mobile: {
+                    required: "Mobile number is required",
+                    minlength: "Mobile number must be of 10 digits"
+                },
+                company: "Company is required",
+            }
+        }); 
     });
     </script>
 </body>

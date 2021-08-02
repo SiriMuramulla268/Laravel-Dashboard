@@ -24,10 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $getMembersCount = Members::get()->count();
-        $getUserCount = User::get()->count();
-        return view('index')->with(['memcount'=>$getMembersCount,'usercount'=>$getUserCount,'tabname'=>'dashboard']);
+        $getUserCount = User::count();
+        return view('admin/index')->with(['usercount'=>$getUserCount,'tabname'=>'dashboard']);
     }
-
-   
 }

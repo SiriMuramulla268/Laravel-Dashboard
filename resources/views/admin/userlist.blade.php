@@ -1,5 +1,6 @@
 @extends('layouts.master')
-@section('title','AdminLTE 3 | Dashboard')
+@extends('layouts.datatable')
+@section('title',config('app.name'))
 @section('content')
   @section('sidebar')
       @parent
@@ -12,12 +13,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>DataTables</h1>
+            <h1>User List</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">DataTables</li>
+              <!-- <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">DataTables</li> -->
             </ol>
           </div>
         </div>
@@ -55,16 +56,15 @@
                     </tr>
                     @endforeach
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Id  </th>
-                    <th>Name</th>
-                    <th>Company</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                  </tr>
-                  </tfoot>
                 </table>
+                </br>
+                <div class="row">
+                  <div class="col-8">
+                  </div>
+                  <div class="col-4">
+                    <span >{{$memberdata->links()}}</span>
+                  </div>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>

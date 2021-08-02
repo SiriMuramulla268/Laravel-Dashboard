@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','AdminLTE 3 | Dashboard')
+@section('title',config('app.name'))
 @section('content')
   @section('sidebar')
       @parent
@@ -26,7 +26,7 @@
           <div class="col-md-12">
             <!-- general form elements -->
           
-              <h1>Click To </h1> <a href="logout" class="btn btn-primary">Logout</a>
+              <h1>Click here to Logout  <a href="logout" class="btn btn-primary">Logout</a> </h1> 
                 
             <!-- /.card -->
           </div>

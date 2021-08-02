@@ -18,25 +18,21 @@ use App\Http\Controllers\UserController;
 
 // Auth::routes();
 
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/', function () {
+        return view('admin/adminlogin');
+    });
+    Route::post('/logins',[LoginController::class, 'authenticate'])->name('logins');
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('admin/dashboard');
+    Route::post('/adduser',[UserController::class, 'addUser'])->name('add-user');
+    Route::get('/userlist',[UserController::class, 'userlist'])->name('user-list');
+    Route::get('/logout',[LoginController::class, 'logOut']);
+    Route::get('/userform', function () {
+        return view('admin/userform',['tabname'=>'userform']);
+    })->middleware('auth');
+    Route::get('/logoutpage', function () {
+        return view('admin/logoutpage',['tabname'=>'logout']);
+    })->middleware('auth');
+}); 
 
-Route::post('/logins',[LoginController::class, 'authenticate'])->name('logins');
 
-Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin/dashboard');
-
-Route::post('/adduser',[UserController::class, 'addUser'])->name('add-user');
-
-Route::get('/admin/userlist',[UserController::class, 'userlist'])->name('user-list');
-
-Route::get('admin/logout',[LoginController::class, 'logOut']);
-
-Route::get('/admin', function () {
-    return view('adminlogin');
-});
-
-Route::get('admin/userform', function () {
-    return view('userform',['tabname'=>'userform']);
-})->middleware('auth');
-
-Route::get('admin/logoutpage', function () {
-    return view('logoutpage',['tabname'=>'logout']);
-})->middleware('auth');

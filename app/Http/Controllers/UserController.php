@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Members;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -12,28 +14,28 @@ class UserController extends Controller
     }
 
     public function addUser(Request $request){
-       
         $validator = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email',
+            'name' => 'required|unique:users|regex:/^([^0-9]*)$/',
+            'email' => 'required|string|unique:users|email',
             'company' => 'required|string',
             'mobile' => 'required|min:10'
         ]);
 
         if($validator){
             $data = $request->all();
-            $insertMember = Members::insert(['name'=>$data['name'],'email'=>$data['email'],'company'=>$data['company'],'mobile'=>$data['mobile']]);
-            if($insertMember){
-                return redirect('admin/userform')->with('success', 'User Added Successful');
+            $insertUser = User::insert(['name'=>$data['name'],'email'=>$data['email'],'company'=>$data['company'],'mobile'=>(int)$data['mobile'],'password'=>Hash::make($data['password'])]);
+            if($insertUser){
+                return redirect('admin/userform')->with('status', 'User Added Successfully');
+            }else{
+                return redirect('admin/userform')->with('status', 'Failed');
             }
         }
     }
 
     public function userList(){
-        $getMembers = Members::get();
+        $getMembers = User::paginate(2);
         if($getMembers){
-            $data = json_decode($getMembers,true);
-            return view('userlist',['memberdata'=>$data,'tabname'=>'userlist']);
+            return view('admin/userlist',['memberdata'=>$getMembers,'tabname'=>'userlist']);
         }
     }
 

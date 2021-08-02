@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','AdminLTE 3 | Dashboard')
+@section('title',config('app.name'))
 @section('content')
   @section('sidebar')
       @parent
@@ -11,9 +11,9 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <!-- <div class="col-sm-6">
+          <div class="col-sm-6">
             <h1>User Form</h1>
-          </div> -->
+          </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -31,42 +31,38 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{route('add-user')}}" method="POST"> 
+              <form action="{{route('add-user')}}" method="POST" id="adduser" autocomplete="off"> 
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Name</label><span class="text-danger">*</span>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
                   </div>
                   <div class="form-group">
-                    <label for="company">Company</label>
+                    <label for="email">Email</label><span class="text-danger">*</span>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" >
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label><span class="text-danger">*</span>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                  </div>
+                  <div class="form-group">
+                    <label for="company">Company</label><span class="text-danger">*</span>
                     <input type="text" class="form-control" id="company" name="company" placeholder="Enter company">
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email">
-                  </div>
-                  <div class="form-group">
-                    <label for="mobile">Mobile</label>
-                    <input type="number" class="form-control" id="mobile" name="mobile" placeholder="Mobile">
+                    <label for="mobile">Mobile</label><span class="text-danger">*</span>
+                    <input type="number" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile">
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit </button>
                   @if(session('status'))
-                    <span class="text-success">{{ session('status') ?? ''  }}</span>
+                    <span class="text-success"> {{ session('status') ?? ''  }}</span>
                   @endif
 
-                  @if ($errors->any())
-                      <div class="text-danger">
-                          <ul>
-                              @foreach ($errors->all() as $error)
-                                  <li>{{ $error }}</li>
-                              @endforeach
-                          </ul>
-                      </div>
-                  @endif
+                  
                 </div>
                 
               </form>

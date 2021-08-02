@@ -20,7 +20,7 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function ()
+    public function login()
     {
         return view('admin');
     }
