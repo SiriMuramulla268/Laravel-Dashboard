@@ -121,19 +121,13 @@
                 </li>
 
                 <li class="nav-item menu-open">
-                    @if ($tabname == 'logout')
-                        <a href="../../admin/logout" class="nav-link active">
-                    @else
-                        <a href="../../admin/logout" class="nav-link">
-                    @endif
+                    <a href="../../admin/logout" class="nav-link ">
                     <i class="nav-icon fas fa-sign-out-alt"></i>
                     <p>
                         Logout
-                        <!-- <i class="right fas fa-angle-left"></i> -->
                     </p>
                     </a>
                 </li>
-
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->

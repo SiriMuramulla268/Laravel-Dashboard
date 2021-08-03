@@ -16,8 +16,6 @@ use App\Http\Controllers\UserController;
 |
 */
 
-// Auth::routes();
-
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/', function () {
         return view('admin/adminlogin');
@@ -29,9 +27,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/logout',[LoginController::class, 'logOut']);
     Route::get('/userform', function () {
         return view('admin/userform',['tabname'=>'userform']);
-    })->middleware('auth');
-    Route::get('/logoutpage', function () {
-        return view('admin/logoutpage',['tabname'=>'logout']);
     })->middleware('auth');
 }); 
 
