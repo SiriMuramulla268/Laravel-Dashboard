@@ -28,10 +28,8 @@
 
 </head>
 <body class="datepicker_mobile_full"><!-- Remove this class to disable datepicker full on mobile -->
-    <div id="page">
-        @yield('content')
-
-        @section('header')
+    <div id="page" class="theia-exception">
+        
         <header class="header menu_fixed">
             <div id="preloader"><div data-loader="circle-side"></div></div><!-- /Page Preload -->
             <div id="logo">
@@ -55,26 +53,18 @@
             </a>
             <nav id="menu" class="main-menu">
                 <ul>
-                    <li><span><a href="#0">Home</a></span>
-                        <ul>
-                            <li><a href="index.html">Home Default</a></li>
-                        </ul>
+                    <li><span><a href="/">Home</a></span>
                     </li>
-                    <li><span><a href="#0">Hotels</a></span>
-                        <ul>
-                            <li><a href="hotels-half-screen-map.html">Hotel List</a></li>
-                        </ul>
+                    <li><span><a href="hotel-list">Hotels</a></span>
                     </li>
                     
                 </ul>
             </nav>
         </header>
         <!-- /header -->
-        @show
 
-        
+        @yield('content')
 
-        @section('footer')
         <footer>
             <div class="container margin_60_35">
                 <div class="row">
@@ -99,7 +89,7 @@
                             <li><a href="login.html">Login</a></li>
                             <li><a href="register.html">Register</a></li>
                             <li><a href="blog.html">News &amp; Events</a></li>
-                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="../contacts">Contacts</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -157,10 +147,9 @@
             </div>
         </footer>
 	    <!--/footer-->
-        @show
+       
     </div>
 
-    @section('signin')
     <!-- Sign In Popup -->
     <div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
         <div class="small-dialog-header">
@@ -208,8 +197,7 @@
         <!--form -->
     </div>
     <!-- /Sign In Popup -->
-    @show
-
+   
     <div id="toTop"></div><!-- Back to top button -->
 	
 	<!-- COMMON SCRIPTS -->
@@ -222,6 +210,11 @@
 
     <!-- COLOR SWITCHER  -->
     <script src="../vendors/dist/js/switcher.js"></script>
+
+    <!-- SPECIFIC SCRIPTS -->
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6Vck_vRXDPR8ILH8ZLOeGSEz_n4YR0mU"></script>
+	<script src="../vendors/dist/js/mapmarker.jquery.js"></script>
+	<script src="../vendors/dist/js/mapmarker_func.jquery.js"></script>
 
     <script>
     $(function () {

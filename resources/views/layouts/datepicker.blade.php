@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-</head>
-<body>
+
 
     <!-- DataTables  & Plugins -->
     <script src="../vendors/dist/js/common_scripts.js"></script>
@@ -28,5 +24,3 @@
 	  });
 	});
 	</script>
-</body>
-</html>
