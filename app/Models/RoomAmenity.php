@@ -9,17 +9,12 @@ class RoomAmenity extends Model
 {
     use HasFactory;
 
-    // Table Name
     protected $table = 'room_amenity';
-    // Primary Key
-    public $primary_key = 'id';
-    // Timestamps
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'room_id',
-        'aminity_id',
-        'status'
+        'amenity_id'
     ];
 
     public function room(){

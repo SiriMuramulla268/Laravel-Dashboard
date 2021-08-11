@@ -9,13 +9,6 @@ class City extends Model
 {
     use HasFactory;
 
-    // Table Name
-    protected $table = 'cities';
-    // Primary Key
-    public $primary_key = 'id';
-    // Timestamps
-    public $timestamps = true;
-
     protected $fillable = [
         'state_id',
         'name',

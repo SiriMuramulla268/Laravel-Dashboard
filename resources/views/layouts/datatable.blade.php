@@ -5,12 +5,6 @@
   <link rel="stylesheet" href="../vendors/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../vendors/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 </head>
-<style>
-    label.error {
-         color: #dc3545;
-         font-size: 12px;
-    }
-</style>
 <body>
 
  <!-- DataTables  & Plugins -->
@@ -22,35 +16,6 @@
     <!-- Page specific script -->
     <script>
         $(function () {
-            $("#adduser").validate({
-                rules: {
-                    name: "required",
-                    email: "required",
-                    password: {
-                        required: true,
-                        minlength: 6
-                    },
-                    company: "required",
-                    mobile: {   
-                        required: true,
-                        minlength: 10
-                    },
-                },
-                messages: {
-                    name: "Name is required",
-                    email: "Email is required",
-                    password: {
-                        required: "Password is required",
-                        minlength: "Password must be of 6 digits"
-                    },
-                    mobile: {
-                        required: "Mobile number is required",
-                        minlength: "Mobile number must be of 10 digits"
-                    },
-                    company: "Company is required",
-                }
-            }); 
-
             $("#example1").DataTable({
                 "responsive": true, 
                 "lengthChange": false, 

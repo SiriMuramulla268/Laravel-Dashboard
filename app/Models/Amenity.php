@@ -9,15 +9,7 @@ class Amenity extends Model
 {
     use HasFactory;
 
-    // Table Name
-    protected $table = 'amenities';
-    // Primary Key
-    public $primary_key = 'id';
-    // Timestamps
-    public $timestamps = true;
-
     protected $fillable = [
-        'name',
-        'status'
+        'name'
     ];
 }

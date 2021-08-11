@@ -9,24 +9,16 @@ class Hotel extends Model
 {
     use HasFactory;
 
-    // Table Name
-    protected $table = 'hotels';
-    // Primary Key
-    public $primary_key = 'id';
-    // Timestamps
-    public $timestamps = true;
-
     protected $fillable = [
         'name',
-        'code',
         'email',
         'address',
         'country_id',
         'state_id',
         'city_id',
-        'category',
         'description',
         'website_url',
+        'featured',
         'status'
     ];
 

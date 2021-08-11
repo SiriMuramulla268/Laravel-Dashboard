@@ -47,8 +47,13 @@
                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
                   </div>
                   <div class="form-group">
-                    <label for="company">Company</label><span class="text-danger">*</span>
-                    <input type="text" class="form-control" id="company" name="company" placeholder="Enter company">
+                    <label for="type">Type</label><span class="text-danger">*</span>
+                    <select class="form-control" id="type" name="type" >
+                        <option value="">Select Type</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                    <!-- <input type="text" class="form-control" id="type" name="type" placeholder="Enter type"> -->
                   </div>
                   <div class="form-group">
                     <label for="mobile">Mobile</label><span class="text-danger">*</span>

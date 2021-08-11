@@ -170,7 +170,7 @@
                     required: true,
                     minlength: 6
                 },
-                company: "required",
+                type: "required",
                 mobile: {   
                     required: true,
                     minlength: 10
@@ -187,7 +187,7 @@
                     required: "Mobile number is required",
                     minlength: "Mobile number must be of 10 digits"
                 },
-                company: "Company is required",
+                type: "Type is required",
             }
         }); 
     });

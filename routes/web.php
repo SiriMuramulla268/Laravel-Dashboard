@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HotelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,6 @@ Route::group(['prefix' => 'admin'], function () {
     })->middleware('auth');
 }); 
 
+Route::get('/', [HotelController::class, 'getHotelDetails']);
+Route::post('/gethotels',[HotelController::class, 'getHotelDetailsByCity'])->name('get-hotels');
 

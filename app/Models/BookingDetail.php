@@ -9,13 +9,6 @@ class BookingDetail extends Model
 {
     use HasFactory;
 
-    // Table Name
-    protected $table = 'booking_details';
-    // Primary Key
-    public $primary_key = 'id';
-    // Timestamps
-    public $timestamps = true;
-
     protected $fillable = [
         'booking_id',
         'check_in',

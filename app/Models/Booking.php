@@ -9,17 +9,8 @@ class Booking extends Model
 {
     use HasFactory;
 
-    // Table Name
-    protected $table = 'bookings';
-    // Primary Key
-    public $primary_key = 'id';
-    // Timestamps
-    public $timestamps = true;
-
     protected $fillable = [
         'hotel_id',
-        'booking_no',
-        'date',
         'user_id',
         'request',
         'response',
@@ -27,7 +18,7 @@ class Booking extends Model
     ];
 
     public function bookingDetail(){
-        return $this->hasOne(BookingDetail::class,'booking_id','id');
+        return $this->hasMany(BookingDetail::class);
     }
 
     public function hotel(){

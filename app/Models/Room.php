@@ -9,13 +9,6 @@ class Room extends Model
 {
     use HasFactory;
 
-    // Table Name
-    protected $table = 'rooms';
-    // Primary Key
-    public $primary_key = 'id';
-    // Timestamps
-    public $timestamps = true;
-
     protected $fillable = [
         'hotel_id',
         'type',

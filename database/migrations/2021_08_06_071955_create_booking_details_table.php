@@ -18,12 +18,11 @@ class CreateBookingDetailsTable extends Migration
             $table->integer('booking_id');
             $table->date('check_in');
             $table->date('check_out');
-            $table->string('guest_details');
-            $table->string('no_of_rooms');
-            $table->string('room_type');
+            $table->string('guest_details',200);
+            $table->integer('room_id');
             $table->decimal('amount');
-            $table->string('adult');
-            $table->string('child');
+            $table->integer('adult');
+            $table->integer('child');
             $table->timestamps();
         });
     }

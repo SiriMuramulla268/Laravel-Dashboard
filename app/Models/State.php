@@ -9,13 +9,6 @@ class State extends Model
 {
     use HasFactory;
 
-    // Table Name
-    protected $table = 'states';
-    // Primary Key
-    public $primary_key = 'id';
-    // Timestamps
-    public $timestamps = true;
-
     protected $fillable = [
         'country_id',
         'code',
