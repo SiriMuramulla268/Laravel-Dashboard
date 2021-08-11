@@ -1,5 +1,5 @@
 
-
+    <script src="/example.js"></script>
     <!-- DataTables  & Plugins -->
     <script src="../vendors/dist/js/common_scripts.js"></script>
     <script src="../vendors/dist/js/main.js"></script>

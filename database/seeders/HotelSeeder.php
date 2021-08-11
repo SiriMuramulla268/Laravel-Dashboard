@@ -35,6 +35,7 @@ class HotelSeeder extends Seeder
             $insert->city_id = $getData->random()->city_id;
             $insert->description = $faker->text;
             $insert->website_url = $faker->url();
+            $insert->featured = $faker->randomElement([1,0]);
             $insert->status = 1;
             $insert->save();
         }

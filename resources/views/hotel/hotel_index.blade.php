@@ -1,19 +1,15 @@
 @extends('layouts.hotelmaster')
-@extends('layouts.datepicker')
 @section('title',config('app.name'))
-@section('content')
-    @section('header')
-        @parent
-    @endsection
 
-    <main>
+@section('content')
+	<main>
 		<section class="hero_single version_2">
 			<div class="wrapper">
 				<div class="container">
 					<h3>Book unique experiences</h3>
 					<p>Expolore top rated hotels around the world</p>
-					<form id="search_hotels">
-					{{ csrf_token() }}
+					<form id="search_hotels" autocomplete="off">
+					<!-- {{ csrf_token() }} -->
 						<div class="row no-gutters custom-search-input-2">
 							<div class="col-lg-4">
 								<div class="form-group">
@@ -64,8 +60,8 @@
 		<div class="container container-custom margin_80_0">
 			<div class="main_title_2">
 				<span><em></em></span>
-                <h2>Popular Hotels and Accommodations</h2>
-                <p>Cum doctus civibus efficiantur in imperdiet deterruisset.</p>
+				<h2>Popular Hotels and Accommodations</h2>
+				<p>Cum doctus civibus efficiantur in imperdiet deterruisset.</p>
 			</div>
 			<div id="reccomended" class="owl-carousel owl-theme">
 				@foreach($hotel_details as $hotel)
@@ -74,15 +70,15 @@
 						<figure>
 							<a href="#0" class="wish_bt"></a>
 							<a href="hotel-detail.html"><img src="../vendors/dist/img/hotel_1.jpg" class="img-fluid" alt="" alt="" >
-                            <div class="read_more"><span>Read more</span></div></a>
+							<div class="read_more"><span>Read more</span></div></a>
 							<small class="score"><strong>8.9</strong></small>
 						</figure>
 						<div class="wrapper">
-                            <div class="cat_star">
+							<div class="cat_star">
 								<i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i>
-                            </div>
-                            
-                            <h3>{{$hotel['name']}}</h3>
+							</div>
+							
+							<h3>{{$hotel['name']}}</h3>
 							<p>{{$hotel['description']}}</p>
 							<span class="price">From <strong>$54</strong> /per person</span>
 						</div>
@@ -116,13 +112,28 @@
 		<!--/call_section-->
 	</main>
 	<!-- /main -->
-
-    @section('footer')
-        @parent
-    @endsection
-
 @endsection
 
-@section('signin')
-        @parent
-@endsection
+@push('datepicker-scripts')
+<!-- DATEPICKER  -->
+<script>
+	$(function() {
+	  'use strict';
+	  $('input[name="dates"]').daterangepicker({
+		  autoUpdateInput: false,
+		  minDate:new Date(),
+		  locale: {
+			  cancelLabel: 'Clear'
+		  }
+	  });
+	  $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
+		  $(this).val(picker.startDate.format('MM-DD-YY') + ' > ' + picker.endDate.format('MM-DD-YY'));
+	  });
+	  $('input[name="dates"]').on('cancel.daterangepicker', function(ev, picker) {
+		  $(this).val('');
+	  });
+	});
+	</script>
+@endpush
+
+

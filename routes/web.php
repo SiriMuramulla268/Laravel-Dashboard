@@ -34,3 +34,8 @@ Route::group(['prefix' => 'admin'], function () {
 Route::get('/', [HotelController::class, 'getHotelDetails']);
 Route::post('/gethotels',[HotelController::class, 'getHotelDetailsByCity'])->name('get-hotels');
 
+Route::get('contacts', function () {
+    return view('hotel/hotel_contact');
+});
+
+Route::get('/hotels', [HotelController::class, 'getHotels']);

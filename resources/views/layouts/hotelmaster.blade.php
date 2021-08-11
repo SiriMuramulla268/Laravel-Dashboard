@@ -30,6 +30,7 @@
 <body class="datepicker_mobile_full"><!-- Remove this class to disable datepicker full on mobile -->
     <div id="page" class="theia-exception">
         
+        <!-- header -->
         <header class="header menu_fixed">
             <div id="preloader"><div data-loader="circle-side"></div></div><!-- /Page Preload -->
             <div id="logo">
@@ -55,7 +56,7 @@
                 <ul>
                     <li><span><a href="/">Home</a></span>
                     </li>
-                    <li><span><a href="hotel-list">Hotels</a></span>
+                    <li><span><a href="hotels">Hotels</a></span>
                     </li>
                     
                 </ul>
@@ -65,6 +66,7 @@
 
         @yield('content')
 
+        <!--footer-->
         <footer>
             <div class="container margin_60_35">
                 <div class="row">
@@ -215,30 +217,11 @@
 	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6Vck_vRXDPR8ILH8ZLOeGSEz_n4YR0mU"></script>
 	<script src="../vendors/dist/js/mapmarker.jquery.js"></script>
 	<script src="../vendors/dist/js/mapmarker_func.jquery.js"></script>
-
-    <script>
-    $(function () {
-        $("#search_hotels").on("submit", function(e){
-            $.ajax({
-            url: "{!! route('get-hotels') !!}",
-            type: 'post',
-            data: $('#search_hotels').serialize(),
-            dataType: 'json',
-            success: function(res) {
-                var string = JSON.stringify(res);
-                var response = $.parseJSON(string); 
-                // $.each(response, function(i){
-                //     alert(response[i]);
-                // // })
-                // $("#hotel").empty();
-                // $('#hotel').html(response);
-            }
-            });
-            e.preventDefault();
-        });
-    });
-    </script>
     
+   
+    <!-- Datepicker -->
+    <script src="../vendors/dist/assets/validate.js"></script>
+    @stack('datepicker-scripts')
 </body>
 
 </html>
