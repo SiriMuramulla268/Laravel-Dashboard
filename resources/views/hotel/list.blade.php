@@ -1,5 +1,5 @@
 @extends('layouts.hotelmaster')
-@section('title',config('app.name'))
+@section('title', config('app.name'))
 
     @section('content')
     <main>
@@ -144,7 +144,7 @@
                                     <div class="box_grid">
                                         <figure>
                                             <a href="#0" class="wish_bt"></a>
-                                            <a href="hotel-detail.html"><img src="../vendors/dist/img/hotel_1.jpg" class="img-fluid" alt="" width="800" height="533"><div class="read_more"><span>Read more</span></div></a>
+                                            <a href="hoteldetail/{{$hotel['id']}}"><img src="{{asset('img/hotel_1.jpg')}}" class="img-fluid" alt="" width="800" height="533"><div class="read_more"><span>Read more</span></div></a>
                                             <small>{{$hotel['city_name']}}</small>
                                         </figure>
                                         <div class="wrapper">

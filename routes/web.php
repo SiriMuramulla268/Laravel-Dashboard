@@ -16,6 +16,7 @@ use App\Http\Controllers\HotelController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/', function () {
@@ -31,11 +32,29 @@ Route::group(['prefix' => 'admin'], function () {
     })->middleware('auth');
 }); 
 
-Route::get('/', [HotelController::class, 'getHotelDetails']);
-Route::post('/gethotels',[HotelController::class, 'getHotelDetailsByCity'])->name('get-hotels');
+Route::get('/', [HotelController::class, 'getHotelIndex']);
+Route::post('/gethotels',[HotelController::class, 'getHotelByCity'])->name('hotel.index');
 
 Route::get('contacts', function () {
-    return view('hotel/hotel_contact');
+    return view('hotel/contact');
 });
 
-Route::get('/hotels', [HotelController::class, 'getHotels']);
+Route::get('/hotels', [HotelController::class, 'getAllHotel']);
+
+Route::get('hoteldetail/{id}', [HotelController::class, 'getHotelDetail']);
+
+Route::get('about', function () {
+    return view('hotel/about');
+});
+
+Route::get('cart1', function () {
+    return view('hotel/cart1');
+});
+
+Route::get('cart2', function () {
+    return view('hotel/cart2');
+});
+
+Route::get('cart3', function () {
+    return view('hotel/cart3');
+});

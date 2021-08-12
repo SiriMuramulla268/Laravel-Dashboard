@@ -9,22 +9,22 @@
     <title>@yield('title')</title>
 
     <!-- Favicons-->
-    <link rel="shortcut icon" href="../vendors/dist/img/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" type="image/x-icon" href="../vendors/dist/img/apple-touch-icon-57x57-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="../vendors/dist/img/apple-touch-icon-72x72-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="../vendors/dist/img/apple-touch-icon-114x114-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="../vendors/dist/img/apple-touch-icon-144x144-precomposed.png">
+    <link rel="shortcut icon" href="{{asset('img/favicon.ico')}}" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="{{asset('img/apple-touch-icon-57x57-precomposed.png')}}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{{asset('img/apple-touch-icon-72x72-precomposed.png')}}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{{asset('img/apple-touch-icon-114x114-precomposed.png')}}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{{asset('img/apple-touch-icon-144x144-precomposed.png')}}">
 
     <!-- BASE CSS -->
-    <link href="../vendors/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../vendors/dist/css/style.css" rel="stylesheet">
-	<link href="../vendors/dist/css/vendors.css" rel="stylesheet">
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/style.css')}}" rel="stylesheet">
+	<link href="{{asset('css/vendors.css')}}" rel="stylesheet">
 
     <!-- ALTERNATIVE COLORS CSS -->
     <link href="#" id="colors" rel="stylesheet">
 
     <!-- YOUR CUSTOM CSS -->
-    <link href="../vendors/dist/css/custom.css" rel="stylesheet">
+    <link href="{{asset('css/custom.css')}}" rel="stylesheet">
 
 </head>
 <body class="datepicker_mobile_full"><!-- Remove this class to disable datepicker full on mobile -->
@@ -35,8 +35,8 @@
             <div id="preloader"><div data-loader="circle-side"></div></div><!-- /Page Preload -->
             <div id="logo">
                 <a href="index.html">
-                    <img src="../vendors/dist/img/logo.svg" width="150" height="36" alt="" class="logo_normal">
-                    <img src="../vendors/dist/img/logo_sticky.svg" width="150" height="36" alt="" class="logo_sticky">
+                    <img src="{{asset('img/logo.svg')}}" width="150" height="36" alt="" class="logo_normal">
+                    <img src="{{asset('img/logo_sticky.svg')}}" width="150" height="36" alt="" class="logo_sticky">
                 </a>
             </div>
             <ul id="top_menu">
@@ -56,14 +56,14 @@
                 <ul>
                     <li><span><a href="/">Home</a></span>
                     </li>
-                    <li><span><a href="hotels">Hotels</a></span>
+                    <li><span><a href="/hotels">Hotels</a></span>
                     </li>
                     
                 </ul>
             </nav>
         </header>
         <!-- /header -->
-
+        
         @yield('content')
 
         <!--footer-->
@@ -71,7 +71,7 @@
             <div class="container margin_60_35">
                 <div class="row">
                     <div class="col-lg-5 col-md-12 p-r-5">
-                        <p><img src="../vendors/dist/img/logo.svg" width="150" height="36" alt=""></p>
+                        <p><img src="{{asset('img/logo.svg')}}" width="150" height="36" alt=""></p>
                         <p>Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea. Id placerat tacimates definitionem sea, prima quidam vim no. Duo nobis persecuti cu. Nihil facilisi indoctum an vix, ut delectus expetendis vis.</p>
                         <div class="follow_us">
                             <ul>
@@ -87,11 +87,11 @@
                     <div class="col-lg-3 col-md-6 ml-lg-auto">
                         <h5>Useful links</h5>
                         <ul class="links">
-                            <li><a href="about.html">About</a></li>
-                            <li><a href="login.html">Login</a></li>
-                            <li><a href="register.html">Register</a></li>
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/admin">Login</a></li>
+                            <li><a href="/register">Register</a></li>
                             <li><a href="blog.html">News &amp; Events</a></li>
-                            <li><a href="../contacts">Contacts</a></li>
+                            <li><a href="/contacts">Contacts</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -135,7 +135,7 @@
                                     </select>
                                 </div>
                             </li>
-                            <li><img src="../vendors/dist/img/cards_all.svg" alt=""></li>
+                            <li><img src="{{asset('img/cards_all.svg')}}" alt=""></li>
                         </ul>
                     </div>
                     <div class="col-lg-6">
@@ -203,25 +203,30 @@
     <div id="toTop"></div><!-- Back to top button -->
 	
 	<!-- COMMON SCRIPTS -->
-    <script src="../vendors/dist/js/common_scripts.js"></script>
-    <script src="../vendors/dist/js/main.js"></script>
+    <script src="{{asset('js/common_scripts.js')}}"></script>
+    <script src="{{asset('js/main.js')}}"></script>
 
     
-    <!-- INPUT QUANTITY  -->
-	<script src="../vendors/dist/js/input_qty.js"></script>
-
+    
     <!-- COLOR SWITCHER  -->
-    <script src="../vendors/dist/js/switcher.js"></script>
+    <script src="{{asset('js/switcher.js')}}"></script>
 
     <!-- SPECIFIC SCRIPTS -->
 	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6Vck_vRXDPR8ILH8ZLOeGSEz_n4YR0mU"></script>
-	<script src="../vendors/dist/js/mapmarker.jquery.js"></script>
-	<script src="../vendors/dist/js/mapmarker_func.jquery.js"></script>
-    
+	<script src="{{asset('js/mapmarker.jquery.js')}}"></script>
+	<script src="{{asset('js/mapmarker_func.jquery.js')}}"></script>
+    <!-- Map -->
+    <!-- <script src="{{asset('js/map_single_hotel.js')}}"></script>
+	<script src="{{asset('js/infobox.js')}}"></script>
+     -->
    
     <!-- Datepicker -->
-    <script src="../vendors/dist/assets/validate.js"></script>
+    <script src="{{asset('assets/validate.js')}}"></script>
     @stack('datepicker-scripts')
+
+    <!-- INPUT QUANTITY  -->
+	<script src="{{asset('js/input_qty.js')}}"></script>
+
 </body>
 
 </html>
