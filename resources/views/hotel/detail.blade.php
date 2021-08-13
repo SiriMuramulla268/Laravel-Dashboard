@@ -6,17 +6,17 @@
 		<section class="hero_in hotels_detail">
 			<div class="wrapper">
 				<div class="container">
+					@if($hotel_detail)
 					<h1 class="fadeInUp"><span></span>{{ $hotel_detail->name }}</h1>
+					@else
+					<h1 class="fadeInUp"><span></span>Hotel Not Found :(</h1>
+					@endif
 				</div>
-				<span class="magnific-gallery">
-					<a href="{{asset('img/gallery/hotel_list_1.jpg')}}" class="btn_photos" title="Photo title" data-effect="mfp-zoom-in">View photos</a>
-					<a href="{{asset('img/gallery/hotel_list_2.jpg')}}" title="Photo title" data-effect="mfp-zoom-in"></a>
-					<a href="{{asset('img/gallery/hotel_list_3.jpg')}}" title="Photo title" data-effect="mfp-zoom-in"></a>
-				</span>
 			</div>
 		</section>
 		<!--/hero_in-->
 
+		@if($hotel_detail)
 		<div class="bg_color_1">
 			<nav class="secondary_nav sticky_horizontal">
 				<div class="container">
@@ -27,6 +27,7 @@
 					</ul>
 				</div>
 			</nav>
+			
 			<div class="container margin_60_35">
 				<div class="row">
 					<div class="col-lg-8">
@@ -64,27 +65,21 @@
 							<!-- /pictures -->
 
 							<hr>
-							@foreach($room_detail as $room_name => $room)
-								@if($loop->first)
-									@php
-										$per_person = $room['per_person'];
-									@endphp
-								@endif
+							@foreach($room_detail->sortBy('price') as $room)
 							<div class="room_type first">
 								<div class="row">
 									<div class="col-md-4">
 										<img src="{{asset('img/gallery/hotel_list_1.jpg')}}" class="img-fluid" alt="">
 									</div>
 									<div class="col-md-8">
-										<h4>{{$room_name}}</h4>
+										<h4>{{$room['type']}} </h4> <span><strong>{{$room['price']}}{{$hotel_detail->country->currency_symbol}} </strong></span>
 										<p>Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.</p>
 
 										<ul class="hotel_facilities">
-										@foreach($room['amenity'] as $key => $room_amenity)
-											<li><img src="{{asset('img/hotel_facilites_icon_2.svg')}}" alt="">{{$room_amenity}}</li>
-										@endforeach
+										@foreach($room->amenities as $room_amenity)
+											<li><img src="{{asset('img/hotel_facilites_icon_2.svg')}}" alt="">{{$room_amenity['name']}}</li>
+										@endforeach	
 										</ul>
-
 									</div>
 								</div>
 								<!-- /row -->
@@ -268,7 +263,7 @@
 					<aside class="col-lg-4" id="sidebar">
 						<div class="box_detail booking">
 							<div class="price">
-								<span>{{$per_person}}{{$hotel_detail->currency_symbol}} <small>person</small></span>
+								<span>1578 {{$hotel_detail->country->currency_symbol}} <small>person</small></span>
 								<div class="score"><span>Good<em>350 Reviews</em></span><strong>7.0</strong></div>
 							</div>
 
@@ -295,8 +290,8 @@
 								<div class="custom-select-form">
 									<select class="wide">
 										<option>Select Room Type</option>	
-										@foreach($room_detail as $key => $room)
-										<option>{{$key}}</option>	
+										@foreach($room_detail as $room)
+										<option>{{$room['type']}}</option>	
 										@endforeach
 									</select>
 								</div>
@@ -316,6 +311,7 @@
 			</div>
 			<!-- /container -->
 		</div>
+		@endif
 		<!-- /bg_color_1 -->
 	</main>
 	<!--/main-->

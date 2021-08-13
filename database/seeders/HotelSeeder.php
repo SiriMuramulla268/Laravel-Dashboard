@@ -28,6 +28,7 @@ class HotelSeeder extends Seeder
         for($i=0;$i<20;$i++){
             $insert = new Hotel;
             $insert->name = $faker->company;
+            $insert->slug = preg_replace('/[^A-Za-z0-9\-]/', '-', strtolower($insert->name));
             $insert->email = strtolower(str_replace(' ','',$insert->name)).'@gmail.com';
             $insert->address = $faker->address;
             $insert->country_id = $getData->random()->country_id;

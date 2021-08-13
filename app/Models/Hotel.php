@@ -31,10 +31,10 @@ class Hotel extends Model
     public function state(){
         return $this->belongsTo(State::class);
     }
-    public function room(){
+    public function rooms(){
         return $this->hasMany(Room::class);
     }
-    public function booking(){
+    public function bookings(){
         return $this->hasMany(Booking::class);
     }
 }

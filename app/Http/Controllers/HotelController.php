@@ -17,51 +17,54 @@ class HotelController extends Controller
         }
     }
 
-    public function getAllHotel(){
-        $hotels = Hotel::join('cities', 'cities.id', '=', 'hotels.city_id')
-        ->select('*', 'cities.name as city_name')->where('hotels.status', 1)->get();
+    public function getAllHotels(){
+        $hotels = array();
+        $room_data = array();
 
-        $cities = Hotel::join('cities', 'cities.id','=','hotels.city_id')
-        ->select('city_id', 'cities.name', DB::raw('COUNT(hotels.id) as no_of_hotels'))
-        ->where('hotels.status', 1)->groupBy('city_id')->get();
-
-        if($hotels){
-            return view('hotel/list', ['hotels'=>$hotels, 'cities'=>$cities]);
-        }
-    }
-
-    public function getHotelByCity(Request $request){
-        $data = $request->all();
-        $city = $data['city'];
-        $hotels = Hotel::where('city_id', $city)->where('status', 1)->get();
-        return response()->json($hotels);
-    }
-
-    public function getHotelDetail(int $hotel_id, Request $request){
-       
-        $hotel_data = Hotel::join('countries','countries.id','=','hotels.country_id')
-        ->select('hotels.name','hotels.description','countries.currency_symbol')
-        ->where('hotels.id', $hotel_id)->where('hotels.status', 1)->first();
+        // Hotels with city name for Hotels balde page
+        $hotels = Hotel::with(['city' => function($query) {
+            $query->select(['id', 'name'])->where('cities.status',1);
+        }])->where('hotels.status', 1)->get();
         
-        $room_data = Hotel::join('rooms','rooms.hotel_id','=','hotels.id')
-        ->join('room_amenity', 'room_amenity.room_id','=','rooms.id')
-        ->join('amenities', 'amenities.id','=','room_amenity.amenity_id')
-        ->select('rooms.type',DB::raw('GROUP_CONCAT(amenities.name) as amenity'), 
-                DB::raw('GROUP_CONCAT(DISTINCT per_adult_price) as per_person'))
-        ->where('hotels.id', $hotel_id)->where('hotels.status', 1)->groupByRaw('rooms.type')->get();
-        if($room_data){
-            foreach($room_data as $key=>$detail){
-                $amenity_array = explode(',', $detail['amenity']);
-                for($i=0;$i<sizeof($amenity_array);$i++){
-                    $room_detail[$detail['type']]['amenity'][] = $amenity_array[$i];
-                    $room_detail[$detail['type']]['per_person'] = $detail['per_person'];
-                }
-            }
-        }
-        if($hotel_data){
-            return view('hotel/detail', ['hotel_detail'=>$hotel_data, 'room_detail'=>$room_detail]);
+        // Cities with no.of.hotels 
+        $cities = City::select(['id','name'])->withCount('hotels as no_of_hotels')->where('cities.status', 1)->get();
+
+        if($hotels && $cities){
+            return view('hotel/list', ['hotels'=>$hotels, 'cities'=>$cities]);
+        }else{
+            return view('hotel/list', ['hotels'=>[], 'cities'=>[]]);
         }
     }
 
+    public function getHotelDetails(string $hotel_slug, Request $request)
+    {
+        $hotel_data = array();
+        $room_data = array();
+        
+        // Get hotel data with currency symbol
+        $hotel_data = Hotel::with(['country' => function($query) {
+            $query->select(['id','currency_symbol']);
+        }])->where('hotels.slug', $hotel_slug)->where('hotels.status', 1)->first();
+
+        // Get Room data of hotel with amenities
+        $room_data = Room::with('amenities')->where('rooms.status',1)->where('rooms.hotel_id',$hotel_data->id)->get();
+
+        if($hotel_data && $room_data){
+            return view('hotel/detail', ['hotel_detail'=>$hotel_data, 'room_detail'=>$room_data]);
+        }else{
+            return view('hotel/detail', ['hotel_detail'=>$hotel_data, 'room_detail'=>$room_data]);
+        }
+    }
 }
+
+
+// $hotels = Hotel::with('city:id,name')->where('hotels.status', 1)->get();
+// $hotels = Hotel::select(['id', 'name'])->with('city')->where('hotels.status',1)->get();
+// $hotels = City::withCount(['hotels as no_of_hotels' => function($query){
+//     $query->where('hotels.status', 1);
+// }])->where('cities.status', 1)->get();
+
 ?>
+
+
+
