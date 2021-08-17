@@ -33,15 +33,15 @@ Route::group(['prefix' => 'admin'], function () {
 }); 
 
 Route::get('/', [HotelController::class, 'getHotelIndex']);
-Route::post('/gethotels',[HotelController::class, 'getHotelByCity'])->name('hotels.index');
+Route::get('/gethotels',[HotelController::class, 'getHotelByCity'])->name('get-hotels');
 
 Route::get('contacts', function () {
     return view('hotel/contact');
 });
 
-Route::get('/hotels', [HotelController::class, 'getAllHotels']);
+Route::get('/hotels', [HotelController::class, 'getAllHotels'])->name('hotels');
 
-// Route::get('hoteldetail/{id}', [HotelController::class, 'getHotelDetail']);
+
 Route::get('hotel/{slug}', [HotelController::class, 'getHotelDetails']);
 
 

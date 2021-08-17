@@ -8,14 +8,13 @@
 				<div class="container">
 					<h3>Book unique experiences</h3>
 					<p>Expolore top rated hotels around the world</p>
-					<form id="search_hotels" autocomplete="off">
-					<!-- {{ csrf_token() }} -->
+					<form action="{{route('get-hotels')}}" id="search_hotels" method="GET" autocomplete="off" >
+						@csrf
 						<div class="row no-gutters custom-search-input-2">
 							<div class="col-lg-4">
 								<div class="form-group">
-									<!-- <input class="form-control" type="text" placeholder="Hotel, City..."> -->
-									<select class="form-control" name="city" id="city" >
-										<option value="">Choose Location</option>
+									<select class="form-select" name="city[]" id="city[]" >
+										<option value=""> Choose Location </option>
 										@foreach ($city_details as $city)
 											<option value="{{$city['id']}}">{{$city['name']}}</option>
 										@endforeach
@@ -39,9 +38,8 @@
 											<input type="text" name="qtyInput" value="1">
 										</div>
 										<div class="qtyButtons">
-											<label>Childrens</label>
-											<input class="form-control" type="text" placeholder="Hotel, City...">
-									<i class="icon_pin_alt"></i>					<input type="text" name="qtyInput" value="0">
+											<label>Childrens</label>					
+											<input type="text" name="qtyInput" value="0">
 										</div>
 									</div>
 								</div>
@@ -135,5 +133,7 @@
 	});
 	</script>
 @endpush
+
+
 
 

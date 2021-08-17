@@ -205,14 +205,13 @@
 	<!-- COMMON SCRIPTS -->
     <script src="{{asset('js/common_scripts.js')}}"></script>
     <script src="{{asset('js/main.js')}}"></script>
-
-    
     
     <!-- COLOR SWITCHER  -->
     <script src="{{asset('js/switcher.js')}}"></script>
 
     <!-- SPECIFIC SCRIPTS -->
-	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6Vck_vRXDPR8ILH8ZLOeGSEz_n4YR0mU"></script>
+	<!-- <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6Vck_vRXDPR8ILH8ZLOeGSEz_n4YR0mU"></script> -->
+
 	<script src="{{asset('js/mapmarker.jquery.js')}}"></script>
 	<script src="{{asset('js/mapmarker_func.jquery.js')}}"></script>
     <!-- Map -->
@@ -226,7 +225,6 @@
 
     <!-- INPUT QUANTITY  -->
 	<script src="{{asset('js/input_qty.js')}}"></script>
-
 </body>
 
 </html>

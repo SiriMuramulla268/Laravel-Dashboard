@@ -31,10 +31,6 @@
 								<label for="latest">Latest</label>
 							</div>
 						</li>
-						
-						<li>
-							<a class="btn_map" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap" data-text-swap="Hide map" data-text-original="View on map">View on map</a>
-						</li>
 					</ul>
 				</div>
 				<!-- /container -->
@@ -53,89 +49,96 @@
 						<div id="filters_col">
 							<a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters" id="filters_col_bt">Filters </a>
 							<div class="collapse show" id="collapseFilters">
-								<div class="filter_type">
-									<h6>Cities</h6>
-									<ul>
-										@php
-											$count = 0;
-										@endphp
-										@foreach($cities as $city)
-											@php
-												$count += $city['no_of_hotels'];
-											@endphp
+								
+								<form action="{{route('get-hotels')}}" id="search_hotels" method="GET" autocomplete="off" >
+									@csrf
+									<div class="filter_type" id="cities">
+										<h6>Cities</h6>
+										<ul>
+											@foreach($cities as $city)
+												@if($city['no_of_hotels'] > 0)
+													@php
+														$checked = '';
+													@endphp
+													
+													@if(isset($city_id))
+														@for($i=0;$i< sizeof($city_id);$i++)
+															@if($city_id[$i] == $city['id'])
+																@php
+																	$checked = 'checked';
+																@endphp
+															@endif	
+														@endfor
+													@endif
+
+													<li>
+														<label class="container_check" >{{$city['name']}} <small>({{$city['no_of_hotels']}})</small>
+															<input type="checkbox" name="city[]" id="city" value="{{$city['id']}}" {{$checked}} >
+															<span class="checkmark"></span>
+														</label>
+													</li>
+												@endif
+											@endforeach
+										</ul>
+									</div>
+									<div class="filter_type">
+										<h6>Distance</h6>
+										<input type="text" id="range" name="range" value="">
+									</div>
+									<div class="filter_type">
+										<h6>Star Category</h6>
+										<ul>
 											<li>
-												<label class="container_check">{{$city['name']}} <small>({{$city['no_of_hotels']}})</small>
+												<label class="container_check"><span class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></span> <small>(25)</small>
+													<input type="checkbox" name="star">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+											<li>
+												<label class="container_check"><span class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></span> <small>(26)</small>
+													<input type="checkbox" name="star">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+											<li>
+												<label class="container_check"><span class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></span> <small>(25)</small>
+													<input type="checkbox" name="star">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+										</ul>
+									</div>
+									<div class="filter_type">
+										<h6>Rating</h6>
+										<ul>
+											<li>
+												<label class="container_check">Superb 9+ <small>(25)</small>
+													<input type="checkbox" name="rate">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+											<li>
+												<label class="container_check">Very Good 8+ <small>(26)</small>
+													<input type="checkbox" name="rate">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+											<li>
+												<label class="container_check">Good 7+ <small>(25)</small>
+													<input type="checkbox" name="rate">
+													<span class="checkmark"></span>
+												</label>
+											</li>
+											<li>
+												<label class="container_check">Pleasant 6+ <small>(12)</small>
 													<input type="checkbox">
 													<span class="checkmark"></span>
 												</label>
 											</li>
-											@if ($loop->last)
-												<li>
-												<label class="container_check">All <small>({{$count}})</small>
-													<input type="checkbox">
-													<span class="checkmark"></span>
-												</label>
-												</li>
-											@endif
-										@endforeach
-									</ul>
-								</div>
-								<div class="filter_type">
-									<h6>Distance</h6>
-									<input type="text" id="range" name="range" value="">
-								</div>
-								<div class="filter_type">
-									<h6>Star Category</h6>
-									<ul>
-										<li>
-											<label class="container_check"><span class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></span> <small>(25)</small>
-												<input type="checkbox">
-												<span class="checkmark"></span>
-											</label>
-										</li>
-										<li>
-											<label class="container_check"><span class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></span> <small>(26)</small>
-												<input type="checkbox">
-												<span class="checkmark"></span>
-											</label>
-										</li>
-										<li>
-											<label class="container_check"><span class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></span> <small>(25)</small>
-												<input type="checkbox">
-												<span class="checkmark"></span>
-											</label>
-										</li>
-									</ul>
-								</div>
-								<div class="filter_type">
-									<h6>Rating</h6>
-									<ul>
-										<li>
-											<label class="container_check">Superb 9+ <small>(25)</small>
-												<input type="checkbox">
-												<span class="checkmark"></span>
-											</label>
-										</li>
-										<li>
-											<label class="container_check">Very Good 8+ <small>(26)</small>
-												<input type="checkbox">
-												<span class="checkmark"></span>
-											</label>
-										</li>
-										<li>
-											<label class="container_check">Good 7+ <small>(25)</small>
-												<input type="checkbox">
-												<span class="checkmark"></span>
-											</label>
-										</li>
-										<li>
-											<label class="container_check">Pleasant 6+ <small>(12)</small>
-												<input type="checkbox">
-												<span class="checkmark"></span>
-											</label>
-										</li>
-									</ul>
-								</div>
+										</ul>
+									</div>
+									<input type="submit" class="btn_search" value="Apply Filter"><br>  
+								</form>
 							</div>
 							<!--/collapse -->
 						</div>
@@ -212,3 +215,9 @@
 	</main>
 	<!--/main-->
     @endsection
+
+
+
+
+
+

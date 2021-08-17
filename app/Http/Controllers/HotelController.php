@@ -27,8 +27,8 @@ class HotelController extends Controller
         }])->where('hotels.status', 1)->get();
         
         // Cities with no.of.hotels 
-        $cities = City::select(['id','name'])->withCount('hotels as no_of_hotels')->where('cities.status', 1)->get();
-
+        $cities = City::select(['id','name'])->withCount('hotels as no_of_hotels')
+        ->where('cities.status', 1)->get();
         if($hotels && $cities){
             return view('hotel/list', ['hotels'=>$hotels, 'cities'=>$cities]);
         }else{
@@ -52,7 +52,21 @@ class HotelController extends Controller
         if($hotel_data && $room_data){
             return view('hotel/detail', ['hotel_detail'=>$hotel_data, 'room_detail'=>$room_data]);
         }else{
-            return view('hotel/detail', ['hotel_detail'=>$hotel_data, 'room_detail'=>$room_data]);
+            return view('hotel/detail', ['hotel_detail'=>[], 'room_detail'=>[]]);
+        }
+    }
+
+    public function getHotelByCity(Request $request){
+        $data = $request->all();
+        $get_hotels = Hotel::whereIn('hotels.city_id',$data['city'])->where('hotels.status',1)->get();
+    
+        $cities = City::select(['id','name'])->withCount('hotels as no_of_hotels')
+        ->where('cities.status', 1)->get();
+
+        if($get_hotels){
+            return view('hotel/list', ['hotels'=>$get_hotels, 'cities'=>$cities, 'city_id' => $data['city']]);
+        }else{
+            return view('hotel/list', ['hotels'=>[], 'cities'=>[] ]);
         }
     }
 }
