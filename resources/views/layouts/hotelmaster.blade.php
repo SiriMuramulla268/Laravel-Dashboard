@@ -27,6 +27,14 @@
     <link href="{{asset('css/custom.css')}}" rel="stylesheet">
 
 </head>
+<style>
+   label.error {
+        color: #dc3545;
+        font-size: 12px;
+    }
+    /* to remove extra pagination style  */
+    .w-5{display:none} 
+</style>
 <body class="datepicker_mobile_full"><!-- Remove this class to disable datepicker full on mobile -->
     <div id="page" class="theia-exception">
         
@@ -209,6 +217,8 @@
     <!-- COLOR SWITCHER  -->
     <script src="{{asset('js/switcher.js')}}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+
     <!-- SPECIFIC SCRIPTS -->
 	<!-- <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6Vck_vRXDPR8ILH8ZLOeGSEz_n4YR0mU"></script> -->
 
@@ -221,8 +231,12 @@
    
     <!-- Datepicker -->
     <script src="{{asset('assets/validate.js')}}"></script>
-    @stack('datepicker-scripts')
+    <script type="text/javascript" src="jquery.validate.js"></script>
 
+    @stack('index.blade-scripts')
+    @stack('list.blade-scripts')
+    @stack('detail.blade-scripts')
+   
     <!-- INPUT QUANTITY  -->
 	<script src="{{asset('js/input_qty.js')}}"></script>
 </body>

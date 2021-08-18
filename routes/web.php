@@ -33,25 +33,24 @@ Route::group(['prefix' => 'admin'], function () {
 }); 
 
 Route::get('/', [HotelController::class, 'getHotelIndex']);
-Route::get('/gethotels',[HotelController::class, 'getHotelByCity'])->name('get-hotels');
 
 Route::get('contacts', function () {
     return view('hotel/contact');
 });
 
-Route::get('/hotels', [HotelController::class, 'getAllHotels'])->name('hotels');
+Route::get('/hotels', [HotelController::class, 'getHotelByCity'])->name('hotel-list');
 
+// Route::get('/gethotels',[HotelController::class, 'getHotelByCity'])->name('get-hotels');
 
-Route::get('hotel/{slug}', [HotelController::class, 'getHotelDetails']);
+Route::get('hotel/{slug}/{date}', [HotelController::class, 'getHotelDetails']);
 
+Route::get('getprice',[HotelController::class, 'getRoomPrice'])->name('get-price');
 
 Route::get('about', function () {
     return view('hotel/about');
 });
 
-Route::get('cart1', function () {
-    return view('hotel/cart1');
-});
+Route::get('cart-1', [HotelController::class, 'getCart1'])->name('cart-1');
 
 Route::get('cart2', function () {
     return view('hotel/cart2');

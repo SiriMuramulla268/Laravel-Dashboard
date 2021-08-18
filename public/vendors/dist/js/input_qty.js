@@ -1,6 +1,6 @@
 // Quantity buttons
 	function qtySum(){
-    var arr = document.getElementsByName('qtyInput');
+    var arr = document.getElementsByName('qtyInput[]');
     var tot=0;
     for(var i=0;i<arr.length;i++){
         if(parseInt(arr[i].value))

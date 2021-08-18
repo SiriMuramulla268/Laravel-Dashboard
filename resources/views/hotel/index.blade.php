@@ -8,12 +8,11 @@
 				<div class="container">
 					<h3>Book unique experiences</h3>
 					<p>Expolore top rated hotels around the world</p>
-					<form action="{{route('get-hotels')}}" id="search_hotels" method="GET" autocomplete="off" >
-						@csrf
+					<form action="{{route('hotel-list')}}" id="search_hotels" method="GET" autocomplete="off" >
 						<div class="row no-gutters custom-search-input-2">
 							<div class="col-lg-4">
 								<div class="form-group">
-									<select class="form-select" name="city[]" id="city[]" >
+									<select class="form-select" name="city[]"  >
 										<option value=""> Choose Location </option>
 										@foreach ($city_details as $city)
 											<option value="{{$city['id']}}">{{$city['name']}}</option>
@@ -35,12 +34,12 @@
 										<!-- Quantity Buttons -->
 										<div class="qtyButtons">
 											<label>Adults</label>
-											<input type="text" name="qtyInput" value="1">
+											<input type="text" name="qtyInput[]" value="1">
 										</div>
-										<div class="qtyButtons">
+										<!-- <div class="qtyButtons">
 											<label>Childrens</label>					
-											<input type="text" name="qtyInput" value="0">
-										</div>
+											<input type="text" name="qtyInput[]" value="0">
+										</div> -->
 									</div>
 								</div>
 							</div>
@@ -112,7 +111,7 @@
 	<!-- /main -->
 @endsection
 
-@push('datepicker-scripts')
+@push('index.blade-scripts')
 <!-- DATEPICKER  -->
 <script>
 	$(function() {
@@ -131,6 +130,19 @@
 		  $(this).val('');
 	  });
 	});
+
+	$("#search_hotels").validate({
+		rules: {
+			"city[]": {
+                required: true
+            },
+			dates: "required",
+		},
+		messages: {
+			'city[]': "Choose City",
+			dates: "Choose Dates",
+		}
+	}); 
 	</script>
 @endpush
 

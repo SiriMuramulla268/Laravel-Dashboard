@@ -46,10 +46,16 @@
 							<thead>
 								<tr>
 									<th>
-										Item
+										Hotel
 									</th>
 									<th>
-										Discount
+										Room
+									</th>
+									<th>
+										Adult
+									</th>
+									<th>
+										Child
 									</th>
 									<th>
 										Price
@@ -60,74 +66,31 @@
 								</tr>
 							</thead>
 							<tbody>
+								@foreach($room_details as $room)
 								<tr>
 									<td>
 										<div class="thumb_cart">
 											<img src="http://via.placeholder.com/150x150/ccc/fff/thumb_cart_1.jpg" alt="Image">
 										</div>
-										<span class="item_cart">Persius delenit has cu</span>
+										<span class="item_cart">{{$room->hotels->name}}</span>
 									</td>
 									<td>
-										0%
+										{{$room['type']}}$
 									</td>
 									<td>
-										<strong>24,71$</strong>
+										{{$room['per_adult_price']}}$
+									</td>
+									<td>
+										{{$room['per_child_price']}}$
+									</td>
+									<td>
+										<strong>{{$room['price']}}$</strong>
 									</td>
 									<td class="options" style="width:5%; text-align:center;">
 										<a href="#"><i class="icon-trash"></i></a>
 									</td>
 								</tr>
-								<tr>
-									<td>
-										<div class="thumb_cart">
-											<img src="http://via.placeholder.com/150x150/ccc/fff/thumb_cart_2.jpg" alt="Image">
-										</div>
-										<span class="item_cart">At deseruisse scriptorem</span>
-									</td>
-									<td>
-										0%
-									</td>
-									<td>
-										<strong>15,50$</strong>
-									</td>
-									<td class="options" style="width:5%; text-align:center;">
-										<a href="#"><i class="icon-trash"></i></a>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<div class="thumb_cart">
-											<img src="http://via.placeholder.com/150x150/ccc/fff/thumb_cart_3.jpg" alt="Image">
-										</div>
-										<span class="item_cart">Ea vel semper quaerendum</span>
-									</td>
-									<td>
-										0%
-									</td>
-									<td>
-										<strong>24,71$</strong>
-									</td>
-									<td class="options" style="width:5%; text-align:center;">
-										<a href="#"><i class="icon-trash"></i></a>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<div class="thumb_cart">
-											<img src="http://via.placeholder.com/150x150/ccc/fff/thumb_cart_4.jpg" alt="Image">
-										</div>
-										<span class="item_cart">Ei has exerci graecis</span>
-									</td>
-									<td>
-										0%
-									</td>
-									<td>
-										<strong>24,71$</strong>
-									</td>
-									<td class="options" style="width:5%; text-align:center;">
-										<a href="#"><i class="icon-trash"></i></a>
-									</td>
-								</tr>
+								@endforeach
 							</tbody>
 						</table>
 						<div class="cart-options clearfix">
@@ -153,13 +116,13 @@
 					<aside class="col-lg-4" id="sidebar">
 						<div class="box_detail">
 							<div id="total_cart">
-								Total <span class="float-right">69.00$</span>
+								Total <span class="float-right">{{$total}}.00$</span>
 							</div>
 							<ul class="cart_details">
-								<li>From <span>02-11-18</span></li>
-								<li>To <span>04-11-18</span></li>
-								<li>Adults <span>2</span></li>
-								<li>Childs <span>1</span></li>
+								<li>From <span>{{$check_in}}</span></li>
+								<li>To <span>{{$check_out}}</span></li>
+								<li>Adults <span>{{$adult}}</span></li>
+								<li>Childs <span>{{$child}}</span></li>
 							</ul>
 							<a href="/cart2" class="btn_1 full-width purchase">Checkout</a>
 							<div class="text-center"><small>No money charged in this step</small></div>
