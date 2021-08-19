@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Hotel extends Model
 {
     use HasFactory;
+    protected $appends = ['min_price'];
+
 
     protected $fillable = [
         'name',
@@ -36,5 +38,10 @@ class Hotel extends Model
     }
     public function bookings(){
         return $this->hasMany(Booking::class);
+    }
+
+    public function getMinPriceAttribute()
+    {
+        return  $this->rooms()->where('status', 1)->exists() ? $this->rooms->min('price')  : 0 ;
     }
 }

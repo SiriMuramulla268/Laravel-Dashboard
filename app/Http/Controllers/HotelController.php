@@ -15,57 +15,51 @@ class HotelController extends Controller
         $city_details = City::where('status', 1)->get();
         if($hotel_details){
             return view('hotel/index', ['hotel_details'=>$hotel_details, 'city_details'=>$city_details]);
-        }
-    }
-
-    public function getAllHotels(){
-        $hotels = array();
-        $room_data = array();
-
-        // Hotels with city name for Hotels balde page
-        $hotels = Hotel::where('hotels.status', 1)->simplepaginate(4); 
-
-        // Cities with no.of.hotels 
-        $cities = City::select(['id','name'])->withCount('hotels as no_of_hotels')->having('no_of_hotels', '>', 0)
-        ->where('cities.status', 1)->get();
-
-        if($hotels && $cities){
-            return view('hotel/list', ['hotels'=>$hotels, 'cities'=>$cities, 'data'=>'']);
         }else{
-            return view('hotel/list', ['hotels'=>[], 'cities'=>[], 'data'=>'']);
+            return view('hotel/index', ['hotel_details'=>[], 'city_details'=>[]]);
         }
     }
 
-    public function getHotelByCity(Request $request){
-
-        $data = $request->all();
+    public function getHotels(Request $request){
+        $request_data = $request->all();
+        $data = isset($request_data)?$request_data:[];
         $page = isset($data['page'])?$data['page']: '';
-        $city = isset($data['city'])?$data['city']: '';
+        $city = isset($data['city'])?$data['city']: [];
         $dates = isset($data['dates'])?$data['dates']:'';
+        $adult = isset($data['qtyInput'][0])?$data['qtyInput'][0]:1;
+        $cities = [];
+        $get_hotels = [];
+        
+        $cities = City::select(['id','name'])->withCount('hotels as no_of_hotels')
+        ->having('no_of_hotels', '>', 0)->where('cities.status', 1)->get();
 
-        $cities = City::select(['id','name'])->withCount('hotels as no_of_hotels')->having('no_of_hotels', '>', 0)
-        ->where('cities.status', 1)->get();
+        $get_hotels = Hotel::where('hotels.status',1)->paginate(4);
 
-        if(!$data || $page != '' && $city == ''){
-            $get_hotels = Hotel::where('hotels.status',1)->simplepaginate(4);
+        $retun_array = array('hotels'=>$get_hotels, 'cities'=>$cities, 'city_id' => $city,
+         'dates'=>$dates, 'adult'=>$adult, 'data'=>$data);
+
+        if(!$data){ 
             if($get_hotels){
-                return view('hotel/list', ['hotels'=>$get_hotels, 'cities'=>$cities , 'data'=>'']);
-            }
-            else{
-                return view('hotel/list', ['hotels'=>[], 'cities'=>[] , 'data'=>'']);
+                return view('hotel/list', $retun_array);
+            }else{
+                return view('hotel/list', $retun_array);
             }
         }
-        // if($page != '' && $city == ''){
-        //     $get_hotels = Hotel::where('hotels.status',1)->simplepaginate(4);
-        //     return view('hotel/list', ['hotels'=>$get_hotels, 'cities'=>$cities , 'data'=>'']);
-        // }
-        elseif($data){
-            $get_hotels = Hotel::whereIn('hotels.city_id',$data['city'])->where('hotels.status',1)->simplepaginate(4);
-            if($get_hotels){
-                return view('hotel/list', ['hotels'=>$get_hotels, 'cities'=>$cities, 'city_id' => $city, 'dates'=>$dates, 'adult'=>$data['qtyInput'][0], 'data'=>$data]);
-            }
-            else{
-                return view('hotel/list', ['hotels'=>[], 'cities'=>[] , 'data'=>'']);
+        else{
+            if($page!='' && !$city){
+                if($get_hotels){
+                    return view('hotel/list', $retun_array);
+                }else{
+                    return view('hotel/list', $retun_array);
+                }
+            }else{
+                $get_hotels = Hotel::whereIn('hotels.city_id',$city)->where('hotels.status',1)->paginate(4);
+                if($get_hotels){
+                    $retun_array['hotels'] = $get_hotels;
+                    return view('hotel/list', $retun_array);
+                }else{
+                    return view('hotel/list', $retun_array);
+                }
             }
         }
     }
@@ -74,6 +68,9 @@ class HotelController extends Controller
     {
         $hotel_data = array();
         $room_data = array();
+        if($dates == 0){
+            $dates = '';
+        }
         
         // Get hotel data with currency symbol
         $hotel_data = Hotel::with(['country' => function($query) {
@@ -90,17 +87,9 @@ class HotelController extends Controller
         }
     }
 
-    public function getRoomPrice(Request $request){
-        $data = $request->all();
-
-        $room_data = Room::where('id', $data['room'])->where('status', 1)->first();
-        if($room_data){
-            return $room_data->price;
-        }
-    }
-
     public function getCart1(Request $request){
         $data = $request->all();
+        $price = 0;
         $date_arr = explode('>', str_replace(" ",'',$data['dates']));
         $check_in = $date_arr[0];
         $check_out = $date_arr[1];
@@ -108,27 +97,21 @@ class HotelController extends Controller
         $datetime2 = new DateTime($check_out);
         $interval = $datetime1->diff($datetime2);
         $days = $interval->format('%d'); 
-        $adult = (int) $data['qtyInput'][0];
-        $child = (int) $data['qtyInput'][1];
-        $room_price = $days * (int)$data['room_price'];
+        $adult = (int) $data['qtyInput'];
+        $room = explode(',',$data['roomid'][0]);
+        for($i=0;$i<sizeof($room);$i++){
+            $roomid[] = (int)$room[$i];
+        }
        
-        $room_details = Room::with('hotels')->where('id',(int)$data['room'])->where('rooms.status',1)->get();
+        $room_details = Room::with('hotels')->whereIn('id',$roomid)->where('rooms.status',1)->get();
         if($room_details){
-           
-            return view('hotel/cart1',['room_details'=>$room_details, 'total'=>$room_price, 'adult'=> $adult, 'child'=>$child, 'check_in'=>$check_in, 'check_out'=>$check_out]);
+            foreach($room_details as $details){
+                $price += $days * (int)$details['price'];
+            }
+            return view('hotel/cart1',['room_details'=>$room_details, 'total'=>$price, 'adult'=> $adult,   'check_in'=>$check_in, 'check_out'=>$check_out]);
         }
     }
 }
-
-
-// $hotels = Hotel::with('city:id,name')->where('hotels.status', 1)->get();
-// $hotels = Hotel::select(['id', 'name'])->with('city')->where('hotels.status',1)->get();
-// $hotels = City::withCount(['hotels as no_of_hotels' => function($query){
-//     $query->where('hotels.status', 1);
-// }])->where('cities.status', 1)->get();
-// $hotels = Hotel::with(['city' => function($query) {
-//     $query->select(['id', 'name'])->where('cities.status',1);
-// }])->where('hotels.status', 1)->simplepaginate(4); 
 
 ?>
 

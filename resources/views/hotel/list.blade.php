@@ -97,9 +97,9 @@
 												<div class="qtyButtons">
 													<label>Adults</label>
 													@if(isset($adult))
-														<input type="text" name="qtyInput[]" value="{{$adult}}">
+														<input type="text" name="qtyInput" value="{{$adult}}">
 													@else
-														<input type="text" name="qtyInput[]" value="1">
+														<input type="text" name="qtyInput" value=1>
 													@endif
 												</div>
 											<!-- </div> -->
@@ -122,14 +122,14 @@
 										<div class="box_grid">
 											<figure>
 												<a href="#0" class="wish_bt"></a>
-												<a href="hotel/{{$hotel['slug']}}/{{ Request::input('dates')}}"><img src="{{asset('img/hotel_1.jpg')}}" class="img-fluid" alt="" width="800" height="533"><div class="read_more"><span>Read more</span></div></a>
+												<a class="redirect" href="hotel/{{$hotel['slug']}}/{{ Request::input('dates') ?? '0'}}"><img src="{{asset('img/hotel_1.jpg')}}" class="img-fluid" alt="" width="800" height="533"><div class="read_more"><span>Read more</span></div></a>
 												<small>{{$hotel->city->name}}</small>
 											</figure>
 											<div class="wrapper">
 												<div class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></div>
 												<h3><a href="hotel-detail.html">{{$hotel['name']}}</a></h3>
 												<p>{{$hotel['description']}}</p>
-												<span class="price">Price <strong>{{$hotel->country->currency_symbol}} 88</strong></span>
+												<span class="price">Price <strong>{{$hotel->country->currency_symbol}}{{$hotel->min_price}}</strong></span>
 											</div>
 										</div>
 									</div>
@@ -138,6 +138,7 @@
 							<div class="row">
 								<div class="col-8"></div>
 								<div class="col-4">
+									
 									@if($data)
 										<span >{{ $hotels->appends($data)->links() }}</span>
 									@else
@@ -201,7 +202,13 @@
 		  }
 	  });
 	  $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
-		  $(this).val(picker.startDate.format('MM-DD-YY') + ' > ' + picker.endDate.format('MM-DD-YY'));
+		  $(this).val(picker.startDate.format('YYYY-MM-DD') + ' > ' + picker.endDate.format('YYYY-MM-DD'));
+		  $('.redirect').each(function(i, obj) {
+				var rest = obj.href.substring(0, obj.href.lastIndexOf("/") + 1);
+				rest = rest + picker.startDate.format('YYYY-MM-DD') + ' > ' + picker.endDate.format('YYYY-MM-DD');
+				obj.href = rest;
+		  });
+
 	  });
 	  $('input[name="dates"]').on('cancel.daterangepicker', function(ev, picker) {
 		  $(this).val('');
@@ -218,7 +225,7 @@
 			'city[]': "Choose City",
 			dates: "Choose Dates",
 		}
-	}); 
+		}); 
 
 	});
 	</script>

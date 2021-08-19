@@ -46,16 +46,7 @@
 							<thead>
 								<tr>
 									<th>
-										Hotel
-									</th>
-									<th>
 										Room
-									</th>
-									<th>
-										Adult
-									</th>
-									<th>
-										Child
 									</th>
 									<th>
 										Price
@@ -72,16 +63,7 @@
 										<div class="thumb_cart">
 											<img src="http://via.placeholder.com/150x150/ccc/fff/thumb_cart_1.jpg" alt="Image">
 										</div>
-										<span class="item_cart">{{$room->hotels->name}}</span>
-									</td>
-									<td>
-										{{$room['type']}}$
-									</td>
-									<td>
-										{{$room['per_adult_price']}}$
-									</td>
-									<td>
-										{{$room['per_child_price']}}$
+										<span class="item_cart">{{$room['type']}}</span>
 									</td>
 									<td>
 										<strong>{{$room['price']}}$</strong>
@@ -115,14 +97,17 @@
 					
 					<aside class="col-lg-4" id="sidebar">
 						<div class="box_detail">
-							<div id="total_cart">
+							<div class="text-center">
+							{{$room->hotels->name}}
+							</div>
+							<hr>
+							<div id="total_cart" >
 								Total <span class="float-right">{{$total}}.00$</span>
 							</div>
 							<ul class="cart_details">
 								<li>From <span>{{$check_in}}</span></li>
 								<li>To <span>{{$check_out}}</span></li>
 								<li>Adults <span>{{$adult}}</span></li>
-								<li>Childs <span>{{$child}}</span></li>
 							</ul>
 							<a href="/cart2" class="btn_1 full-width purchase">Checkout</a>
 							<div class="text-center"><small>No money charged in this step</small></div>

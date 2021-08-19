@@ -38,9 +38,7 @@ Route::get('contacts', function () {
     return view('hotel/contact');
 });
 
-Route::get('/hotels', [HotelController::class, 'getHotelByCity'])->name('hotel-list');
-
-// Route::get('/gethotels',[HotelController::class, 'getHotelByCity'])->name('get-hotels');
+Route::get('/hotels', [HotelController::class, 'getHotels'])->name('hotel-list');
 
 Route::get('hotel/{slug}/{date}', [HotelController::class, 'getHotelDetails']);
 

@@ -13,10 +13,14 @@
 							<div class="col-lg-4">
 								<div class="form-group">
 									<select class="form-select" name="city[]"  >
-										<option value=""> Choose Location </option>
-										@foreach ($city_details as $city)
-											<option value="{{$city['id']}}">{{$city['name']}}</option>
-										@endforeach
+										@if($city_details)
+											<option value=""> Choose Location </option>
+											@foreach ($city_details as $city)
+												<option value="{{$city['id']}}">{{$city['name']}}</option>
+											@endforeach
+										@else
+											<option value=""> No Cities </option>
+										@endif
 									</select>
 									<i class="icon_pin_alt"></i>
 								</div>
@@ -34,12 +38,8 @@
 										<!-- Quantity Buttons -->
 										<div class="qtyButtons">
 											<label>Adults</label>
-											<input type="text" name="qtyInput[]" value="1">
+											<input type="text" name="qtyInput" value="1">
 										</div>
-										<!-- <div class="qtyButtons">
-											<label>Childrens</label>					
-											<input type="text" name="qtyInput[]" value="0">
-										</div> -->
 									</div>
 								</div>
 							</div>
@@ -55,6 +55,7 @@
 		<!-- /hero_single -->
 
 		<div class="container container-custom margin_80_0">
+			@if($hotel_details)
 			<div class="main_title_2">
 				<span><em></em></span>
 				<h2>Popular Hotels and Accommodations</h2>
@@ -86,7 +87,13 @@
 				
 			</div>
 			<!-- /carousel -->
-			<p class="btn_home_align"><a href="tours-grid-isotope.html" class="btn_1 rounded">View all Hotels</a></p>
+			<p class="btn_home_align"><a href="/hotels" class="btn_1 rounded">View all Hotels</a></p>
+			@else
+			<div class="main_title_2">
+				<span><em></em></span>
+				<h2>No Hotels Found :(</h2>
+			</div>
+			@endif
 			<hr class="large">
 		</div>
 		<!-- /container -->
@@ -124,7 +131,7 @@
 		  }
 	  });
 	  $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
-		  $(this).val(picker.startDate.format('MM-DD-YY') + ' > ' + picker.endDate.format('MM-DD-YY'));
+		  $(this).val(picker.startDate.format('YYYY-MM-DD') + ' > ' + picker.endDate.format('YYYY-MM-DD'));
 	  });
 	  $('input[name="dates"]').on('cancel.daterangepicker', function(ev, picker) {
 		  $(this).val('');

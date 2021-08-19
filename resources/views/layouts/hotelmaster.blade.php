@@ -34,6 +34,9 @@
     }
     /* to remove extra pagination style  */
     .w-5{display:none} 
+    .cb-btn:checked + label {
+        background-color: Green !important;
+    }
 </style>
 <body class="datepicker_mobile_full"><!-- Remove this class to disable datepicker full on mobile -->
     <div id="page" class="theia-exception">
