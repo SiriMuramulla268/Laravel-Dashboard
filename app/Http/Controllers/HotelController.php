@@ -89,6 +89,7 @@ class HotelController extends Controller
 
     public function getCart1(Request $request){
         $data = $request->all();
+        $request->session()->put($data);
         $price = 0;
         $date_arr = explode('>', str_replace(" ",'',$data['dates']));
         $check_in = $date_arr[0];
@@ -98,18 +99,28 @@ class HotelController extends Controller
         $interval = $datetime1->diff($datetime2);
         $days = $interval->format('%d'); 
         $adult = (int) $data['qtyInput'];
-        $room = explode(',',$data['roomid'][0]);
+        $room = explode(',',$data['roomid']);
         for($i=0;$i<sizeof($room);$i++){
             $roomid[] = (int)$room[$i];
         }
-       
         $room_details = Room::with('hotels')->whereIn('id',$roomid)->where('rooms.status',1)->get();
         if($room_details){
             foreach($room_details as $details){
                 $price += $days * (int)$details['price'];
+                $hotel_id = $details['hotel_id'];
             }
-            return view('hotel/cart1',['room_details'=>$room_details, 'total'=>$price, 'adult'=> $adult,   'check_in'=>$check_in, 'check_out'=>$check_out]);
+            $hotel = Hotel::where('id',$hotel_id)->first();
+
+            //array data push to blade page
+            $return_array = array('room_details'=>$room_details, 'total'=>number_format($price,2,".",""), 'adult'=> $adult,   'check_in'=>$check_in, 'check_out'=>$check_out, 'currency'=>$hotel->country->currency_symbol);
+            $request->session()->put($return_array);
+            return view('hotel/cart1',$return_array);
         }
+    }
+
+    public function getCart2($token, Request $request){
+        
+        return view('hotel/cart2',['token'=>$token]);
     }
 }
 

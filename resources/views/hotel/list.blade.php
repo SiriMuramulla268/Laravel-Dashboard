@@ -193,10 +193,23 @@
 	@push('list.blade-scripts')
 	<script>
 	$(function() {
+		var date = $('#dates').val();
+		var date_arr = date.split('>');
+		var start_date, end_date;
+		if(date_arr == ''){
+			start_date = new Date();
+			end_date = new Date();
+		}else{
+			start_date = new Date (date_arr[0]);
+			end_date = new Date (date_arr[1]);
+		}
+		
 	  'use strict';
 	  $('input[name="dates"]').daterangepicker({
 		  autoUpdateInput: false,
 		  minDate:new Date(),
+		  startDate: start_date,
+		  endDate: end_date,
 		  locale: {
 			  cancelLabel: 'Clear'
 		  }

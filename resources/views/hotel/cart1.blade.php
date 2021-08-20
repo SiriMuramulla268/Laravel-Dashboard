@@ -49,10 +49,10 @@
 										Room
 									</th>
 									<th>
-										Price
+										Quantity
 									</th>
 									<th>
-										Actions
+										Price
 									</th>
 								</tr>
 							</thead>
@@ -66,10 +66,10 @@
 										<span class="item_cart">{{$room['type']}}</span>
 									</td>
 									<td>
-										<strong>{{$room['price']}}$</strong>
+										1
 									</td>
-									<td class="options" style="width:5%; text-align:center;">
-										<a href="#"><i class="icon-trash"></i></a>
+									<td>
+										<strong>{{$currency}}{{$room['price']}}</strong>
 									</td>
 								</tr>
 								@endforeach
@@ -79,15 +79,16 @@
 							<div class="float-left">
 								<div class="apply-coupon">
 									<div class="form-group">
-										<input type="text" name="coupon-code" value="" placeholder="Your Coupon Code" class="form-control">
+										<input type="text" name="coupon-code" id="coupon_code" placeholder="Your Coupon Code" class="form-control">
+										<span class="text-danger" id="coupon_msg" value=""></span>
 									</div>
 									<div class="form-group">
-										<button type="button" class="btn_1 outline">Apply Coupon</button>
+										<button type="button" class="btn_1 outline" onclick="coupon()">Apply Coupon</button>
 									</div>
 								</div>
 							</div>
 							<div class="float-right fix_mobile">
-								<button type="button" class="btn_1 outline">Update Cart</button>
+								<a href="{{ url()->previous() }}" type="button" class="btn_1 outline">Update Cart</a>
 							</div>
 						</div>
 						<!-- /cart-options -->
@@ -98,18 +99,18 @@
 					<aside class="col-lg-4" id="sidebar">
 						<div class="box_detail">
 							<div class="text-center">
-							{{$room->hotels->name}}
+							<h5 class="p-3 mb-2 bg-info text-white">{{$room->hotels->name}}</h5>
 							</div>
-							<hr>
+							<br>
 							<div id="total_cart" >
-								Total <span class="float-right">{{$total}}.00$</span>
+								Total <span class="float-right">{{$currency}}{{$total}}</span>
 							</div>
 							<ul class="cart_details">
 								<li>From <span>{{$check_in}}</span></li>
 								<li>To <span>{{$check_out}}</span></li>
 								<li>Adults <span>{{$adult}}</span></li>
 							</ul>
-							<a href="/cart2" class="btn_1 full-width purchase">Checkout</a>
+							<a href="/cart2/{{session('_token')}}" class="btn_1 full-width purchase">Checkout</a>
 							<div class="text-center"><small>No money charged in this step</small></div>
 						</div>
 					</aside>
@@ -122,3 +123,12 @@
 	</main>
 	<!--/main-->
     @endsection
+
+	<script>
+		function coupon(){
+			$("#coupon_msg").show();
+			$('#coupon_msg').html('Invalid Coupon');
+			$("#coupon_msg").fadeOut(200);
+			$('#coupon_code').val('');
+		}
+	</script>

@@ -140,9 +140,7 @@
 
 	$("#search_hotels").validate({
 		rules: {
-			"city[]": {
-                required: true
-            },
+			'city[]': "allRequired",
 			dates: "required",
 		},
 		messages: {

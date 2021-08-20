@@ -50,9 +50,7 @@ Route::get('about', function () {
 
 Route::get('cart-1', [HotelController::class, 'getCart1'])->name('cart-1');
 
-Route::get('cart2', function () {
-    return view('hotel/cart2');
-});
+Route::get('cart2/{session}', [HotelController::class, 'getCart2'])->name('cart-2');
 
 Route::get('cart3', function () {
     return view('hotel/cart3');

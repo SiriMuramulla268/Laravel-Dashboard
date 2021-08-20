@@ -38,7 +38,7 @@
 										<h4>{{$room['type']}} <input type="checkbox" name="book[]" id="{{$room['id']}}" hidden class="cb-btn" onclick="book('{{$room['id']}}')" value="{{$room['type']}}"><label class="btn-sm btn-primary btn-1" for="{{$room['id']}}"><small>Book</small></label></h4>
 										
 										<!-- <input type="button" id="book" class="btn-xs btn-info btn-1" value="Book"> -->
-										<span><strong>{{$room['price']}}{{$hotel_detail->country->currency_symbol}} </strong></span>
+										<span><strong>{{$hotel_detail->country->currency_symbol}}{{$room['price']}}</strong></span>
 										<p>Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.</p>
 
 										<ul class="hotel_facilities">
@@ -61,16 +61,18 @@
 						<div class="box_detail booking">
 							<form id="purchase" action="{{route('cart-1')}}" method="get" autocomplete="off">
 								<div class="price">
-									<span id="price">{{$hotel_detail->min_price}}</span>
+									<span>{{$hotel_detail->country->currency_symbol}}</span> 
+									<span id="price">{{$hotel_detail->min_price}}</span><small>per room</small>
 									<input type="hidden" id="room_price" name="room_price" value="{{$hotel_detail->min_price}}"/>
-									<span>{{$hotel_detail->country->currency_symbol}} </span> <small>per room</small>
+									
 									<div class="score"><span>Good<em>350 Reviews</em></span><strong>7.0</strong></div>
 								</div>
-
+								
 								<div class="form-group input-dates">
-									<input class="form-control" type="text" name="dates" id="dates" autocomplete="off" placeholder="When.." value="{{$dates ?? ''}}">
+									<input class="form-control" type="text" name="dates" id="dates" autocomplete="off" placeholder="When.." value="{{$dates}}">
 									<i class="icon_calendar"></i>
 								</div>
+								
 								<div class="panel-dropdown">
 									<a href="#">Guests <span class="qtyTotal">1</span></a>
 									<div class="panel-dropdown-content right">
@@ -83,8 +85,8 @@
 
 								<div class="form-group clearfix">
 									<div class="custom-select-form">
-										<input type="text" class="form-control" id="rooms" value="" Placeholder="Pick Rooms to Book">
-										<input type="hidden" class="form-control" name="roomid[]" id="roomid" value="">
+										<input type="text" class="form-control" id="rooms" name="rooms" value="" Placeholder="Pick Rooms to Book">
+										<input type="hidden" class="form-control" name="roomid" id="roomid" value="">
 									</div>
 								</div>
 
@@ -115,10 +117,23 @@
 <!-- DATEPICKER  -->
 <script>
 	$(function() {
+		var date = $('#dates').val();
+		var date_arr = date.split('>');
+		var start_date, end_date;
+		if(date_arr == ''){
+			start_date = new Date();
+			end_date = new Date();
+		}else{
+			start_date = new Date (date_arr[0]);
+			end_date = new Date (date_arr[1]);
+		}
+
 	  'use strict';
 	  $('input[name="dates"]').daterangepicker({
 		  autoUpdateInput: false,
 		  minDate:new Date(),
+		  startDate: start_date ,
+		  endDate: end_date,
 		  select: 'range',
 		  startInput: '#dates',
 		  display: 'inline',
@@ -137,25 +152,20 @@
 		rules: {
 			dates: "required",
 			rooms: "required",
-			qtyInput: {
-                notEqual: 0,
-            },
+			
 		},
 		messages: {
 			dates: "Choose Dates",
 			rooms: "Pick Rooms",
-			adult: "Pick",
-			qtyInput: "Guests should not be 0",
 		}
 		});
-
+		$('input[type=checkbox]').prop("checked", false);
 	});
 
 	//booked rooms
 	function book(val){
 		document.getElementById('rooms').value = '';
 		document.getElementById('roomid').value = '';
-		some_array = [];
 		$("input[name='book[]']:checked").each( function (i, val) {
 			if(i>0){
 				document.getElementById('rooms').value += ', ';
@@ -163,7 +173,6 @@
 			}
 			document.getElementById('rooms').value += val.value;
 			document.getElementById('roomid').value += val.id;	
-			
 		});
 	}
 	

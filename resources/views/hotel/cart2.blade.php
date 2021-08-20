@@ -3,53 +3,52 @@
 
     @section('content')
     <main>
-            <div class="hero_in cart_section">
-                <div class="wrapper">
-                    <div class="container">
-                        <div class="bs-wizard clearfix">
-                            <div class="bs-wizard-step">
-                                <div class="text-center bs-wizard-stepnum">Your cart</div>
-                                <div class="progress">
-                                    <div class="progress-bar"></div>
-                                </div>
-                                <a href="cart-1.html" class="bs-wizard-dot"></a>
+        <div class="hero_in cart_section">
+            <div class="wrapper">
+                <div class="container">
+                    <div class="bs-wizard clearfix">
+                        <div class="bs-wizard-step">
+                            <div class="text-center bs-wizard-stepnum">Your cart</div>
+                            <div class="progress">
+                                <div class="progress-bar"></div>
                             </div>
-
-                            <div class="bs-wizard-step active">
-                                <div class="text-center bs-wizard-stepnum">Payment</div>
-                                <div class="progress">
-                                    <div class="progress-bar"></div>
-                                </div>
-                                <a href="#0" class="bs-wizard-dot"></a>
-                            </div>
-
-                            <div class="bs-wizard-step disabled">
-                                <div class="text-center bs-wizard-stepnum">Finish!</div>
-                                <div class="progress">
-                                    <div class="progress-bar"></div>
-                                </div>
-                                <a href="#0" class="bs-wizard-dot"></a>
-                            </div>
+                            <a href="cart-1.html" class="bs-wizard-dot"></a>
                         </div>
-                        <!-- End bs-wizard -->
+
+                        <div class="bs-wizard-step active">
+                            <div class="text-center bs-wizard-stepnum">Payment</div>
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a href="#0" class="bs-wizard-dot"></a>
+                        </div>
+
+                        <div class="bs-wizard-step disabled">
+                            <div class="text-center bs-wizard-stepnum">Finish!</div>
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a href="#0" class="bs-wizard-dot"></a>
+                        </div>
                     </div>
+                    <!-- End bs-wizard -->
                 </div>
             </div>
-            <!--/hero_in-->
+        </div>
+        <!--/hero_in-->
 
+        @if(session('_token') == $token)
             <div class="bg_color_1">
                 <div class="container margin_60_35">
+                    <form id="booking">
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="box_cart">
                             <div class="message">
-                                <p>Exisitng Customer? <a href="#0">Click here to login</a></p>
+                                <p>Exisitng Customer? <a href="#sign-in-dialog" id="sign-in" class="login" title="Sign In">Click here to login</a></p>
                             </div>
                             <div class="form_title">
                                 <h3><strong>1</strong>Your Details</h3>
-                                <p>
-                                    Mussum ipsum cacilds, vidis litro abertis.
-                                </p>
                             </div>
                             <div class="step">
                                 <div class="row">
@@ -94,9 +93,6 @@
 
                             <div class="form_title">
                                 <h3><strong>2</strong>Payment Information</h3>
-                                <p>
-                                    Mussum ipsum cacilds, vidis litro abertis.
-                                </p>
                             </div>
                             <div class="step">
                                 <div class="form-group">
@@ -148,24 +144,12 @@
                             </div>
                             <!--End row -->
 
-                            <hr>
-
-                            <h4>Or checkout with Paypal</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet, vim id accusata sensibus, id ridens quaeque qui. Ne qui vocent ornatus molestie, reque fierent dissentiunt mel ea.
-                            </p>
-                            <p>
-                                <a href="#0"><img src="{{asset('img/paypal_bt.png')}}" alt="Image"></a>
-                            </p>
                             </div>
                             <hr>
                             <!--End step -->
 
                             <div class="form_title">
                                 <h3><strong>3</strong>Billing Address</h3>
-                                <p>
-                                    Mussum ipsum cacilds, vidis litro abertis.
-                                </p>
                             </div>
                             <div class="step">
                                 <div class="row">
@@ -233,25 +217,41 @@
                         
                         <aside class="col-lg-4" id="sidebar">
                             <div class="box_detail">
+                                <div class="text-center">
+                                <h5 class="p-3 mb-2 bg-info text-white">{{session('room_details')[0]['hotels']['name']}}</h5>
+                                </div>
+                                <br>
                                 <div id="total_cart">
-                                    Total <span class="float-right">69.00$</span>
+                                    Total <span class="float-right">{{session('currency')}}{{session('total')}}</span>
                                 </div>
                                 <ul class="cart_details">
-                                    <li>From <span>02-11-18</span></li>
-                                    <li>To <span>04-11-18</span></li>
-                                    <li>Adults <span>2</span></li>
-                                    <li>Childs <span>1</span></li>
+                                    <li>From <span>{{session('check_in')}}</span></li>
+                                    <li>To <span>{{session('check_out')}}</span></li>
+                                    <li>Adults <span>{{session('adult')}}</span></li>
                                 </ul>
                                 <a href="/cart3" class="btn_1 full-width purchase">Purchase</a>
-                                <div class="text-center"><small>No money charged in this step</small></div>
                             </div>
                         </aside>
                     </div>
+                </form>
                     <!-- /row -->
                 </div>
                 <!-- /container -->
             </div>
-            <!-- /bg_color_1 -->
-        </main>
+        @else
+            <div class="bg_color_1">
+                <div class="container margin_60_35">
+                    <div class="row"> 
+                        <div class="col-lg-12 text-center">
+                        Session Expired
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        <!-- /bg_color_1 -->
+    </main>
         <!--/main-->
     @endsection
+
+   
