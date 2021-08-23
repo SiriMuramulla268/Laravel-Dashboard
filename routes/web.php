@@ -48,9 +48,9 @@ Route::get('about', function () {
     return view('hotel/about');
 });
 
-Route::get('cart-1', [HotelController::class, 'getCart1'])->name('cart-1');
+Route::post('cart', [HotelController::class, 'getCart'])->name('cart');
 
-Route::get('cart2/{session}', [HotelController::class, 'getCart2'])->name('cart-2');
+Route::get('checkout/{session}', [HotelController::class, 'getCheckout'])->name('checkout');
 
 Route::get('cart3', function () {
     return view('hotel/cart3');

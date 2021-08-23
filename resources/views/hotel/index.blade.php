@@ -131,7 +131,7 @@
 		  }
 	  });
 	  $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
-		  $(this).val(picker.startDate.format('YYYY-MM-DD') + ' > ' + picker.endDate.format('YYYY-MM-DD'));
+		  $(this).val(picker.startDate.format('MM-DD-YYYY') + ' > ' + picker.endDate.format('MM-DD-YYYY'));
 	  });
 	  $('input[name="dates"]').on('cancel.daterangepicker', function(ev, picker) {
 		  $(this).val('');

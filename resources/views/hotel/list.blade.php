@@ -92,7 +92,7 @@
 									<div class="filter_type">
 										<div>
 											<h6><strong>Guests </strong><span class="qtyTotal">1</span></h6>
-											<!-- <div class="panel-dropdown-content"> -->
+											<div class="panel-dropdown-content">
 												<!-- Quantity Buttons -->
 												<div class="qtyButtons">
 													<label>Adults</label>
@@ -102,7 +102,7 @@
 														<input type="text" name="qtyInput" value=1>
 													@endif
 												</div>
-											<!-- </div> -->
+											</div>
 										</div>
 									</div>
 									<input type="submit" class="btn_search" value="Apply Filter"><br>  
@@ -129,7 +129,7 @@
 												<div class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></div>
 												<h3><a href="hotel-detail.html">{{$hotel['name']}}</a></h3>
 												<p>{{$hotel['description']}}</p>
-												<span class="price">Price <strong>{{$hotel->country->currency_symbol}}{{$hotel->min_price}}</strong></span>
+												<span class="price">Price <strong>{{$hotel->country->currency_symbol}}{{  number_format($hotel->min_price)  }}</strong></span>
 											</div>
 										</div>
 									</div>
@@ -215,13 +215,12 @@
 		  }
 	  });
 	  $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
-		  $(this).val(picker.startDate.format('YYYY-MM-DD') + ' > ' + picker.endDate.format('YYYY-MM-DD'));
+		  $(this).val(picker.startDate.format('MM-DD-YYYY') + ' > ' + picker.endDate.format('MM-DD-YYYY'));
 		  $('.redirect').each(function(i, obj) {
 				var rest = obj.href.substring(0, obj.href.lastIndexOf("/") + 1);
-				rest = rest + picker.startDate.format('YYYY-MM-DD') + ' > ' + picker.endDate.format('YYYY-MM-DD');
+				rest = rest + picker.startDate.format('MM-DD-YYYY') + ' > ' + picker.endDate.format('MM-DD-YYYY');
 				obj.href = rest;
 		  });
-
 	  });
 	  $('input[name="dates"]').on('cancel.daterangepicker', function(ev, picker) {
 		  $(this).val('');

@@ -37,6 +37,7 @@
 		</div>
 		<!--/hero_in-->
 
+		@if($room_details)
 		<div class="bg_color_1">
 			<div class="container margin_60_35">
 				<div class="row">
@@ -57,7 +58,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($room_details as $room)
+								@foreach($room_details as $key=>$room)
 								<tr>
 									<td>
 										<div class="thumb_cart">
@@ -65,11 +66,9 @@
 										</div>
 										<span class="item_cart">{{$room['type']}}</span>
 									</td>
+									<td>{{ $room_qty[$key] }}</td>
 									<td>
-										1
-									</td>
-									<td>
-										<strong>{{$currency}}{{$room['price']}}</strong>
+										<strong>{{$currency}}{{ number_format($room['price'], 2) }}</strong>
 									</td>
 								</tr>
 								@endforeach
@@ -88,7 +87,7 @@
 								</div>
 							</div>
 							<div class="float-right fix_mobile">
-								<a href="{{ url()->previous() }}" type="button" class="btn_1 outline">Update Cart</a>
+								<a href="{{ $cart_url }}" type="button" class="btn_1 outline">Update Cart</a>
 							</div>
 						</div>
 						<!-- /cart-options -->
@@ -103,14 +102,14 @@
 							</div>
 							<br>
 							<div id="total_cart" >
-								Total <span class="float-right">{{$currency}}{{$total}}</span>
+								Total <span class="float-right">{{$currency}}{{ number_format($total, 2) }}</span>
 							</div>
 							<ul class="cart_details">
 								<li>From <span>{{$check_in}}</span></li>
 								<li>To <span>{{$check_out}}</span></li>
 								<li>Adults <span>{{$adult}}</span></li>
 							</ul>
-							<a href="/cart2/{{session('_token')}}" class="btn_1 full-width purchase">Checkout</a>
+							<a href="/checkout/{{session('_token')}}" class="btn_1 full-width purchase">Checkout</a>
 							<div class="text-center"><small>No money charged in this step</small></div>
 						</div>
 					</aside>
@@ -119,6 +118,17 @@
 			</div>
 			<!-- /container -->
 		</div>
+		@else
+		<div class="bg_color_1">
+                <div class="container margin_60_35">
+                    <div class="row"> 
+                        <div class="col-lg-12 text-center">
+                        No Rooms In Cart. Click <a href="/hotels">Hotels</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		@endif
 		<!-- /bg_color_1 -->
 	</main>
 	<!--/main-->

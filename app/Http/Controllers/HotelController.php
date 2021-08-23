@@ -87,40 +87,43 @@ class HotelController extends Controller
         }
     }
 
-    public function getCart1(Request $request){
+    public function getCart(Request $request){
         $data = $request->all();
         $request->session()->put($data);
         $price = 0;
+        $cart_url = $data['url'];
         $date_arr = explode('>', str_replace(" ",'',$data['dates']));
-        $check_in = $date_arr[0];
-        $check_out = $date_arr[1];
+        $check_in = date('Y-m-d', strtotime(strtr($date_arr[0], '-', '/')));
+        $check_out = date('Y-m-d', strtotime(strtr($date_arr[1], '-', '/')));
         $datetime1 = new DateTime($check_in);
-        $datetime2 = new DateTime($check_out);
+        $datetime2 =  new DateTime($check_out);
         $interval = $datetime1->diff($datetime2);
         $days = $interval->format('%d'); 
         $adult = (int) $data['qtyInput'];
+        $room_qty = explode(',',$data['room_qty']);
         $room = explode(',',$data['roomid']);
         for($i=0;$i<sizeof($room);$i++){
             $roomid[] = (int)$room[$i];
         }
+
         $room_details = Room::with('hotels')->whereIn('id',$roomid)->where('rooms.status',1)->get();
         if($room_details){
-            foreach($room_details as $details){
-                $price += $days * (int)$details['price'];
+            foreach($room_details as $key=>$details){
+                $price += $days * (int)$details['price'] * $room_qty[$key];
                 $hotel_id = $details['hotel_id'];
             }
             $hotel = Hotel::where('id',$hotel_id)->first();
 
             //array data push to blade page
-            $return_array = array('room_details'=>$room_details, 'total'=>number_format($price,2,".",""), 'adult'=> $adult,   'check_in'=>$check_in, 'check_out'=>$check_out, 'currency'=>$hotel->country->currency_symbol);
+            $return_array = array('room_details'=>$room_details, 'total'=>number_format($price,2,".",""), 'adult'=> $adult, 'check_in'=>$date_arr[0], 'check_out'=>$date_arr[1], 'currency'=>$hotel->country->currency_symbol, 'cart_url'=>$cart_url,'room_qty'=>$room_qty);
             $request->session()->put($return_array);
-            return view('hotel/cart1',$return_array);
+            return view('hotel/cart',$return_array);
         }
     }
 
-    public function getCart2($token, Request $request){
+    public function getCheckout($token, Request $request){
         
-        return view('hotel/cart2',['token'=>$token]);
+        return view('hotel/checkout',['token'=>$token]);
     }
 }
 

@@ -40,7 +40,8 @@
         @if(session('_token') == $token)
             <div class="bg_color_1">
                 <div class="container margin_60_35">
-                    <form id="booking">
+                    <form id="booking" method="post">
+                    @csrf
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="box_cart">
@@ -54,36 +55,28 @@
                                 <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>First name</label>
-                                        <input type="text" class="form-control" id="firstname_booking" name="firstname_booking">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" id="name_booking" name="name_booking">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Last name</label>
-                                        <input type="text" class="form-control" id="lastname_booking" name="lastname_booking">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Email</label>
                                         <input type="email" id="email_booking" name="email_booking" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Confirm email</label>
-                                        <input type="email" id="email_booking_2" name="email_booking_2" class="form-control">
-                                    </div>
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Telephone</label>
+                                        <label>Mobile</label>
                                         <input type="text" id="telephone_booking" name="telephone_booking" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" id="address_booking" name="address_booking" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -205,12 +198,7 @@
                                 </div>
                                 <!--End row -->
                             </div>
-                            <hr>
-                            <!--End step -->
-                            <div id="policy">
-                                <h5>Cancellation policy</h5>
-                                <p class="nomargin">Lorem ipsum dolor sit amet, vix <a href="#0">cu justo blandit deleniti</a>, discere omittantur consectetuer per eu. Percipit repudiare similique ad sed, vix ad decore nullam ornatus.</p>
-                            </div>
+                           
                             </div>
                         </div>
                         <!-- /col -->
@@ -222,14 +210,15 @@
                                 </div>
                                 <br>
                                 <div id="total_cart">
-                                    Total <span class="float-right">{{session('currency')}}{{session('total')}}</span>
+                                    Total <span class="float-right">{{session('currency')}}{{ number_format(session('total'),2) }}</span>
                                 </div>
                                 <ul class="cart_details">
                                     <li>From <span>{{session('check_in')}}</span></li>
                                     <li>To <span>{{session('check_out')}}</span></li>
                                     <li>Adults <span>{{session('adult')}}</span></li>
                                 </ul>
-                                <a href="/cart3" class="btn_1 full-width purchase">Purchase</a>
+                                <!-- <a href="/cart3" class="btn_1 full-width purchase">Purchase</a> -->
+                                <button type="submit" class=" add_top_30 btn_1 full-width purchase">Purchase</button>
                             </div>
                         </aside>
                     </div>
@@ -253,5 +242,7 @@
     </main>
         <!--/main-->
     @endsection
+
+
 
    

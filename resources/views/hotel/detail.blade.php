@@ -38,7 +38,7 @@
 										<h4>{{$room['type']}} <input type="checkbox" name="book[]" id="{{$room['id']}}" hidden class="cb-btn" onclick="book('{{$room['id']}}')" value="{{$room['type']}}"><label class="btn-sm btn-primary btn-1" for="{{$room['id']}}"><small>Book</small></label></h4>
 										
 										<!-- <input type="button" id="book" class="btn-xs btn-info btn-1" value="Book"> -->
-										<span><strong>{{$hotel_detail->country->currency_symbol}}{{$room['price']}}</strong></span>
+										<span><strong>{{$hotel_detail->country->currency_symbol}}{{ number_format($room['price']) }}</strong></span>
 										<p>Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.</p>
 
 										<ul class="hotel_facilities">
@@ -59,13 +59,14 @@
 					
 					<aside class="col-lg-4" id="sidebar">
 						<div class="box_detail booking">
-							<form id="purchase" action="{{route('cart-1')}}" method="get" autocomplete="off">
+							<form id="purchase" action="{{route('cart')}}" method="post" autocomplete="off">
+								@csrf
 								<div class="price">
 									<span>{{$hotel_detail->country->currency_symbol}}</span> 
-									<span id="price">{{$hotel_detail->min_price}}</span><small>per room</small>
+									<span id="price">{{ number_format($hotel_detail->min_price) }} </span><small>per room</small>
 									<input type="hidden" id="room_price" name="room_price" value="{{$hotel_detail->min_price}}"/>
-									
-									<div class="score"><span>Good<em>350 Reviews</em></span><strong>7.0</strong></div>
+									<input type="hidden" id="url" name="url" value="{{url()->full()}}" />
+									<div class="score"><strong>7.0</strong></div>
 								</div>
 								
 								<div class="form-group input-dates">
@@ -73,13 +74,13 @@
 									<i class="icon_calendar"></i>
 								</div>
 								
-								<div class="panel-dropdown">
-									<a href="#">Guests <span class="qtyTotal">1</span></a>
-									<div class="panel-dropdown-content right">
-										<div class="qtyButtons">
+								<div class="form-group panel-dropdown">
+									<a href="#">Guests <span class="qtyTotal" name="guest">1</span></a>
+									 <div class="panel-dropdown-content right">
+										<div class="qtyButtons"> 
 											<label>Adults</label>
-											<input type="text" name="qtyInput" value="1">
-										</div>
+											<input class="form-control" type="text" name="qtyInput" value="1" min="1" >
+										 </div>	
 									</div>
 								</div>
 
@@ -90,7 +91,10 @@
 									</div>
 								</div>
 
-								<!-- <a href="/cart1" class=" add_top_30 btn_1 full-width purchase">Purchase</a> -->
+								<div class="form-group clearfix">
+									<input type="hidden" class="form-control" id="room_qty" name="room_qty">
+								</div>
+
 								<button type="submit" class=" add_top_30 btn_1 full-width purchase">Purchase</button>
 								<a href="wishlist.html" class="btn_1 full-width outline wishlist"><i class="icon_heart"></i> Add to wishlist</a>
 								<div class="text-center"><small>No money charged in this step</small></div>
@@ -142,7 +146,7 @@
 		  }
 	  });
 	  $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
-		  $(this).val(picker.startDate.format('YYYY-MM-DD') + ' > ' + picker.endDate.format('YYYY-MM-DD'));
+		  $(this).val(picker.startDate.format('MM-DD-YYYY') + ' > ' + picker.endDate.format('MM-DD-YYYY'));
 	  });
 	  $('input[name="dates"]').on('cancel.daterangepicker', function(ev, picker) {
 		  $(this).val('');
@@ -152,7 +156,6 @@
 		rules: {
 			dates: "required",
 			rooms: "required",
-			
 		},
 		messages: {
 			dates: "Choose Dates",
@@ -166,13 +169,17 @@
 	function book(val){
 		document.getElementById('rooms').value = '';
 		document.getElementById('roomid').value = '';
+		document.getElementById('room_qty').value = '';
 		$("input[name='book[]']:checked").each( function (i, val) {
 			if(i>0){
 				document.getElementById('rooms').value += ', ';
 				document.getElementById('roomid').value += ',';
+				document.getElementById('room_qty').value += ',';
+
 			}
 			document.getElementById('rooms').value += val.value;
 			document.getElementById('roomid').value += val.id;	
+			document.getElementById('room_qty').value += 1;	
 		});
 	}
 	
