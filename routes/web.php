@@ -48,10 +48,14 @@ Route::get('about', function () {
     return view('hotel/about');
 });
 
-Route::post('cart', [HotelController::class, 'getCart'])->name('cart');
+Route::post('add-to-cart', [HotelController::class, 'addToCart'])->name('add-to-cart');
+
+Route::get('/cart', [HotelController::class, 'getCart'])->name('cart');
 
 Route::get('checkout/{session}', [HotelController::class, 'getCheckout'])->name('checkout');
 
 Route::get('cart3', function () {
     return view('hotel/cart3');
 });
+
+Route::post('/exist_user', [HotelController::class, 'getExistUser'])->name('exist-user');

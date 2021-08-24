@@ -10,6 +10,7 @@
     var cardQty = document.querySelector(".qtyTotal");
 	// if(tot != 0){
 		cardQty.innerHTML = tot;
+		sessionStorage.setItem('guests',tot);
 	// }
 	} 
 	qtySum();

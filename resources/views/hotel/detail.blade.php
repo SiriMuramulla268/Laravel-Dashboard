@@ -59,7 +59,7 @@
 					
 					<aside class="col-lg-4" id="sidebar">
 						<div class="box_detail booking">
-							<form id="purchase" action="{{route('cart')}}" method="post" autocomplete="off">
+							<form id="purchase" action="{{route('add-to-cart')}}" method="post" autocomplete="off">
 								@csrf
 								<div class="price">
 									<span>{{$hotel_detail->country->currency_symbol}}</span> 
@@ -70,8 +70,8 @@
 								</div>
 								
 								<div class="form-group input-dates">
-									<input class="form-control" type="text" name="dates" id="dates" autocomplete="off" placeholder="When.." value="{{$dates}}">
-									<i class="icon_calendar"></i>
+									<input class="form-control" type="text" name="dates" id="dates" autocomplete="off" placeholder="When.." value="{{$dates}}"><i class="icon_calendar"></i>
+									<span class="error text-danger"><p id="dates_error"></p></span>
 								</div>
 								
 								<div class="form-group panel-dropdown">
@@ -79,14 +79,16 @@
 									 <div class="panel-dropdown-content right">
 										<div class="qtyButtons"> 
 											<label>Adults</label>
-											<input class="form-control" type="text" name="qtyInput" value="1" min="1" >
+											<input class="form-control" type="text" id="qtyInput" name="qtyInput" value="1" min="1" >
 										 </div>	
 									</div>
 								</div>
+								<span class="error text-danger"><p id="qtyInput_error"></p></span>
 
 								<div class="form-group clearfix">
 									<div class="custom-select-form">
 										<input type="text" class="form-control" id="rooms" name="rooms" value="" Placeholder="Pick Rooms to Book">
+										<span class="error text-danger"><p id="rooms_error"></p></span>
 										<input type="hidden" class="form-control" name="roomid" id="roomid" value="">
 									</div>
 								</div>
@@ -95,8 +97,10 @@
 									<input type="hidden" class="form-control" id="room_qty" name="room_qty">
 								</div>
 
-								<button type="submit" class=" add_top_30 btn_1 full-width purchase">Purchase</button>
-								<a href="wishlist.html" class="btn_1 full-width outline wishlist"><i class="icon_heart"></i> Add to wishlist</a>
+								<input type="button" id="add_to_cart" class="add_top_30 btn_1 full-width purchase" onclick="addToCart()" value="Add To Cart">
+
+								<a href="/cart" class="add_top_30 btn_1 full-width outline wishlist" >View Cart</a>
+
 								<div class="text-center"><small>No money charged in this step</small></div>
 							</form>
 						</div>
@@ -121,7 +125,9 @@
 <!-- DATEPICKER  -->
 <script>
 	$(function() {
+		sessionStorage.setItem("url",window.location.href);
 		var date = $('#dates').val();
+		sessionStorage.setItem("dates",date);
 		var date_arr = date.split('>');
 		var start_date, end_date;
 		if(date_arr == ''){
@@ -147,6 +153,7 @@
 	  });
 	  $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
 		  $(this).val(picker.startDate.format('MM-DD-YYYY') + ' > ' + picker.endDate.format('MM-DD-YYYY'));
+		  sessionStorage.setItem("dates",picker.startDate.format('MM-DD-YYYY') + ' > ' + picker.endDate.format('MM-DD-YYYY'));
 	  });
 	  $('input[name="dates"]').on('cancel.daterangepicker', function(ev, picker) {
 		  $(this).val('');
@@ -170,19 +177,50 @@
 		document.getElementById('rooms').value = '';
 		document.getElementById('roomid').value = '';
 		document.getElementById('room_qty').value = '';
+		var item_array = [];
 		$("input[name='book[]']:checked").each( function (i, val) {
 			if(i>0){
 				document.getElementById('rooms').value += ', ';
 				document.getElementById('roomid').value += ',';
 				document.getElementById('room_qty').value += ',';
-
 			}
 			document.getElementById('rooms').value += val.value;
 			document.getElementById('roomid').value += val.id;	
 			document.getElementById('room_qty').value += 1;	
+			item_array.push(val.id);
+			sessionStorage.setItem("cart_items",item_array);
+			sessionStorage.setItem("room_qty",$('#room_qty').val());
 		});
+		$('#cart_items').html(item_array.length);
+		document.getElementById('add_to_cart').value = "Add To Cart";
 	}
-	
+
+	function addToCart(){
+		if($('#dates').val() == ''){
+			document.getElementById('dates_error').innerHTML = 'Choose Dates';
+		}else if($('#rooms').val() == ''){
+			document.getElementById('rooms_error').innerHTML = 'Pick Rooms';
+		}else{
+			document.getElementById('dates_error').innerHTML = '';
+			document.getElementById('rooms_error').innerHTML = '';
+			document.getElementById('qtyInput_error').innerHTML = '';
+			$.ajax({
+			url: "http://127.0.0.1:8000/add-to-cart",
+			type: 'post',
+			data: $('#purchase').serialize(),
+			dataType: 'json',
+			success: function(res) {
+				if(res == 1){
+					$('#dates').val('');
+					$('#rooms').val('');
+					document.getElementById('add_to_cart').value = "Items Added To Cart";
+				}else{
+					document.getElementById('add_to_cart').value = "No Items Added";
+				}
+			}
+			});
+		}
+	}
 </script>
 @endpush
 

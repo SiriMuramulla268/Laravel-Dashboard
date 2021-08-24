@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\City;
 use App\Models\Room;
+use App\Models\User;
 use DB;
 use DateTime;
 
@@ -87,7 +89,7 @@ class HotelController extends Controller
         }
     }
 
-    public function getCart(Request $request){
+    public function addToCart(Request $request){
         $data = $request->all();
         $request->session()->put($data);
         $price = 0;
@@ -105,7 +107,6 @@ class HotelController extends Controller
         for($i=0;$i<sizeof($room);$i++){
             $roomid[] = (int)$room[$i];
         }
-
         $room_details = Room::with('hotels')->whereIn('id',$roomid)->where('rooms.status',1)->get();
         if($room_details){
             foreach($room_details as $key=>$details){
@@ -113,17 +114,30 @@ class HotelController extends Controller
                 $hotel_id = $details['hotel_id'];
             }
             $hotel = Hotel::where('id',$hotel_id)->first();
-
             //array data push to blade page
             $return_array = array('room_details'=>$room_details, 'total'=>number_format($price,2,".",""), 'adult'=> $adult, 'check_in'=>$date_arr[0], 'check_out'=>$date_arr[1], 'currency'=>$hotel->country->currency_symbol, 'cart_url'=>$cart_url,'room_qty'=>$room_qty);
             $request->session()->put($return_array);
-            return view('hotel/cart',$return_array);
+
+            return 1;
+        }else{
+            return 0;
         }
     }
 
+    public function getCart(){
+        return view('hotel/cart');
+    }
+
     public function getCheckout($token, Request $request){
-        
         return view('hotel/checkout',['token'=>$token]);
+    }
+
+    public function getExistUser(Request $request){
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            $get_user = User::where('email',$request->email)->first();
+            return $get_user;
+        }
     }
 }
 

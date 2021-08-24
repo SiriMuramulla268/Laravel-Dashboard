@@ -51,7 +51,11 @@
                 </a>
             </div>
             <ul id="top_menu">
-                <li><a href="cart-1.html" class="cart-menu-btn" title="Cart"><strong>4</strong></a></li>
+                @if(session('room_details'))
+                    <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items" value="">{{ sizeof(session('room_details')) }}</span></strong></a></li>
+                @else
+                    <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items" value="">{{ sizeof(session('room_details')) }}</span></strong></a></li>
+                @endif
                 <li><a href="#sign-in-dialog" id="sign-in" class="login" title="Sign In">Sign In</a></li>
                 <li><a href="wishlist.html" class="wishlist_bt_top" title="Your wishlist">Your wishlist</a></li>
             </ul>
@@ -163,33 +167,7 @@
        
     </div>
 
-    <!-- Sign In Popup -->
-    <div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
-        <div class="small-dialog-header">
-            <h3>Sign In</h3>
-        </div>
-        <form method="POST" action="{{ route('logins') }}" onsubmit="signin()">
-        @csrf
-            <div class="sign-in-wrapper">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" name="email" id="email">
-                    <i class="icon_mail_alt"></i>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" name="password" id="password" value="">
-                    <i class="icon_lock_alt"></i>
-                </div>
-                <div class="text-center"><input type="submit" value="Log In" class="btn_1 full-width"></div>
-                <div class="text-center">
-                    Don’t have an account? <a href="register.html">Sign up</a>
-                </div>
-            </div>
-        </form>
-        <!--form -->
-    </div>
-    <!-- /Sign In Popup -->
+    
 
     <div id="toTop"></div><!-- Back to top button -->
 	
@@ -225,3 +203,4 @@
 </body>
 
 </html>
+

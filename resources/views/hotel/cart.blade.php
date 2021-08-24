@@ -37,7 +37,7 @@
 		</div>
 		<!--/hero_in-->
 
-		@if($room_details)
+		@if(session('room_details'))
 		<div class="bg_color_1">
 			<div class="container margin_60_35">
 				<div class="row">
@@ -58,7 +58,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($room_details as $key=>$room)
+								@foreach(session('room_details') as $key=>$room)
 								<tr>
 									<td>
 										<div class="thumb_cart">
@@ -66,9 +66,9 @@
 										</div>
 										<span class="item_cart">{{$room['type']}}</span>
 									</td>
-									<td>{{ $room_qty[$key] }}</td>
+									<td>1</td>
 									<td>
-										<strong>{{$currency}}{{ number_format($room['price'], 2) }}</strong>
+										<strong>{{session('currency')}}{{ number_format($room['price'], 2) }}</strong>
 									</td>
 								</tr>
 								@endforeach
@@ -87,7 +87,7 @@
 								</div>
 							</div>
 							<div class="float-right fix_mobile">
-								<a href="{{ $cart_url }}" type="button" class="btn_1 outline">Update Cart</a>
+								<a href="{{ session('cart_url') }}" type="button" class="btn_1 outline">Update Cart</a>
 							</div>
 						</div>
 						<!-- /cart-options -->
@@ -98,16 +98,16 @@
 					<aside class="col-lg-4" id="sidebar">
 						<div class="box_detail">
 							<div class="text-center">
-							<h5 class="p-3 mb-2 bg-info text-white">{{$room->hotels->name}}</h5>
+							<h5 class="p-3 mb-2 bg-info text-white">{{session('room_details')[0]['hotels']['name']}}</h5>
 							</div>
 							<br>
 							<div id="total_cart" >
-								Total <span class="float-right">{{$currency}}{{ number_format($total, 2) }}</span>
+								Total <span class="float-right">{{session('currency')}}{{ number_format(session('total'),2) }}</span>
 							</div>
 							<ul class="cart_details">
-								<li>From <span>{{$check_in}}</span></li>
-								<li>To <span>{{$check_out}}</span></li>
-								<li>Adults <span>{{$adult}}</span></li>
+								<li>From <span>{{session('check_in')}}</span></li>
+								<li>To <span>{{session('check_out')}}</span></li>
+								<li>Adults <span>{{session('adult')}}</span></li>
 							</ul>
 							<a href="/checkout/{{session('_token')}}" class="btn_1 full-width purchase">Checkout</a>
 							<div class="text-center"><small>No money charged in this step</small></div>
@@ -123,7 +123,7 @@
                 <div class="container margin_60_35">
                     <div class="row"> 
                         <div class="col-lg-12 text-center">
-                        No Rooms In Cart. Click <a href="/hotels">Hotels</a>
+                        No Rooms Added To Cart. Click <a href="/hotels">Hotels</a>
                         </div>
                     </div>
                 </div>
