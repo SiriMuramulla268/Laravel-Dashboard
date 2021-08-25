@@ -54,8 +54,6 @@ Route::get('/cart', [HotelController::class, 'getCart'])->name('cart');
 
 Route::get('checkout/{session}', [HotelController::class, 'getCheckout'])->name('checkout');
 
-Route::get('cart3', function () {
-    return view('hotel/cart3');
-});
-
 Route::post('/exist_user', [HotelController::class, 'getExistUser'])->name('exist-user');
+
+Route::post('booking_process', [HotelController::class, 'booking'])->name('booking');

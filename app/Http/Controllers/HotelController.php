@@ -7,8 +7,14 @@ use App\Models\Hotel;
 use App\Models\City;
 use App\Models\Room;
 use App\Models\User;
+use App\Models\Booking;
+use App\Models\BookingDetail;
 use DB;
 use DateTime;
+use Stripe\Stripe;
+use Stripe\Charge;
+use Stripe\Customer;
+use Config;
 
 class HotelController extends Controller
 {
@@ -136,9 +142,68 @@ class HotelController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $get_user = User::where('email',$request->email)->first();
-            return $get_user;
+            session()->put('user',$get_user);
+            return 1;
         }
     }
+
+    public function booking(Request $request){
+        $data = $request->all();
+        $session = session()->all();
+        $hotel_id = $session['room_details'][0]['hotels']->id;
+        $rooms = $session['room_details'];
+        $check_in = date('Y-m-d', strtotime(strtr($session['check_in'], '-', '/')));
+        $check_out = date('Y-m-d', strtotime(strtr($session['check_out'], '-', '/')));
+        
+        //Insert or Update User details
+        $user = User::updateOrCreate(
+            ['email' => $data['email_booking']],
+            ['type' => 'user', 'name' => $data['name_booking'], 'mobile' => $data['telephone_booking'], 'address' => $data['address_booking']]
+        );
+        if($user->id){
+            session()->put('user',$user);
+            //Booking data initiated
+            $insert_booking = new Booking;
+            $insert_booking['hotel_id'] = $hotel_id;
+            $insert_booking['user_id'] = $user->id;
+            $insert_booking['request'] = $request;
+            $insert_booking['booking_status'] = 'pending';
+            $insert_booking['total'] = $session['total'];
+            if($insert_booking->save()){
+                foreach($rooms as $room){
+                    $booking_details = new BookingDetail;
+                    $booking_details['booking_id'] = $insert_booking->id;
+                    $booking_details['check_in'] = 
+                    $booking_details['check_out'] = $check_in;
+                    $booking_details['guest_details'] = $check_out;
+                    $booking_details['room_id'] = $room['id'];
+                    $booking_details['amount'] = $room['price'];
+                    $booking_details['adult'] = $session['adult'];
+                    $booking_details->save();
+                }
+
+                //Stripe Payment Gateway
+                $stripe_secret = Stripe::setApiKey(env('STRIPE_SECRET'));
+                $customer = Customer::create(array(
+                    'name' => $data['name_booking'],
+                    'email' => $data['email_booking'],
+                    'source' => $data['stripeToken'],
+                    "address" => ["city" => $data['city_booking'], "country" => $data['country'], "line1" => $data['street_1'], "line2" => $data['street_2'], "postal_code" => $data['postal_code'], "state" => $data['state_booking']]
+                ));
+                
+                $payment = Charge::create ([
+                    'customer' => $customer->id, 
+                    "amount" => (int)$session['total'],
+                    "currency" => 'inr',
+                    "description" => "Test payment"
+                ]);
+                if($payment){
+                    return view('hotel/bookingstatus',['response'=>$payment]);
+                }
+            }
+        }
+    }
+
 }
 
 ?>

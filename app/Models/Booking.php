@@ -14,6 +14,7 @@ class Booking extends Model
         'user_id',
         'request',
         'response',
+        'total',
         'booking_status'
     ];
 

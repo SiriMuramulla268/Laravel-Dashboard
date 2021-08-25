@@ -54,7 +54,7 @@
                 @if(session('room_details'))
                     <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items" value="">{{ sizeof(session('room_details')) }}</span></strong></a></li>
                 @else
-                    <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items" value="">{{ sizeof(session('room_details')) }}</span></strong></a></li>
+                    <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items" value="">0</span></strong></a></li>
                 @endif
                 <li><a href="#sign-in-dialog" id="sign-in" class="login" title="Sign In">Sign In</a></li>
                 <li><a href="wishlist.html" class="wishlist_bt_top" title="Your wishlist">Your wishlist</a></li>
@@ -69,10 +69,11 @@
             </a>
             <nav id="menu" class="main-menu">
                 <ul>
-                    <li><span><a href="/">Home</a></span>
-                    </li>
-                    <li><span><a href="/hotels">Hotels</a></span>
-                    </li>
+                    @if(session('user'))
+                        <li><strong><span><a href="">Hello! <span class="text-danger" id="user_name" value="">{{ session('user')['name'] }}</span></a></span></strong></li>
+                    @endif
+                    <li><span><a href="/">Home</a></span></li>
+                    <li><span><a href="/hotels">Hotels</a></span></li>
                     
                 </ul>
             </nav>
@@ -193,10 +194,12 @@
     <!-- Datepicker -->
     <script src="{{asset('assets/validate.js')}}"></script>
     <script type="text/javascript" src="jquery.validate.js"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
     @stack('index.blade-scripts')
     @stack('list.blade-scripts')
     @stack('detail.blade-scripts')
+    @stack('checkout.blade-scripts')
    
     <!-- INPUT QUANTITY  -->
 	<script src="{{asset('js/input_qty.js')}}"></script>

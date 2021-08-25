@@ -40,7 +40,7 @@
         @if(session('_token') == $token)
             <div class="bg_color_1">
                 <div class="container margin_60_35">
-                    <form id="booking" method="post">
+                    <form id="booking" method="post" action="{{ route('booking') }}"  class="require-validation" data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}">
                     @csrf
                     <div class="row">
                         <div class="col-lg-8">
@@ -56,13 +56,13 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" id="name_booking" name="name_booking">
+                                        <input type="text" class="form-control" id="name_booking" name="name_booking" value="{{ session('user')['name']?session('user')['name'] : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="email" id="email_booking" name="email_booking" class="form-control">
+                                        <input type="email" id="email_booking" name="email_booking" class="form-control" value="{{ session('user')['email'] }}">
                                     </div>
                                 </div>
                             </div>
@@ -70,13 +70,13 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Mobile</label>
-                                        <input type="text" id="telephone_booking" name="telephone_booking" class="form-control">
+                                        <input type="text" id="telephone_booking" name="telephone_booking" class="form-control" value="{{ session('user')['mobile'] }}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text" id="address_booking" name="address_booking" class="form-control">
+                                        <input type="text" id="address_booking" name="address_booking" class="form-control" value="{{ session('user')['address'] }}">
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                                 <div class="col-md-6 col-sm-12">
                                     <div class="form-group">
                                         <label>Card number</label>
-                                        <input type="text" id="card_number" name="card_number" class="form-control">
+                                        <input type="text" id="card_number" name="card_number" class="form-control card-number" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-12">
@@ -109,12 +109,12 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" id="expire_month" name="expire_month" class="form-control" placeholder="MM">
+                                                <input type="text" id="expire_month" name="expire_month" class="form-control card-expiry-month" placeholder="MM">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" id="expire_year" name="expire_year" class="form-control" placeholder="Year">
+                                                <input type="text" id="expire_year" name="expire_year" class="form-control card-expiry-year" placeholder="Year">
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +125,7 @@
                                         <div class="row">
                                             <div class="col-4">
                                                 <div class="form-group">
-                                                    <input type="text" id="ccv" name="ccv" class="form-control" placeholder="CCV">
+                                                    <input type="text" id="cvv" name="cvv" class="form-control card-cvc" placeholder="CVV">
                                                 </div>
                                             </div>
                                             <div class="col-8">
@@ -134,6 +134,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <div class='form-row row'>
+                                    <div class='col-md-12 error form-group hide'>
+                                        <div class='alert-danger alert'>Please correct the errors and try
+                                            again.</div>
+                                    </div>
+                                </div> -->
                             </div>
                             <!--End row -->
 
@@ -271,25 +277,74 @@
         <!--form -->
     </div>
     <!-- /Sign In Popup -->
-
+@push('checkout.blade-scripts')
     <script>
-    
-
-    function signin(){
-        $.ajax({
-        url: "http://127.0.0.1:8000/exist_user",
-        type: 'post',
-        data: $('#exist_user').serialize(),
-        dataType: 'json',
-        success: function(res) {
-            $('#sign-in-dialog').hide();
-            document.getElementById('name_booking').value = res.name;
-            document.getElementById('email_booking').value = res.email;
-            document.getElementById('telephone_booking').value = res.mobile;
-            document.getElementById('address_booking').value = res.address;
-        }
+        $(function() {
+            var $form         = $(".require-validation");
+            $('form.require-validation').bind('submit', function(e) {
+                var $form         = $(".require-validation"),
+                inputSelector = ['input[type=email]', 'input[type=password]',
+                                    'input[type=text]', 'input[type=file]',
+                                    'textarea'].join(', '),
+                $inputs       = $form.find('.required').find(inputSelector),
+                $errorMessage = $form.find('div.error'),
+                valid         = true;
+                $errorMessage.addClass('hide');
+            
+                $('.has-error').removeClass('has-error');
+                $inputs.each(function(i, el) {
+                    var $input = $(el);
+                    if ($input.val() === '') {
+                    $input.parent().addClass('has-error');
+                    $errorMessage.removeClass('hide');
+                    e.preventDefault();
+                    }
+                });
+            
+                if (!$form.data('cc-on-file')) {
+                    e.preventDefault();
+                    Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+                    Stripe.createToken({
+                    number: $('.card-number').val(),
+                    cvc: $('.card-cvc').val(),
+                    exp_month: $('.card-expiry-month').val(),
+                    exp_year: $('.card-expiry-year').val()
+                    }, stripeResponseHandler);
+                }
+            });
+        
+            function stripeResponseHandler(status, response) {
+                alert('here');
+                if (response.error) {
+                    $('.error')
+                        .removeClass('hide')
+                        .find('.alert')
+                        .text(response.error.message);
+                } else {
+                    /* token contains id, last4, and card type */
+                    var token = response['id'];
+                        
+                    $form.find('input[type=text]').empty();
+                    $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
+                    $form.get(0).submit();
+                }
+            }
         });
-    }
+    
+        function signin(){
+            $.ajax({
+            url: "http://127.0.0.1:8000/exist_user",
+            type: 'post',
+            data: $('#exist_user').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                if(res == 1){
+                    $('#sign-in-dialog').hide();
+                }
+            }
+            });
+        }
     </script>
+@endpush
 
    
