@@ -19,6 +19,7 @@
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 	<link href="{{asset('css/vendors.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- ALTERNATIVE COLORS CSS -->
     <link href="#" id="colors" rel="stylesheet">
@@ -36,6 +37,11 @@
     .w-5{display:none} 
     .cb-btn:checked + label {
         background-color: Green !important;
+    }
+    .fa {
+        margin-left: -12px;
+        margin-right: 8px;
+        height: 12px;
     }
 </style>
 <body class="datepicker_mobile_full"><!-- Remove this class to disable datepicker full on mobile -->

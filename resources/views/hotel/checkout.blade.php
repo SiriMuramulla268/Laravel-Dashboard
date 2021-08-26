@@ -56,13 +56,13 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" id="name_booking" name="name_booking" value="{{ session('user')['name']?session('user')['name'] : '' }}">
+                                        <input type="text" class="form-control" id="name_booking" name="name_booking" value="{{ Session::has('user')? Session::get('user')['name'] : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="email" id="email_booking" name="email_booking" class="form-control" value="{{ session('user')['email'] }}">
+                                        <input type="email" id="email_booking" name="email_booking" class="form-control" value="{{ Session::has('user')? Session::get('user')['email'] : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -70,13 +70,13 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Mobile</label>
-                                        <input type="text" id="telephone_booking" name="telephone_booking" class="form-control" value="{{ session('user')['mobile'] }}">
+                                        <input type="text" id="telephone_booking" name="telephone_booking" class="form-control" value="{{ Session::has('user')? Session::get('user')['mobile'] : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text" id="address_booking" name="address_booking" class="form-control" value="{{ session('user')['address'] }}">
+                                        <input type="text" id="address_booking" name="address_booking" class="form-control" value="{{ Session::has('user')? Session::get('user')['address'] : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -158,11 +158,9 @@
                                             <div class="custom-select-form">
                                             <select class="wide add_bottom_15" name="country" id="country">
                                                 <option value="" selected>Select your country</option>
-                                                <option value="Europe">Europe</option>
-                                                <option value="United states">United states</option>
-                                                <option value="South America">South America</option>
-                                                <option value="Oceania">Oceania</option>
-                                                <option value="Asia">Asia</option>
+                                                <option value="US">United states</option>
+                                                <option value="SA">South America</option>
+                                                <option value="IN">India</option>
                                             </select>
                                             </div>
                                         </div>
@@ -223,8 +221,9 @@
                                     <li>To <span>{{session('check_out')}}</span></li>
                                     <li>Adults <span>{{session('adult')}}</span></li>
                                 </ul>
-                                <!-- <a href="/cart3" class="btn_1 full-width purchase">Purchase</a> -->
-                                <button type="submit" class=" add_top_30 btn_1 full-width purchase">Purchase</button>
+                                <!-- <a href="/cart3" class="btn_1 full-width purchase">Purchase</a> <i class="fa fa-spinner fa-spin"></i>-->
+                                <button type="submit" id="purchase" class="add_top_30 btn_1 full-width purchase">
+                                Proceed To Book</button>
                             </div>
                         </aside>
                     </div>
@@ -282,6 +281,7 @@
         $(function() {
             var $form         = $(".require-validation");
             $('form.require-validation').bind('submit', function(e) {
+                $('#purchase').html('<span class="spinner-border spinner-border-sm"></span>  Booking Processing...');
                 var $form         = $(".require-validation"),
                 inputSelector = ['input[type=email]', 'input[type=password]',
                                     'input[type=text]', 'input[type=file]',
@@ -314,7 +314,6 @@
             });
         
             function stripeResponseHandler(status, response) {
-                alert('here');
                 if (response.error) {
                     $('.error')
                         .removeClass('hide')
@@ -323,7 +322,6 @@
                 } else {
                     /* token contains id, last4, and card type */
                     var token = response['id'];
-                        
                     $form.find('input[type=text]').empty();
                     $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
                     $form.get(0).submit();

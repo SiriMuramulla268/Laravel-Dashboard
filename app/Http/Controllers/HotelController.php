@@ -9,6 +9,8 @@ use App\Models\Room;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\BookingDetail;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Mailer;
 use DB;
 use DateTime;
 use Stripe\Stripe;
@@ -121,7 +123,7 @@ class HotelController extends Controller
             }
             $hotel = Hotel::where('id',$hotel_id)->first();
             //array data push to blade page
-            $return_array = array('room_details'=>$room_details, 'total'=>number_format($price,2,".",""), 'adult'=> $adult, 'check_in'=>$date_arr[0], 'check_out'=>$date_arr[1], 'currency'=>$hotel->country->currency_symbol, 'cart_url'=>$cart_url,'room_qty'=>$room_qty);
+            $return_array = array('room_details'=>$room_details, 'total'=>number_format($price,2,".",""), 'adult'=> $adult, 'check_in'=>$date_arr[0], 'check_out'=>$date_arr[1], 'currency'=>$hotel->country->currency_symbol,'currency_code'=>$hotel->country->currency, 'cart_url'=>$cart_url,'room_qty'=>$room_qty);
             $request->session()->put($return_array);
 
             return 1;
@@ -150,7 +152,11 @@ class HotelController extends Controller
     public function booking(Request $request){
         $data = $request->all();
         $session = session()->all();
+        if(!isset($session['room_details'])){
+           return redirect('/hotels');
+        }
         $hotel_id = $session['room_details'][0]['hotels']->id;
+        $hotel_name = $session['room_details'][0]['hotels']->name;
         $rooms = $session['room_details'];
         $check_in = date('Y-m-d', strtotime(strtr($session['check_in'], '-', '/')));
         $check_out = date('Y-m-d', strtotime(strtr($session['check_out'], '-', '/')));
@@ -162,7 +168,7 @@ class HotelController extends Controller
         );
         if($user->id){
             session()->put('user',$user);
-            //Booking data initiated
+            //Booking initiated
             $insert_booking = new Booking;
             $insert_booking['hotel_id'] = $hotel_id;
             $insert_booking['user_id'] = $user->id;
@@ -173,9 +179,9 @@ class HotelController extends Controller
                 foreach($rooms as $room){
                     $booking_details = new BookingDetail;
                     $booking_details['booking_id'] = $insert_booking->id;
-                    $booking_details['check_in'] = 
-                    $booking_details['check_out'] = $check_in;
-                    $booking_details['guest_details'] = $check_out;
+                    $booking_details['check_in'] = $check_in;
+                    $booking_details['check_out'] = $check_out;
+                    $booking_details['guest_details'] = $data['address_booking'];
                     $booking_details['room_id'] = $room['id'];
                     $booking_details['amount'] = $room['price'];
                     $booking_details['adult'] = $session['adult'];
@@ -191,14 +197,36 @@ class HotelController extends Controller
                     "address" => ["city" => $data['city_booking'], "country" => $data['country'], "line1" => $data['street_1'], "line2" => $data['street_2'], "postal_code" => $data['postal_code'], "state" => $data['state_booking']]
                 ));
                 
-                $payment = Charge::create ([
+                $payment_response = Charge::create ([
                     'customer' => $customer->id, 
                     "amount" => (int)$session['total'],
-                    "currency" => 'inr',
+                    "currency" => strtolower($session['currency_code']),
                     "description" => "Test payment"
                 ]);
-                if($payment){
-                    return view('hotel/bookingstatus',['response'=>$payment]);
+                if($payment_response){
+                    if($payment_response->status == 'succeeded'){
+                        $insert_booking['booking_status'] = 'success';
+                        $insert_booking['response'] = $payment_response;
+                        $insert_booking->save();
+
+                        $details = ['transaction_no' => $payment_response->balance_transaction, 'booking_no' => $insert_booking->id,'user' => $user->name, 'hotel' => $hotel_name, 'rooms' => $session['rooms'], 
+                        'check_in' => $check_in, 'check_out' => $check_out, 'adult' => $session['adult']];
+                      
+                        // Mail::send('emails.mail',$details, function ($m) use ($user) {
+                        //     $m->from('hotelbooking@gmail.com','Hotel Booking');
+                        //     $m->to($user->email, $user->name)->subject('Confirm Booking!');
+                        // });
+
+                        Mail::to($user->email, $user->name)->send(new Mailer($details));
+
+                        session()->forget(['room_details']);
+                        return view('hotel/book',['response'=>$payment_response,'email' => $user->email]);
+                    }else{
+                        $insert_booking['booking_status'] = 'fail';
+                        $insert_booking['response'] = $payment_response;
+                        $insert_booking->save();
+                        return view('hotel/book',['response'=>$payment_response]);
+                    }
                 }
             }
         }

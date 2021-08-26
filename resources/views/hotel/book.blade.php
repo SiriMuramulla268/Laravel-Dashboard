@@ -32,10 +32,14 @@
 						</div>
 					</div>
 					<!-- End bs-wizard -->
-					<div id="confirm">
-						<h4>Order completed!</h4>
-						<p>You'll receive a confirmation email at mail@example.com</p>
-					</div>
+					@if(session('room_details'))
+						@if($response['status'] == 'succeeded')
+						<div id="confirm">
+							<h4>Booking Done Sucessfully!</h4>
+							<p>You'll receive a confirmation email at {{ $email }}</p>
+						</div>
+						@endif
+					@endif
 				</div>
 			</div>
 		</div>

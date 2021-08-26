@@ -56,4 +56,8 @@ Route::get('checkout/{session}', [HotelController::class, 'getCheckout'])->name(
 
 Route::post('/exist_user', [HotelController::class, 'getExistUser'])->name('exist-user');
 
-Route::post('booking_process', [HotelController::class, 'booking'])->name('booking');
+Route::post('book', [HotelController::class, 'booking'])->name('booking');
+
+Route::get('mail', function () {
+    return view('emails/mail');
+});
