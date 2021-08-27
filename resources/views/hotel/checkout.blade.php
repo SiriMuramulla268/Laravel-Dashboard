@@ -66,6 +66,17 @@
                                     </div>
                                 </div>
                             </div>
+                            @if(session()->has('user'))
+                            @else
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="text" id="password_booking" name="password_booking" class="form-control" value="" placeholder="Password is required for new user">
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -83,14 +94,14 @@
                             </div>
                             <hr>
                             <!--End step -->
-
+                            
                             <div class="form_title">
                                 <h3><strong>2</strong>Payment Information</h3>
                             </div>
                             <div class="step">
                                 <div class="form-group">
                                 <label>Name on card</label>
-                                <input type="text" class="form-control" id="name_card_bookign" name="name_card_bookign">
+                                <input type="text" class="form-control" id="name_card_booking" name="name_card_booking">
                             </div>
                             <div class="row">
                                 <div class="col-md-6 col-sm-12">
@@ -134,12 +145,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class='form-row row'>
+                                <div class='form-row row hide'>
                                     <div class='col-md-12 error form-group hide'>
-                                        <div class='alert-danger alert'>Please correct the errors and try
-                                            again.</div>
+                                        <div id="error" class=''></div>
                                     </div>
-                                </div> -->
+                                </div>
                             </div>
                             <!--End row -->
 
@@ -158,9 +168,9 @@
                                             <div class="custom-select-form">
                                             <select class="wide add_bottom_15" name="country" id="country">
                                                 <option value="" selected>Select your country</option>
-                                                <option value="US">United states</option>
-                                                <option value="SA">South America</option>
-                                                <option value="IN">India</option>
+                                                @foreach($countries as $country)
+                                                    <option value="{{$country['iso2']}}">{{ $country['name'] }}</option>
+                                                @endforeach
                                             </select>
                                             </div>
                                         </div>
@@ -279,9 +289,50 @@
 @push('checkout.blade-scripts')
     <script>
         $(function() {
+            $("#booking").validate({
+            rules: {
+                name_booking: "required",
+                email_booking: "required",
+                password_booking: "required",
+                telephone_booking: "required",
+                address_booking: "required",
+                name_card_booking: "required",
+                card_number: "required",
+                expire_month: "required",
+                expire_year: "required",
+                cvv: "required",
+                country: "required",
+                street_1: "required",
+                street_2: "required",
+                city_booking: "required",
+                state_booking: "required",
+                postal_code: "required",
+            },
+            messages: {
+                name_booking: "required",
+                email_booking: "required",
+                password_booking: "required",
+                telephone_booking: "required",
+                address_booking: "required",
+                name_card_booking: "required",
+                card_number: "required",
+                expire_month: "required",
+                expire_year: "required",
+                cvv: "required",
+                country: "required",
+                street_1: "required",
+                street_2: "required",
+                city_booking: "required",
+                state_booking: "required",
+                postal_code: "required",
+            }
+            });
+                
             var $form         = $(".require-validation");
             $('form.require-validation').bind('submit', function(e) {
-                $('#purchase').html('<span class="spinner-border spinner-border-sm"></span>  Booking Processing...');
+                
+                
+
                 var $form         = $(".require-validation"),
                 inputSelector = ['input[type=email]', 'input[type=password]',
                                     'input[type=text]', 'input[type=file]',
@@ -315,11 +366,13 @@
         
             function stripeResponseHandler(status, response) {
                 if (response.error) {
+                    document.getElementById('error').className = 'alert-danger alert';
                     $('.error')
                         .removeClass('hide')
                         .find('.alert')
                         .text(response.error.message);
                 } else {
+                    $('#purchase').html('<span class="spinner-border spinner-border-sm"></span>  Booking Processing...');
                     /* token contains id, last4, and card type */
                     var token = response['id'];
                     $form.find('input[type=text]').empty();

@@ -61,3 +61,5 @@ Route::post('book', [HotelController::class, 'booking'])->name('booking');
 Route::get('mail', function () {
     return view('emails/mail');
 });
+
+Route::get('history', [HotelController::class, 'bookingHistory'])->name('history');

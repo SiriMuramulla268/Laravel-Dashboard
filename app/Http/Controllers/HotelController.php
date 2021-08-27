@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Hotel;
+use App\Models\Country;
 use App\Models\City;
 use App\Models\Room;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\BookingDetail;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Mailer;
 use DB;
@@ -23,6 +25,7 @@ class HotelController extends Controller
     public function getHotelIndex(){
         $hotel_details = Hotel::where('status', 1)->where('featured', 1)->get();
         $city_details = City::where('status', 1)->get();
+
         if($hotel_details){
             return view('hotel/index', ['hotel_details'=>$hotel_details, 'city_details'=>$city_details]);
         }else{
@@ -137,7 +140,8 @@ class HotelController extends Controller
     }
 
     public function getCheckout($token, Request $request){
-        return view('hotel/checkout',['token'=>$token]);
+        $countries = Country::get();
+        return view('hotel/checkout',['token'=>$token, 'countries'=>$countries]);
     }
 
     public function getExistUser(Request $request){
@@ -160,12 +164,17 @@ class HotelController extends Controller
         $rooms = $session['room_details'];
         $check_in = date('Y-m-d', strtotime(strtr($session['check_in'], '-', '/')));
         $check_out = date('Y-m-d', strtotime(strtr($session['check_out'], '-', '/')));
-        
+       
+        $update = array();
+        $update['type'] = 'user';
+        $update['name'] = $data['name_booking'];
+        $update['mobile'] = $data['telephone_booking'];
+        $update['address'] = $data['address_booking'];
+        if(isset($data['password_booking'])){
+            $update['password'] = Hash::make($data['password_booking']);
+        }
         //Insert or Update User details
-        $user = User::updateOrCreate(
-            ['email' => $data['email_booking']],
-            ['type' => 'user', 'name' => $data['name_booking'], 'mobile' => $data['telephone_booking'], 'address' => $data['address_booking']]
-        );
+        $user = User::updateOrCreate(['email' => $data['email_booking']],$update);
         if($user->id){
             session()->put('user',$user);
             //Booking initiated
@@ -201,7 +210,7 @@ class HotelController extends Controller
                     'customer' => $customer->id, 
                     "amount" => (int)$session['total'],
                     "currency" => strtolower($session['currency_code']),
-                    "description" => "Test payment"
+                    "description" => "Test payment",
                 ]);
                 if($payment_response){
                     if($payment_response->status == 'succeeded'){
@@ -212,11 +221,7 @@ class HotelController extends Controller
                         $details = ['transaction_no' => $payment_response->balance_transaction, 'booking_no' => $insert_booking->id,'user' => $user->name, 'hotel' => $hotel_name, 'rooms' => $session['rooms'], 
                         'check_in' => $check_in, 'check_out' => $check_out, 'adult' => $session['adult']];
                       
-                        // Mail::send('emails.mail',$details, function ($m) use ($user) {
-                        //     $m->from('hotelbooking@gmail.com','Hotel Booking');
-                        //     $m->to($user->email, $user->name)->subject('Confirm Booking!');
-                        // });
-
+                        // Send mail to user
                         Mail::to($user->email, $user->name)->send(new Mailer($details));
 
                         session()->forget(['room_details']);
@@ -232,6 +237,16 @@ class HotelController extends Controller
         }
     }
 
+    public function bookingHistory(Request $request){
+        $session = session()->all();
+        if(isset($session['user'])){
+            $user = $session['user'];
+            $bookings = Booking::with('bookingDetail')->where('user_id',$user['id'])->where('booking_status','success')->paginate(6);
+            return view('hotel/history',['bookings'=>$bookings,'user'=>$user]);
+        }else{
+            return view('hotel/history');
+        }
+    }
 }
 
 ?>

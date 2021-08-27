@@ -30,6 +30,9 @@ class Room extends Model
         return $this->hasMany(RoomAmenity::class);
     }
 
+    public function bookingRoom(){
+        return $this->hasMant(BookingDetail::class);
+    }
 
 }
 

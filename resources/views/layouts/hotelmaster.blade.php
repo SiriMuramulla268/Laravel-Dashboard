@@ -27,6 +27,9 @@
     <!-- YOUR CUSTOM CSS -->
     <link href="{{asset('css/custom.css')}}" rel="stylesheet">
 
+    <!-- SPECIFIC CSS -->
+    <link href="{{asset('css/blog.css')}}" rel="stylesheet">
+
 </head>
 <style>
    label.error {
@@ -63,7 +66,7 @@
                     <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items" value="">0</span></strong></a></li>
                 @endif
                 <li><a href="#sign-in-dialog" id="sign-in" class="login" title="Sign In">Sign In</a></li>
-                <li><a href="wishlist.html" class="wishlist_bt_top" title="Your wishlist">Your wishlist</a></li>
+                <li><a href="/history" class="wishlist_bt_top" title="Your Booking History">Your wishlist</a></li>
             </ul>
             <!-- /top_menu -->
             <a href="#menu" class="btn_mobile">
