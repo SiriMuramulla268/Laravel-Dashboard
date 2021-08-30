@@ -13,7 +13,7 @@
 							<div class="col-lg-4">
 								<div class="form-group">
 									<select class="form-select" name="city[]"  >
-										@if($city_details)
+										@if(!$city_details->isEmpty())
 											<option value=""> Choose Location </option>
 											@foreach ($city_details as $city)
 												<option value="{{$city['id']}}">{{$city['name']}}</option>
@@ -55,44 +55,44 @@
 		<!-- /hero_single -->
 
 		<div class="container container-custom margin_80_0">
-			@if($hotel_details)
-			<div class="main_title_2">
-				<span><em></em></span>
-				<h2>Popular Hotels and Accommodations</h2>
-				<p>Cum doctus civibus efficiantur in imperdiet deterruisset.</p>
-			</div>
-			<div id="reccomended" class="owl-carousel owl-theme">
-				@foreach($hotel_details as $hotel)
-				<div class="item">
-					<div class="box_grid">
-						<figure>
-							<a href="#0" class="wish_bt"></a>
-							<a href="hotel/{{$hotel['slug']}}"><img src="{{asset('img/hotel_1.jpg')}}" class="img-fluid" alt="" alt="" >
-							<div class="read_more"><span>Read more</span></div></a>
-							<small class="score"><strong>8.9</strong></small>
-						</figure>
-						<div class="wrapper">
-							<div class="cat_star">
-								<i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i>
-							</div>
-							
-							<h3>{{$hotel['name']}}</h3>
-							<p>{{$hotel['description']}}</p>
-							<span class="price">From <strong>$54</strong> /per person</span>
-						</div>
-					</div>
-				</div>
-				@endforeach
-				<!-- /item -->
-				
-			</div>
-			<!-- /carousel -->
-			<p class="btn_home_align"><a href="/hotels" class="btn_1 rounded">View all Hotels</a></p>
-			@else
+			
+			@if($hotel_details->isEmpty())
 			<div class="main_title_2">
 				<span><em></em></span>
 				<h2>No Hotels Found :(</h2>
 			</div>
+			@else
+				<div class="main_title_2">
+					<span><em></em></span>
+					<h2>Popular Hotels and Accommodations</h2>
+				</div>
+				<div id="reccomended" class="owl-carousel owl-theme">
+					@foreach($hotel_details as $hotel)
+					<div class="item">
+						<div class="box_grid">
+							<figure>
+								<a href="#0" class="wish_bt"></a>
+								<a href="hotel/{{$hotel['slug']}}"><img src="{{asset('img/hotel_1.jpg')}}" class="img-fluid" alt="" alt="" >
+								<div class="read_more"><span>Read more</span></div></a>
+								<small class="score"><strong>8.9</strong></small>
+							</figure>
+							<div class="wrapper">
+								<div class="cat_star">
+									<i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i>
+								</div>
+								
+								<h3>{{$hotel['name']}}</h3>
+								<p>{{$hotel['description']}}</p>
+								<span class="price">From <strong>$54</strong> /per person</span>
+							</div>
+						</div>
+					</div>
+					@endforeach
+					<!-- /item -->
+					
+				</div>
+				<!-- /carousel -->
+				<p class="btn_home_align"><a href="/hotels" class="btn_1 rounded">View all Hotels</a></p>
 			@endif
 			<hr class="large">
 		</div>

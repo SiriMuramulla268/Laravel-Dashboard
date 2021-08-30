@@ -6285,7 +6285,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 }
 
 .modal-open .modal {
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
 }
 

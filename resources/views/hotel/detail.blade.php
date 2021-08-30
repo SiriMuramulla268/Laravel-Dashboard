@@ -6,57 +6,54 @@
 		<section class="hero_in hotels_detail">
 			<div class="wrapper">
 				<div class="container">
-					@if($hotel_detail)
+					@if(!$room_detail->isEmpty())
 					<h1 class="fadeInUp"><span></span>{{ $hotel_detail->name }}</h1>
 					@else
-					<h1 class="fadeInUp"><span></span>Hotel Not Found :(</h1>
+					<h1 class="fadeInUp"><span></span>Hotel Details Not Found :(</h1>
 					@endif
 				</div>
 			</div>
 		</section>
 		<!--/hero_in-->
 
-		@if($hotel_detail)
+		@if(!$room_detail->isEmpty())
 		<div class="bg_color_1">
-			
 			<div class="container margin_60_35">
 				<div class="row">
 					<div class="col-lg-8">
 						<section id="description">
-							<h2>Description</h2>
-							<p>{{ $hotel_detail->description }}</p>
-							<!-- /row -->
-							<hr>
-							
-							@foreach($room_detail->sortBy('price') as $room)
-							<div class="room_type first">
-								<div class="row">
-									<div class="col-md-4">
-										<img src="{{asset('img/gallery/hotel_list_1.jpg')}}" class="img-fluid" alt="">
-									</div>
-									<div class="col-md-8 container">
-										<h4>{{$room['type']}} <input type="checkbox" name="book[]" id="{{$room['id']}}" hidden class="cb-btn" onclick="book('{{$room['id']}}')" value="{{$room['type']}}"><label class="btn-sm btn-primary btn-1" for="{{$room['id']}}"><small>Book</small></label></h4>
-										
-										<!-- <input type="button" id="book" class="btn-xs btn-info btn-1" value="Book"> -->
-										<span><strong>{{$hotel_detail->country->currency_symbol}}{{ number_format($room['price']) }}</strong></span>
-										<p>Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.</p>
-
-										<ul class="hotel_facilities">
-										@foreach($room->amenities as $room_amenity)
-											<li><img src="{{asset('img/hotel_facilites_icon_2.svg')}}" alt="">{{$room_amenity['name']}}</li>
-										@endforeach	
-										</ul>
-									</div>
-								</div>
+								<h2>Description</h2>
+								<p>{{ $hotel_detail->description }}</p>
 								<!-- /row -->
-							</div>
-							@endforeach
+								@foreach($room_detail->sortBy('price') as $room)
+								<hr>
+								<div class="room_type first">
+									<div class="row">
+										<div class="col-md-4">
+											<img src="{{asset('img/gallery/hotel_list_1.jpg')}}" class="img-fluid" alt="">
+										</div>
+										<div class="col-md-8 container">
+											<h4>{{$room['type']}} <input type="checkbox" name="book[]" id="{{$room['id']}}" hidden class="cb-btn" onclick="book('{{$room['id']}}')" value="{{$room['type']}}"><label class="btn-sm btn-primary btn-1" for="{{$room['id']}}"><small>Book</small></label></h4>
+											
+											<!-- <input type="button" id="book" class="btn-xs btn-info btn-1" value="Book"> -->
+											<span><strong>{{$hotel_detail->country->currency_symbol}}{{ number_format($room['price']) }}</strong></span>
+											<p>Sit an meis aliquam, cetero inermis vel ut. An sit illum euismod facilisis, tamquam vulputate pertinacia eum at.</p>
+
+											<ul class="hotel_facilities">
+											@foreach($room->amenities as $room_amenity)
+												<li><img src="{{asset('img/hotel_facilites_icon_2.svg')}}" alt="">{{$room_amenity['name']}}</li>
+											@endforeach	
+											</ul>
+										</div>
+									</div>
+									<!-- /row -->
+								</div>
+								@endforeach
 							<!-- End Map -->
 						</section>
 						<!-- /section -->
 					</div>
 					<!-- /col -->
-					
 					<aside class="col-lg-4" id="sidebar">
 						<div class="box_detail booking">
 							<form id="purchase" action="{{route('add-to-cart')}}" method="post" autocomplete="off">
@@ -205,7 +202,7 @@
 			document.getElementById('rooms_error').innerHTML = '';
 			document.getElementById('qtyInput_error').innerHTML = '';
 			$.ajax({
-			url: "http://127.0.0.1:8000/add-to-cart",
+			url: "{{ route('add-to-cart') }}",
 			type: 'post',
 			data: $('#purchase').serialize(),
 			dataType: 'json',

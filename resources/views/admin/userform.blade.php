@@ -1,9 +1,7 @@
 @extends('layouts.master')
 @section('title',config('app.name'))
 @section('content')
-  @section('sidebar')
-      @parent
-  @endsection
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -85,9 +83,6 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
-  @section('footer')
-        @parent
-  @endsection
+
 
 @endsection

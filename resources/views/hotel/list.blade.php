@@ -6,7 +6,7 @@
 		<section class="hero_in hotels">
 			<div class="wrapper">
 				<div class="container">
-					@if($hotels)
+					@if(!$hotels->isEmpty())
 						<h1 class="fadeInUp"><span></span>Hotels</h1>
 					@else
 						<h1 class="fadeInUp"><span></span>No Hotels Found :(</h1>
@@ -17,7 +17,7 @@
 		<!--/hero_in-->
 		
 		<!-- If Hotels are present -->
-		@if($hotels)
+		@if(!$hotels->isEmpty())
 			<div class="filters_listing sticky_horizontal">
 				<div class="container">
 					<ul class="clearfix">

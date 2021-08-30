@@ -75,8 +75,7 @@
                     @endif
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
-                        Dashboard
-                        <!-- <i class="right fas fa-angle-left"></i> -->
+                        Dashboard 
                     </p>
                     </a>
                     
@@ -105,6 +104,42 @@
                     @endif
                         <i class="far fa-circle nav-icon"></i>
                         <p>Add User</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                    @if ($tabname == 'userlist')
+                        <a href="../../admin/userlist" class="nav-link active">
+                    @else
+                        <a href="../../admin/userlist" class="nav-link">
+                    @endif
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Listing User</p>
+                        </a>
+                    </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item menu-open">
+                    @if ($tabname == 'hotel' || $tabname == '#')
+                        <a href="#" class="nav-link active">
+                    @else
+                        <a href="#" class="nav-link">
+                    @endif
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>
+                        Hotel
+                        <span class="badge badge-info right"></span>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                    @if ($tabname == 'hotel')
+                        <a href="../../admin/hotellist" class="nav-link active">
+                    @else
+                        <a href="../../admin/hotellist" class="nav-link">
+                    @endif
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Add Hotel</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -192,5 +227,7 @@
         }); 
     });
     </script>
+
+    @stack('hotellist.blade-scripts')
 </body>
 </html>

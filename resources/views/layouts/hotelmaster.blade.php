@@ -177,6 +177,34 @@
        
     </div>
 
+    <!-- Sign In Popup -->
+    <div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide" >
+        <div class="small-dialog-header">
+            <h3>Sign In</h3>
+        </div>
+        <form id="exist_user" name="exist_user" method="post">
+        @csrf
+            <div class="sign-in-wrapper">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" name="email" id="email">
+                    <i class="icon_mail_alt"></i>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" name="password" id="password" value="">
+                    <i class="icon_lock_alt"></i>
+                </div>
+                <input type="hidden" name="user_type" value="user">
+                <div class="text-center"><input type="button" value="Log In" class="btn_1 full-width" onclick="signin()"></div>
+                <div class="text-center">
+                    Don’t have an account? <a href="register.html">Sign up</a>
+                </div>
+            </div>
+        </form>
+        <!--form -->
+    </div>
+    <!-- /Sign In Popup -->
     
 
     <div id="toTop"></div><!-- Back to top button -->
@@ -212,6 +240,24 @@
    
     <!-- INPUT QUANTITY  -->
 	<script src="{{asset('js/input_qty.js')}}"></script>
+
+    <script>
+        function signin(){
+            console.log('here');
+            $.ajax({
+            url: "{{ route('exist-user') }}",
+            type: 'post',
+            data: $('#exist_user').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                if(res == 1){
+                    $('#sign-in-dialog').hide();
+                    location.reload();
+                }
+            }
+            });
+        }
+    </script>
 </body>
 
 </html>

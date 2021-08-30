@@ -30,6 +30,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/userform', function () {
         return view('admin/userform',['tabname'=>'userform']);
     })->middleware('auth');
+    Route::get('/hotellist',[HotelController::class, 'hotelList'])->name('hotels');
+    Route::get('/addhotel',[HotelController::class, 'addHotel'])->name('add-hotel');
 }); 
 
 Route::get('/', [HotelController::class, 'getHotelIndex']);
@@ -63,3 +65,5 @@ Route::get('mail', function () {
 });
 
 Route::get('history', [HotelController::class, 'bookingHistory'])->name('history');
+
+Route::get('statebycountry/{country_id}', [HotelController::class, 'getstateByCountry'])->name('state-by-country');

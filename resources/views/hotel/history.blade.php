@@ -6,7 +6,7 @@
 		<section class="hero_in general">
 			<div class="wrapper">
 				<div class="container">
-					@if(session('user'))
+					@if(!$bookings->isEmpty())
 					<h1 class="fadeInUp"><span></span>{{ $user->name }}</h1>
 					@endif
 				</div> 
@@ -15,9 +15,13 @@
 		<!--/hero_in-->
 
 		<div class="container margin_60_35">
-        @if(session('user'))
+        @if(!$bookings->isEmpty())
 			<div class="row">
                 @foreach($bookings as $data)
+					@php
+						$response = json_decode(str_replace("Stripe\Charge JSON: ",'',$data->response),true);
+						$transaction_no = $response['balance_transaction'];
+					@endphp
                 <div class="col-lg-6">
 					<article class="blog wow fadeIn">
 						<div class="row no-gutters">
@@ -30,16 +34,21 @@
 							</div>
 							<div class="col-lg-7">
 								<div class="post_info">
-									<span><small>{{ $data->bookingDetail[0]->check_in }} to {{ $data->bookingDetail[0]->check_in }}</small></span>
-									<h3><a href="blog-post.html">{{ $data->hotel->name }}</a></h3>
-                                    <p>Adults - {{ $data->bookingDetail[0]->adult }}</p>
-                                    <p>Total - {{ $data->total }}</p>
-									<ul>
+									<span><small><strong>Transaction - {{ $transaction_no }}</strong></small></span>
+									<h3>{{ $data->hotel->name }}</h3>
+                                    <p>
+									Check In - {{ $data->bookingDetail[0]->check_in }}<br>
+									Check Out - {{ $data->bookingDetail[0]->check_out }}<br>
+									Adults - {{ $data->bookingDetail[0]->adult }}<br>
+									Total - {{ $data->hotel->country->currency_symbol }}{{ number_format($data->total) }}	
+									</p>
+                                    
+									<!-- <ul>
 										<li>
 											<div class="thumb"><img src="{{asset('img/thumb_blog.jpg')}}" alt=""></div> {{ $data->user->name }}
 										</li>
 										<li></li>
-									</ul>
+									</ul> -->
 								</div>
 							</div>
 						</div>
@@ -47,7 +56,6 @@
 					<!-- /article -->
 				</div>
                 @endforeach
-                
 			</div>
             <div class="row">
                 <div class="col-8"></div>
@@ -59,7 +67,7 @@
         @else
             <div class="row"> 
                 <div class="col-lg-12 text-center">
-                No Bookings Found
+                No Bookings Found.
                 </div>
             </div>
         @endif

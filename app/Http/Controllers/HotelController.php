@@ -25,12 +25,7 @@ class HotelController extends Controller
     public function getHotelIndex(){
         $hotel_details = Hotel::where('status', 1)->where('featured', 1)->get();
         $city_details = City::where('status', 1)->get();
-
-        if($hotel_details){
-            return view('hotel/index', ['hotel_details'=>$hotel_details, 'city_details'=>$city_details]);
-        }else{
-            return view('hotel/index', ['hotel_details'=>[], 'city_details'=>[]]);
-        }
+        return view('hotel/index', ['hotel_details'=>$hotel_details, 'city_details'=>$city_details]);
     }
 
     public function getHotels(Request $request){
@@ -52,52 +47,35 @@ class HotelController extends Controller
          'dates'=>$dates, 'adult'=>$adult, 'data'=>$data);
 
         if(!$data){ 
-            if($get_hotels){
-                return view('hotel/list', $retun_array);
-            }else{
-                return view('hotel/list', $retun_array);
-            }
+            return view('hotel/list', $retun_array);
         }
         else{
             if($page!='' && !$city){
-                if($get_hotels){
-                    return view('hotel/list', $retun_array);
-                }else{
-                    return view('hotel/list', $retun_array);
-                }
+                return view('hotel/list', $retun_array);
             }else{
                 $get_hotels = Hotel::whereIn('hotels.city_id',$city)->where('hotels.status',1)->paginate(4);
-                if($get_hotels){
-                    $retun_array['hotels'] = $get_hotels;
-                    return view('hotel/list', $retun_array);
-                }else{
-                    return view('hotel/list', $retun_array);
-                }
+                $retun_array['hotels'] = $get_hotels;
+                return view('hotel/list', $retun_array);
             }
         }
     }
 
     public function getHotelDetails(string $hotel_slug, $dates, Request $request)
     {
-        $hotel_data = array();
-        $room_data = array();
+        $hotel_data = [];
+        $room_data = [];
         if($dates == 0){
             $dates = '';
         }
-        
         // Get hotel data with currency symbol
         $hotel_data = Hotel::with(['country' => function($query) {
             $query->select(['id','currency_symbol']);
         }])->where('hotels.slug', $hotel_slug)->where('hotels.status', 1)->first();
-
-        // Get Room data of hotel with amenities
-        $room_data = Room::with('amenities')->where('rooms.status',1)->where('rooms.hotel_id',$hotel_data->id)->get();
-
-        if($hotel_data && $room_data){
-            return view('hotel/detail', ['hotel_detail'=>$hotel_data, 'room_detail'=>$room_data, 'dates'=>$dates]);
-        }else{
-            return view('hotel/detail', ['hotel_detail'=>[], 'room_detail'=>[]]);
+        if($hotel_data){
+            // Get Room data of hotel with amenities
+            $room_data = Room::with('amenities')->where('rooms.status',1)->where('rooms.hotel_id',$hotel_data->id)->get();
         }
+        return view('hotel/detail', ['hotel_detail'=>$hotel_data, 'room_detail'=>$room_data, 'dates'=>$dates]);
     }
 
     public function addToCart(Request $request){
@@ -128,7 +106,6 @@ class HotelController extends Controller
             //array data push to blade page
             $return_array = array('room_details'=>$room_details, 'total'=>number_format($price,2,".",""), 'adult'=> $adult, 'check_in'=>$date_arr[0], 'check_out'=>$date_arr[1], 'currency'=>$hotel->country->currency_symbol,'currency_code'=>$hotel->country->currency, 'cart_url'=>$cart_url,'room_qty'=>$room_qty);
             $request->session()->put($return_array);
-
             return 1;
         }else{
             return 0;
@@ -147,6 +124,7 @@ class HotelController extends Controller
     public function getExistUser(Request $request){
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
+            session()->forget(['user']);
             $get_user = User::where('email',$request->email)->first();
             session()->put('user',$get_user);
             return 1;
@@ -239,14 +217,27 @@ class HotelController extends Controller
 
     public function bookingHistory(Request $request){
         $session = session()->all();
+        $bookings = [];
+        $user = [];
         if(isset($session['user'])){
             $user = $session['user'];
-            $bookings = Booking::with('bookingDetail')->where('user_id',$user['id'])->where('booking_status','success')->paginate(6);
-            return view('hotel/history',['bookings'=>$bookings,'user'=>$user]);
-        }else{
-            return view('hotel/history');
+            $bookings = Booking::with('bookingDetail')->where('user_id',$user['id'])->where('booking_status','success')
+            ->paginate(6);
         }
+        // $data = json_decode(str_replace("Stripe\Charge JSON: ",'',$bookings->response),true);
+
+        // dd($data['balance_transaction']); 
+        return view('hotel/history',['bookings'=>$bookings,'user'=>$user]);
     }
+
+    public function hotelList(Request $request){
+
+        $hotels = Hotel::paginate(5);
+        $countries = Country::get();
+        return view('admin/hotellist',['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries]);
+    }
+
+
 }
 
 ?>
