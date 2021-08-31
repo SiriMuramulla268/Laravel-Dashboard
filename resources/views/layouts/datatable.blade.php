@@ -18,11 +18,11 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, 
-                "lengthChange": false, 
-                "autoWidth": false,
+                "lengthChange": true, 
+                "autoWidth": true,
                 "paging": false,
-                "searching": false,
-                "info": false,
+                "searching": true,
+                "info": true,
                 "ordering": true,
             });
         });

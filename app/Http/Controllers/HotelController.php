@@ -5,8 +5,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\Country;
+use App\Models\State;
 use App\Models\City;
 use App\Models\Room;
+use App\Models\Amenity;
+use App\Models\RoomAmenity;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\BookingDetail;
@@ -224,19 +227,85 @@ class HotelController extends Controller
             $bookings = Booking::with('bookingDetail')->where('user_id',$user['id'])->where('booking_status','success')
             ->paginate(6);
         }
-        // $data = json_decode(str_replace("Stripe\Charge JSON: ",'',$bookings->response),true);
-
-        // dd($data['balance_transaction']); 
         return view('hotel/history',['bookings'=>$bookings,'user'=>$user]);
     }
 
-    public function hotelList(Request $request){
-
+    public function hotelList(){
         $hotels = Hotel::paginate(5);
         $countries = Country::get();
-        return view('admin/hotellist',['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries]);
+        $states = State::get();
+        $cities = City::get();
+        return view('admin/hotellist',['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries, 'states'=>$states, 'cities'=>$cities]);  
+        // return redirect('admin/hotellist')->with(['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries]);
     }
 
+    public function getStateByCountry(Request $request){
+       $data = $request->all();
+       $getStateData = State::where('country_id',$data['id'])->where('status',1)->get();
+       if($getStateData){
+           return response()->json($getStateData);
+       }
+    }
+
+    public function getCityByState(Request $request){
+        $data = $request->all();
+        $getCityData = City::where('state_id',$data['id'])->where('status',1)->get();
+        if($getCityData){
+            return response()->json($getCityData);
+        }
+    }
+
+    public function addHotel(Request $request){
+        $data = $request->all();
+        $insertHotel['name'] = $data['name'];
+        $insertHotel['slug'] = preg_replace('/[^A-Za-z0-9\-]/', '-', strtolower($data['name']));
+        $insertHotel['address'] = $data['address'];
+        $insertHotel['country_id'] = (int)$data['country'];
+        $insertHotel['state_id'] = (int)$data['state'];
+        $insertHotel['city_id'] = (int)$data['city'];
+        $insertHotel['description'] = $data['description'];
+        $insertHotel['website_url'] = $data['website_url'];
+        $insertHotel['featured'] = isset($data['featured'])? 1 : 0;
+        $insertHotel['status'] = isset($data['status'])? 1 : 0;
+        $user = Hotel::updateOrCreate(['email' => $data['email']],$insertHotel);
+        $this->hotelList();
+    }
+
+    public function viewHotel(Request $request){
+        $data = $request->all();
+        $getHotel = Hotel::where('id',$data['id'])->get();
+        if($getHotel){
+            return response()->json($getHotel);
+        }
+    }
+
+    public function rooms(){
+        $hotels = Hotel::where('status',1)->get();
+        $rooms = Room::where('status', 1)->paginate(10);
+        $amenities = Amenity::get();
+        return view('admin/roomdetails',['tabname'=>'rooms', 'hotels'=>$hotels, 'rooms'=>$rooms, 'amenities'=>$amenities]);
+    }
+
+    public function addRoom(Request $request){
+        $data = $request->all();
+        $insertRoom = new Room();
+        $insertRoom['hotel_id'] = (int)$data['hotel'];
+        $insertRoom['type'] = $data['room_type'];
+        $insertRoom['price'] = $data['room_price'];
+        $insertRoom['per_adult_price'] = $data['adult_price'];
+        $insertRoom['per_child_price'] = $data['child_price'];
+        $insertRoom['status'] = isset($data['status'])? 1 : 0;
+
+        if($insertRoom->save()){
+            for($i=0;$i<sizeof($data['amenities']);$i++){
+                $roomAmenity = new RoomAmenity();
+                $roomAmenity['room_id'] = $insertRoom->id;
+                $roomAmenity['amenity_id'] = $data['amenities'][$i];
+                $roomAmenity->save();
+            }
+            $this->rooms();
+        }
+    }
 
 }
 

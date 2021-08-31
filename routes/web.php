@@ -31,7 +31,10 @@ Route::group(['prefix' => 'admin'], function () {
         return view('admin/userform',['tabname'=>'userform']);
     })->middleware('auth');
     Route::get('/hotellist',[HotelController::class, 'hotelList'])->name('hotels');
-    Route::get('/addhotel',[HotelController::class, 'addHotel'])->name('add-hotel');
+    Route::post('/addhotel',[HotelController::class, 'addHotel'])->name('add-hotel');
+    Route::get('/rooms', [HotelController::class, 'rooms'])->name('rooms');
+    Route::post('/addroom',[HotelController::class, 'addRoom'])->name('add-room');
+    
 }); 
 
 Route::get('/', [HotelController::class, 'getHotelIndex']);
@@ -66,4 +69,8 @@ Route::get('mail', function () {
 
 Route::get('history', [HotelController::class, 'bookingHistory'])->name('history');
 
-Route::get('statebycountry/{country_id}', [HotelController::class, 'getstateByCountry'])->name('state-by-country');
+Route::get('statebycountry', [HotelController::class, 'getStateByCountry'])->name('state-by-country');
+
+Route::get('citybystate', [HotelController::class, 'getCityByState'])->name('city-by-state');
+
+Route::get('viewhotel', [HotelController::class, 'viewHotel'])->name('view-hotel');

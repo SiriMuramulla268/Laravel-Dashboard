@@ -32,7 +32,7 @@ class UserController extends Controller
     }
 
     public function userList(){
-        $getMembers = User::paginate(2);
+        $getMembers = User::paginate(10);
         if($getMembers){
             return view('admin/userlist',['memberdata'=>$getMembers,'tabname'=>'userlist']);
         }

@@ -1,5 +1,4 @@
 @extends('layouts.master')
-@extends('layouts.datatable')
 @section('title',config('app.name'))
 @section('content')
   @section('sidebar')
@@ -40,7 +39,6 @@
                   <tr>
                     <th>Id  </th>
                     <th>Name</th>
-                    <th>Company</th>
                     <th>Email</th>
                     <th>Mobile</th>
                   </tr>
@@ -50,7 +48,6 @@
                     <tr>
                     <td>{{$mem['id']}}  </td>
                     <td>{{$mem['name']}}</td>
-                    <td>{{$mem['company']}}</td>
                     <td>{{$mem['email']}}</td>
                     <td>{{$mem['mobile']}}</td>
                     </tr>
@@ -79,9 +76,5 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
- 
- @section('footer')
-        @parent
-  @endsection
 
 @endsection
