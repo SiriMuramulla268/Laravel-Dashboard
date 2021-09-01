@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="../vendors/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+
 </head>
 <style>
     /* to show form clientside error in red */
@@ -29,11 +31,13 @@
          font-size: 12px;
     }
     /* to remove extra pagination style  */
-    .w-5{display:none} 
+    .w-5{
+        display:none
+    } 
     .dropdown-toggle{
-            height: 40px;
-            width: 400px !important;
-        }
+        height: 40px;
+        width: 400px !important;
+    }
 </style>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -129,7 +133,7 @@
             </li>
 
             <li class="nav-item menu-open">
-                @if ($tabname == 'hotel' || $tabname == '#' || $tabname == 'rooms')
+                @if ($tabname == 'hotel' || $tabname == '#' || $tabname == 'room' || $tabname == 'amenity')
                     <a href="#" class="nav-link active">
                 @else
                     <a href="#" class="nav-link">
@@ -152,13 +156,49 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                @if ($tabname == 'rooms')
+                @if ($tabname == 'room')
                     <a href="../../admin/rooms" class="nav-link active">
                 @else
                     <a href="../../admin/rooms" class="nav-link">
                 @endif
                     <i class="far fa-circle nav-icon"></i>
                     <p>Room Details</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                @if ($tabname == 'amenity')
+                    <a href="../../admin/amenities" class="nav-link active">
+                @else
+                    <a href="../../admin/amenities" class="nav-link">
+                @endif
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Amenities</p>
+                    </a>
+                </li>
+                </ul>
+            </li>
+
+            <li class="nav-item menu-open">
+                @if ($tabname == '#')
+                    <a href="#" class="nav-link active">
+                @else
+                    <a href="#" class="nav-link">
+                @endif
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                    Bookings
+                    <span class="badge badge-info right"></span>
+                </p>
+                </a>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                @if ($tabname == '#')
+                    <a href="../../admin/bookings" class="nav-link active">
+                @else
+                    <a href="../../admin/bookings" class="nav-link">
+                @endif
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Manage Bookings</p>
                     </a>
                 </li>
                 </ul>
@@ -188,6 +228,7 @@
     </footer>
 
 </div>
+
     <!-- jQuery -->
     <script src="../vendors/plugins/jquery/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -209,49 +250,13 @@
     <script src="../vendors/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <!-- Page specific script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-    <script>
-    $(function () {
-        // $('select').selectpicker();
-        $("#example1").DataTable({
-            "responsive": true, 
-            "lengthChange": true, 
-            "autoWidth": true,
-            "paging": false,
-            "searching": true,
-            "info": false,
-            "ordering": true,
-        });
-
-        $("#adduser").validate({
-            rules: {
-                name: "required",
-                email: "required",
-                password: {
-                    required: true,
-                    minlength: 6
-                },
-                type: "required",
-                mobile: {   
-                    required: true,
-                    minlength: 10
-                },
-            },
-            messages: {
-                name: "Name is required",
-                email: "Email is required",
-                password: {
-                    required: "Password is required",
-                    minlength: "Password must be of 6 digits"
-                },
-                mobile: {
-                    required: "Mobile number is required",
-                    minlength: "Mobile number must be of 10 digits"
-                },
-                type: "Type is required",
-            }
-        }); 
-    });
-    </script>
+    @stack('userform.blade-scripts')
+    @stack('userlist.blade-scripts')
+    @stack('hotellist.blade-scripts')
+    @stack('roomdetails.blade-scripts')
+    
 </body>
 </html>

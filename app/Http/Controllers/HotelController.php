@@ -231,13 +231,11 @@ class HotelController extends Controller
     }
 
     public function hotelList(){
-        $hotels = Hotel::paginate(5);
+        $hotels = Hotel::get();
         $countries = Country::get();
         $states = State::get();
         $cities = City::get();
-        return view('admin/hotellist',['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries, 'states'=>$states, 'cities'=>$cities]);  
-        // return redirect('admin/hotellist')->with(['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries]);
-    }
+        return view('admin/hotellist',['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries, 'states'=>$states, 'cities'=>$cities]);      }
 
     public function getStateByCountry(Request $request){
        $data = $request->all();
@@ -268,7 +266,7 @@ class HotelController extends Controller
         $insertHotel['featured'] = isset($data['featured'])? 1 : 0;
         $insertHotel['status'] = isset($data['status'])? 1 : 0;
         $user = Hotel::updateOrCreate(['email' => $data['email']],$insertHotel);
-        $this->hotelList();
+        return redirect('admin/hotellist')->with(['tabname'=>'hotel','status'=>'Hotel Data Added Successfully ']);
     }
 
     public function viewHotel(Request $request){
@@ -281,32 +279,90 @@ class HotelController extends Controller
 
     public function rooms(){
         $hotels = Hotel::where('status',1)->get();
-        $rooms = Room::where('status', 1)->paginate(10);
+        $rooms = Room::get();
         $amenities = Amenity::get();
-        return view('admin/roomdetails',['tabname'=>'rooms', 'hotels'=>$hotels, 'rooms'=>$rooms, 'amenities'=>$amenities]);
+        return view('admin/roomdetails',['tabname'=>'room', 'hotels'=>$hotels, 'rooms'=>$rooms, 'amenities'=>$amenities]);
     }
 
     public function addRoom(Request $request){
         $data = $request->all();
-        $insertRoom = new Room();
-        $insertRoom['hotel_id'] = (int)$data['hotel'];
-        $insertRoom['type'] = $data['room_type'];
-        $insertRoom['price'] = $data['room_price'];
-        $insertRoom['per_adult_price'] = $data['adult_price'];
-        $insertRoom['per_child_price'] = $data['child_price'];
-        $insertRoom['status'] = isset($data['status'])? 1 : 0;
+        $room = new Room();
+        $room['hotel_id'] = (int)$data['hotel'];
+        $room['type'] = $data['room_type'];
+        $room['price'] = $data['room_price'];
+        $room['per_adult_price'] = $data['adult_price'];
+        $room['per_child_price'] = $data['child_price'];
+        $room['status'] = isset($data['status'])? 1 : 0;
 
-        if($insertRoom->save()){
-            for($i=0;$i<sizeof($data['amenities']);$i++){
-                $roomAmenity = new RoomAmenity();
-                $roomAmenity['room_id'] = $insertRoom->id;
-                $roomAmenity['amenity_id'] = $data['amenities'][$i];
-                $roomAmenity->save();
+        $room = [
+            'hotel_id' => (int)$data['hotel'],
+            'type' => $data['room_type'],
+            'price' => $data['room_price'],
+            'per_adult_price' => $data['adult_price'],
+            'per_child_price' => $data['child_price'],
+            'status' => isset($data['status'])? 1 : 0,
+        ];
+
+        if(!isset($data['id'])){
+            $upsert = Room::create($room);
+            $room_id = $upsert->id;
+            $status = 'Room Data Created Successfully';
+        }
+        else{
+            $upsert = Room::where('id',$data['id'])->update($room);
+            $room_id = $data['id'];
+            $roomAmenity = RoomAmenity::where('room_id',$room_id)->delete();
+            $status = 'Room Data Updated Successfully';
+        }
+        if($upsert){
+            if(isset($data['amenities'])){
+                for($i=0;$i<sizeof($data['amenities']);$i++){
+                    $roomAmenity = new RoomAmenity();
+                    $roomAmenity['room_id'] = $room_id;
+                    $roomAmenity['amenity_id'] = $data['amenities'][$i];
+                    $roomAmenity->save();
+                }
             }
-            $this->rooms();
+        }else{
+            $status = 'Failed';
+        }
+        return redirect('admin/rooms')->with(['tabname'=>'rooms','status'=>$status]);
+    }
+
+    public function viewRoom(Request $request){
+        $data = $request->all();
+        $getRoom = Room::find($data['id']);
+        if($getRoom){
+            $response = array('data'=>$getRoom, 'hotel'=>$getRoom->hotels->id, 'amenities'=>$getRoom->amenities);
+            return response()->json($response);
         }
     }
 
+    public function addAmenity(Request $request){
+        $data = $request->all();
+        $insert_amenity = new Amenity();
+        $insert_amenity['name'] = $data['amenity'];
+        if($insert_amenity->save()){
+            return redirect('admin/amenities')->with(['tabname'=>'amenity']);
+        }
+    }
+
+    public function deleteAmenity(Request $request){
+        $data = $request->all();
+        $delete_amenity = Amenity::where('id',$data['id'])->delete();
+        if($delete_amenity){
+            return array('status'=>'deleted');
+        }
+    }
+
+    public function getAmenity(Request $request){
+        $response = [];
+        $amenities = Amenity::get();
+        if($amenities){
+            $response = array('data' => $amenities);
+        }
+        return response()->json($response);
+    }
 }
 
 ?>

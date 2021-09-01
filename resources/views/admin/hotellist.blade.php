@@ -19,26 +19,28 @@
               <div class="card-body">
                 <div class="row">
                     <div class="col-sm-11"><h3>Hotels</h3></div>
-                    <div class="col-sm-1"><a href="" class="btn btn-primary" data-toggle="modal" onclick="addModal()"><i class="fa fa-plus"></i> Add</a></div>
+                    <div class="col-sm-1"><a href="" class="btn btn-primary" data-toggle="modal" onclick="addHotelModal()"><i class="fa fa-plus"></i> Add</a></div>
                 </div>
                     <br>
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="table_hotel" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th class="col-sm-1">Sl.no  </th>
-                    <th class="col-sm-3">Name</th>
-                    <th clas="col-sm-2">Email</th>
-                    <th class="col-sm-3">Description</th>
-                    <th class="col-sm-2 text-center">Action</th>
+                    <th >Name</th>
+                    <th >Email</th>
+                    <th >Country</th>
+                    <th >State</th>
+                    <th >City</th>
+                    <th class="col-sm-2">Action</th>
                   </tr>
                   </thead>
                   <tbody>
                     @foreach($hotels as $key=>$hotel)
                     <tr>
-                      <td>{{ $loop->iteration }}</td>
                       <td>{{ $hotel['name'] }}</td>
                       <td>{{ $hotel['email'] }}</td>
-                      <td>{{ $hotel['description'] }}</td>
+                      <td>{{ $hotel->country->name }}</td>
+                      <td>{{ $hotel->state->name }}</td>
+                      <td>{{ $hotel->city->name }}</td>
                       <td class="text-center">
                         <a href="" type="button" class="btn btn-info" data-toggle="modal" data-target="#viewHotelModal" onclick="viewHotel( {{ $hotel['id'] }} )"><i class="far fa-eye"></i></a>
                         <a href="" type="button" class="btn btn-success" data-toggle="modal" onclick="editHotel( {{ $hotel['id'] }} )"><i class="fas fa-edit"></i></a>
@@ -46,15 +48,10 @@
                     </tr>
                     @endforeach
                   </tbody>
+                  @if(session('status'))
+                    <span class="text-success" id="status_msg"> {{ session('status') ?? ''  }}</span>
+                  @endif
                 </table>
-                </br>
-                <div class="row">
-                  <div class="col-8">
-                  </div>
-                  <div class="col-4">
-                    {{ $hotels->links() }}
-                  </div>
-                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -244,26 +241,31 @@
                     </div>
                   </div>
 
+                  <div class="form-group">
+                    <label for="mobile">Website Url</label><span class="text-danger">*</span>
+                    <textarea class="form-control" id="view_website_url" rows="1" disabled="disabled"></textarea>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="mobile">Rooms</label><span class="text-danger">*</span>
+                    <textarea class="form-control" id="view_website_url" rows="1" disabled="disabled"></textarea>
+                  </div>
+
                   <div class="row">
-                    <div class="col-md-8">
-                      <div class="form-group">
-                        <label for="mobile">Website Url</label><span class="text-danger">*</span>
-                        <textarea class="form-control" id="view_website_url" disabled="disabled"></textarea>
-                      </div>
-                    </div>
-                    <div class="col-md-2">
+                    <div class="col-sm-6">
                       <div class="form-group">
                         <label class="container_check">Featured</label><span class="text-danger">*</span>
                         <input type="checkbox" id="view_featured" name="view_featured" disabled="disabled">
                       </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-sm-6">
                       <div class="form-group">
                         <label class="container_check">Status</label>
                         <input type="checkbox" id="view_status" name="view_status" disabled="disabled">
                       </div>
                     </div>
                   </div>
+
                 </div>
             </form>
             </div>
@@ -275,7 +277,25 @@
   <!-- /.content-wrapper -->
 @endsection
 
+@push('hotellist.blade-scripts')
 <script>
+  $(function () {
+    $('#table_hotel').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        "responsive": true,
+    });
+
+    setTimeout(function(){
+        $('#status_msg').remove();
+    }, 500);
+
+  });
+
   function countryChange(){
 		var country_id = $('#country').val();
     $.ajax({
@@ -375,13 +395,11 @@
         if(res[0].status == 1){
           $('input[name=status]').attr('checked', true);
         }
-        
 			}
 		});
-    
   }  
 
-  function addModal(){
+  function addHotelModal(){
     $('#addModalLabel').html('Add Hotel');
     document.getElementById("addhotel").reset();
     $( 'input[type="checkbox"]' ).prop('checked', false);
@@ -389,3 +407,4 @@
   }
 
 </script>
+@endpush

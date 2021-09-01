@@ -64,8 +64,6 @@
                   @if(session('status'))
                     <span class="text-success"> {{ session('status') ?? ''  }}</span>
                   @endif
-
-                  
                 </div>
                 
               </form>
@@ -83,6 +81,39 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
-
 @endsection
+
+@push('userform.blade-scripts')
+<script>
+  $(function () {
+    $("#adduser").validate({
+        rules: {
+            name: "required",
+            email: "required",
+            password: {
+                required: true,
+                minlength: 6
+            },
+            type: "required",
+            mobile: {   
+                required: true,
+                minlength: 10
+            },
+        },
+        messages: {
+            name: "Name is required",
+            email: "Email is required",
+            password: {
+                required: "Password is required",
+                minlength: "Password must be of 6 digits"
+            },
+            mobile: {
+                required: "Mobile number is required",
+                minlength: "Mobile number must be of 10 digits"
+            },
+            type: "Type is required",
+        }
+    }); 
+  });
+</script>
+@endpush

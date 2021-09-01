@@ -34,7 +34,7 @@
               
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="table_user" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Id  </th>
@@ -59,7 +59,7 @@
                   <div class="col-8">
                   </div>
                   <div class="col-4">
-                    <span >{{$memberdata->links()}}</span>
+                    <!-- <span >{{$memberdata->links()}}</span> -->
                   </div>
                 </div>
               </div>
@@ -78,3 +78,19 @@
   <!-- /.content-wrapper -->
 
 @endsection
+
+@push('userlist.blade-scripts')
+<script>
+  $(function () {
+      $('#table_user').DataTable({
+          "paging": true,
+          "lengthChange": true,
+          "searching": true,
+          "ordering": true,
+          "info": true,
+          "autoWidth": true,
+          "responsive": true,
+      });
+  });
+</script>
+@endpush

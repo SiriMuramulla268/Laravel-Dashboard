@@ -32,9 +32,17 @@ Route::group(['prefix' => 'admin'], function () {
     })->middleware('auth');
     Route::get('/hotellist',[HotelController::class, 'hotelList'])->name('hotels');
     Route::post('/addhotel',[HotelController::class, 'addHotel'])->name('add-hotel');
+    Route::get('/viewhotel', [HotelController::class, 'viewHotel'])->name('view-hotel');
     Route::get('/rooms', [HotelController::class, 'rooms'])->name('rooms');
     Route::post('/addroom',[HotelController::class, 'addRoom'])->name('add-room');
-    
+    Route::get('/viewroom', [HotelController::class, 'viewRoom'])->name('view-room');
+
+    Route::get('/amenities', function () {
+        return view('admin/amenities',['tabname'=>'amenity']);
+    });
+    Route::post('/getamenity',[HotelController::class, 'getAmenity'])->name('get-amenity');
+    Route::post('/addamenity',[HotelController::class, 'addAmenity'])->name('add-amenity');
+    Route::get('/deleteamenity',[HotelController::class, 'deleteAmenity'])->name('delete-amenity');
 }); 
 
 Route::get('/', [HotelController::class, 'getHotelIndex']);
@@ -72,5 +80,3 @@ Route::get('history', [HotelController::class, 'bookingHistory'])->name('history
 Route::get('statebycountry', [HotelController::class, 'getStateByCountry'])->name('state-by-country');
 
 Route::get('citybystate', [HotelController::class, 'getCityByState'])->name('city-by-state');
-
-Route::get('viewhotel', [HotelController::class, 'viewHotel'])->name('view-hotel');
