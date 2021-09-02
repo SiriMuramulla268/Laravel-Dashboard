@@ -18,6 +18,6 @@
     
     <br>
     <p>Thank you,</p>
-    <p>Hotel xyz</p>
+    <p>Hotel {{ $details['hotel']</p>
 </body>
 </html>

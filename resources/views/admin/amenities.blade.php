@@ -26,7 +26,7 @@
                   <thead>
                   <tr>
                     <th>Amenity</th>
-                    <!-- <th>Action</th> -->
+                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -44,10 +44,9 @@
       <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-@endsection
 
-    <!-- Add Hotel -->
-    <div class="modal fade" id="addAmenityModal" tabindex="-1" role="dialog" aria-labelledby="addAmenityModalLabel" aria-hidden="true">
+     <!-- Add Hotel -->
+     <div class="modal fade" id="addAmenityModal" tabindex="-1" role="dialog" aria-labelledby="addAmenityModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -57,42 +56,67 @@
             </button>
             </div>
             <div class="modal-body">
-            <form action="{{route('add-amenity')}}" method="POST" id="addamenity" autocomplete="off"> 
+            <form id="addamenity" method="POST" autocomplete="off"> 
                 @csrf
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="mobile">Amenity</label><span class="text-danger">*</span>
+                        <label for="amenity">Amenity</label><span class="text-danger">*</span>
                         <Input type="text" class="form-control" id="amenity" name="amenity" placeholder="Enter Amenity Name">
                     </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Submit </button>
+                <button class="btn-primary btn-submit">Submit </button>
                 </div>
             </form>
             </div>
         </div>
         </div>
     </div>
-    <!-- <a href="" type="button" class="btn btn-danger" data-toggle="modal" onclick="deleteAmenity();"><i class="fas fa-trash-alt"></i></a> -->
+
+@endsection
+
+   
+
 @push('roomdetails.blade-scripts')
 <script>
     $(function () {
-        
-
-        $("#addamenity").on("submit", function(e){
+        $('#table_amenity').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+            "processing" : true,
+            "serverSide" : true,
+            ajax: "{{ route('get-amenity') }}",
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'action', name: 'action'},
+            ]
+        });
+     
+        $(".btn-submit").click(function(e){
+            e.preventDefault();
             $.ajax({
-            url: "{!! route('add-amenity') !!}",
-            type: 'post',
-            data: $('#addamenity').serialize(),
-            dataType: 'json',
-            success: function(res) {
-               
-            }
+                url: "{!! route('add-amenity') !!}",
+                type: 'POST',
+                data: $('#addamenity').serialize(),
+                dataType: 'json',
+                success: function(res) {
+                    if(res.status == 1){
+                        $("#addAmenityModal").modal();
+                        document.getElementById("addamenity").reset();
+                        toastr.success( '', res.message, {timeOut: 1000});
+                        $('#table_amenity').DataTable().ajax.reload();
+                    }else{
+                        toastr.error( '', res.message, {timeOut: 1000});
+                    }
+                }
             });
         });
-
-        getAmenities();
     });
 
     function addAmenityModal(){
@@ -102,7 +126,7 @@
 
     function deleteAmenity(amenity_id){
         swal({
-            text: "Are you sure you want to delete?",
+            text: "Are you sure you want to delete ?",
             buttons: ['NO', 'YES'],
             dangerMode: true
         })
@@ -114,44 +138,18 @@
                     data: { id: amenity_id },
                 	dataType: 'json',
                 	success: function(res){
-                        if(res.status == 'deleted'){
-                            toastr.success('Amenity Deleted Successfully.', 'Success', {timeOut: 1000});
-                            setTimeout(function(){ 
-                                window.location.reload(); 
-                            }, 2000);
+                        if(res.status == 1){
+                            toastr.success('', res.message, {timeOut: 1000});
+                            $('#table_amenity').DataTable().ajax.reload();
                         }else{
-                            toastr.success('Amenity Deleted Successfully.', 'Success', {timeOut: 1000});
+                            toastr.error('',res.message, {timeOut: 1000});
                         }
                 	} 
                 });
             }
         });
-        
     }
 
-    function getAmenities(){
-        var table = $("#table_amenity");
-        $.ajax({
-        url: "{!! route('get-amenity') !!}",
-        type: 'post',
-        data: $('#addamenity').serialize(),
-        dataType: 'json',
-        success: function(res) {
-            $.each(res, function (i, val) {
-                table.append("<tr><td>"+val[0].name+"</td>");
-            });
-            $('#').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": true,
-                "responsive": true,
-            });
-        }
-        });
-    }
 </script>
 @endpush
     

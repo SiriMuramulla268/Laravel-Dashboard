@@ -40,7 +40,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/amenities', function () {
         return view('admin/amenities',['tabname'=>'amenity']);
     });
-    Route::post('/getamenity',[HotelController::class, 'getAmenity'])->name('get-amenity');
+    Route::get('/getamenity',[HotelController::class, 'getAmenity'])->name('get-amenity');
     Route::post('/addamenity',[HotelController::class, 'addAmenity'])->name('add-amenity');
     Route::get('/deleteamenity',[HotelController::class, 'deleteAmenity'])->name('delete-amenity');
 }); 
@@ -53,7 +53,7 @@ Route::get('contacts', function () {
 
 Route::get('/hotels', [HotelController::class, 'getHotels'])->name('hotel-list');
 
-Route::get('hotel/{slug}/{date}', [HotelController::class, 'getHotelDetails']);
+Route::get('hotel/{slug}/{date?}', [HotelController::class, 'getHotelDetails']);
 
 Route::get('getprice',[HotelController::class, 'getRoomPrice'])->name('get-price');
 

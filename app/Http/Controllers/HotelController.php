@@ -22,6 +22,7 @@ use Stripe\Stripe;
 use Stripe\Charge;
 use Stripe\Customer;
 use Config;
+use DataTables;
 
 class HotelController extends Controller
 {
@@ -34,7 +35,7 @@ class HotelController extends Controller
     public function getHotels(Request $request){
         $request_data = $request->all();
         $data = isset($request_data)?$request_data:[];
-        $page = isset($data['page'])?$data['page']: '';
+        $page = isset($data['page'])?$data['page']: 0;
         $city = isset($data['city'])?$data['city']: [];
         $dates = isset($data['dates'])?$data['dates']:'';
         $adult = isset($data['qtyInput'][0])?$data['qtyInput'][0]:1;
@@ -46,38 +47,46 @@ class HotelController extends Controller
 
         $get_hotels = Hotel::where('hotels.status',1)->paginate(4);
 
-        $retun_array = array('hotels'=>$get_hotels, 'cities'=>$cities, 'city_id' => $city,
+        $return_array = array('hotels'=>$get_hotels, 'cities'=>$cities, 'city_id' => $city,
          'dates'=>$dates, 'adult'=>$adult, 'data'=>$data);
-
-        if(!$data){ 
-            return view('hotel/list', $retun_array);
+        // dd($retun_array);
+        // if(!$data){ 
+        //     return view('hotel/list', $retun_array);
+        // }
+        // else{
+            // if($page!='' && !$city){
+            //     // return view('hotel/list', $retun_array);
+            // }
+            // else{
+                // $get_hotels = Hotel::whereIn('hotels.city_id',$city)->where('hotels.status',1)->paginate(4);
+                // $retun_array['hotels'] = $get_hotels;
+                
+            // }
+        // }
+        if($city){
+            $get_hotels = Hotel::whereIn('hotels.city_id',$city)->where('hotels.status',1)->paginate(4);
+            $return_array['hotels'] = $get_hotels;
         }
-        else{
-            if($page!='' && !$city){
-                return view('hotel/list', $retun_array);
-            }else{
-                $get_hotels = Hotel::whereIn('hotels.city_id',$city)->where('hotels.status',1)->paginate(4);
-                $retun_array['hotels'] = $get_hotels;
-                return view('hotel/list', $retun_array);
-            }
-        }
+        return view('hotel/list', $return_array);
     }
 
-    public function getHotelDetails(string $hotel_slug, $dates, Request $request)
+    public function getHotelDetails(string $hotel_slug, $dates='', Request $request)
     {
         $hotel_data = [];
         $room_data = [];
-        if($dates == 0){
-            $dates = '';
-        }
+        // if($dates == 0){
+        //     $dates = '';
+        // }
         // Get hotel data with currency symbol
         $hotel_data = Hotel::with(['country' => function($query) {
             $query->select(['id','currency_symbol']);
         }])->where('hotels.slug', $hotel_slug)->where('hotels.status', 1)->first();
+
         if($hotel_data){
             // Get Room data of hotel with amenities
             $room_data = Room::with('amenities')->where('rooms.status',1)->where('rooms.hotel_id',$hotel_data->id)->get();
         }
+
         return view('hotel/detail', ['hotel_detail'=>$hotel_data, 'room_detail'=>$room_data, 'dates'=>$dates]);
     }
 
@@ -101,18 +110,19 @@ class HotelController extends Controller
         }
         $room_details = Room::with('hotels')->whereIn('id',$roomid)->where('rooms.status',1)->get();
         if($room_details){
+            $hotel_id = $room_details[0]->hotel_id;
             foreach($room_details as $key=>$details){
                 $price += $days * (int)$details['price'] * $room_qty[$key];
-                $hotel_id = $details['hotel_id'];
             }
             $hotel = Hotel::where('id',$hotel_id)->first();
             //array data push to blade page
             $return_array = array('room_details'=>$room_details, 'total'=>number_format($price,2,".",""), 'adult'=> $adult, 'check_in'=>$date_arr[0], 'check_out'=>$date_arr[1], 'currency'=>$hotel->country->currency_symbol,'currency_code'=>$hotel->country->currency, 'cart_url'=>$cart_url,'room_qty'=>$room_qty);
             $request->session()->put($return_array);
+
             return 1;
-        }else{
-            return 0;
         }
+
+        return 0;
     }
 
     public function getCart(){
@@ -235,7 +245,8 @@ class HotelController extends Controller
         $countries = Country::get();
         $states = State::get();
         $cities = City::get();
-        return view('admin/hotellist',['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries, 'states'=>$states, 'cities'=>$cities]);      }
+        return view('admin/hotellist',['tabname'=>'hotel','hotels'=>$hotels,'countries'=>$countries, 'states'=>$states, 'cities'=>$cities]);     
+    }
 
     public function getStateByCountry(Request $request){
        $data = $request->all();
@@ -340,10 +351,18 @@ class HotelController extends Controller
 
     public function addAmenity(Request $request){
         $data = $request->all();
+        $response = [];
+        $check = Amenity::where('name',$data['amenity'])->first();
+        // dd($check);
+        if($check){
+            $response = array('status'=>2,'message'=>'Amenity Already Exist');
+            return response()->json($response);
+        }
         $insert_amenity = new Amenity();
         $insert_amenity['name'] = $data['amenity'];
         if($insert_amenity->save()){
-            return redirect('admin/amenities')->with(['tabname'=>'amenity']);
+            $response = array('status'=>1,'message'=>'Amenity Added Successfully');
+            return response()->json($response);
         }
     }
 
@@ -351,7 +370,9 @@ class HotelController extends Controller
         $data = $request->all();
         $delete_amenity = Amenity::where('id',$data['id'])->delete();
         if($delete_amenity){
-            return array('status'=>'deleted');
+            return array('status'=>'1', 'message'=>'Amenity Deleted Successfully');
+        }else{
+            return array('status'=>'2', 'message'=>'Failed');
         }
     }
 
@@ -359,9 +380,17 @@ class HotelController extends Controller
         $response = [];
         $amenities = Amenity::get();
         if($amenities){
-            $response = array('data' => $amenities);
+            return Datatables::of($amenities)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                $id = $row->id;
+                $name = $row->name;
+                    $btn = "<a href='' type='button' class='btn btn-danger' data-toggle='modal' onclick='deleteAmenity($id);'><i class='fas fa-trash-alt'></i></a>";
+                    return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
         }
-        return response()->json($response);
     }
 }
 
