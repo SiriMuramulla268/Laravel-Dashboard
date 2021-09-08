@@ -59,7 +59,7 @@
                   <div class="col-8">
                   </div>
                   <div class="col-4">
-                    <!-- <span >{{$memberdata->links()}}</span> -->
+                    <span >{{$memberdata->links()}}</span>
                   </div>
                 </div>
               </div>
@@ -90,6 +90,14 @@
           "info": true,
           "autoWidth": true,
           "responsive": true,
+          // "processing" : true,
+          // "serverSide" : true,
+          // ajax: "{{ route('user-list') }}",
+          // columns: [
+          //     {data: 'name', name: 'name'},
+          //     {data: 'name', name: 'name'},
+          //     {data: 'action', name: 'action'},
+          // ]
       });
   });
 </script>

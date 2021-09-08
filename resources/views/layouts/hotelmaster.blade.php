@@ -4,16 +4,20 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Panagea - Premium site template for travel agencies, hotels and restaurant listing.">
+    <meta name="description" content="Panagea - Premium site template for travel agencies,
+        hotels and restaurant listing.">
     <meta name="author" content="Ansonika">
     <title>@yield('title')</title>
 
     <!-- Favicons-->
     <link rel="shortcut icon" href="{{asset('img/favicon.ico')}}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{{asset('img/apple-touch-icon-57x57-precomposed.png')}}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{{asset('img/apple-touch-icon-72x72-precomposed.png')}}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{{asset('img/apple-touch-icon-114x114-precomposed.png')}}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{{asset('img/apple-touch-icon-144x144-precomposed.png')}}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
+        href="{{asset('img/apple-touch-icon-72x72-precomposed.png')}}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
+        href="{{asset('img/apple-touch-icon-114x114-precomposed.png')}}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
+        href="{{asset('img/apple-touch-icon-144x144-precomposed.png')}}">
 
     <!-- BASE CSS -->
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
@@ -30,6 +34,9 @@
     <!-- SPECIFIC CSS -->
     <link href="{{asset('css/blog.css')}}" rel="stylesheet">
 
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+
+
 </head>
 <style>
    label.error {
@@ -37,7 +44,7 @@
         font-size: 12px;
     }
     /* to remove extra pagination style  */
-    .w-5{display:none} 
+    .w-5{display:none}
     .cb-btn:checked + label {
         background-color: Green !important;
     }
@@ -61,9 +68,11 @@
             </div>
             <ul id="top_menu">
                 @if(session('room_details'))
-                    <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items" value="">{{ sizeof(session('room_details')) }}</span></strong></a></li>
+                    <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items"
+                        value="">{{ sizeof(session('room_details')) }}</span></strong></a></li>
                 @else
-                    <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items" value="">0</span></strong></a></li>
+                    <li><a href="/cart" class="cart-menu-btn" title="Cart"><strong><span id="cart_items"
+                        value="">0</span></strong></a></li>
                 @endif
                 <li><a href="#sign-in-dialog" id="sign-in" class="login" title="Sign In">Sign In</a></li>
                 <li><a href="/history" class="wishlist_bt_top" title="Your Booking History">Your wishlist</a></li>
@@ -79,7 +88,8 @@
             <nav id="menu" class="main-menu">
                 <ul>
                     @if(session('user'))
-                        <li><strong><span><a href="">Hello! <span class="text-danger" id="user_name" value="">{{ session('user')['name'] }}</span></a></span></strong></li>
+                        <li><strong><span><a href="">Hello! <span class="text-danger" id="user_name"
+                            value="">{{ session('user')['name'] }}</span></a></span></strong></li>
                     @endif
                     <li><span><a href="/">Home</a></span></li>
                     <li><span><a href="/hotels">Hotels</a></span></li>
@@ -97,7 +107,9 @@
                 <div class="row">
                     <div class="col-lg-5 col-md-12 p-r-5">
                         <p><img src="{{asset('img/logo.svg')}}" width="150" height="36" alt=""></p>
-                        <p>Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea. Id placerat tacimates definitionem sea, prima quidam vim no. Duo nobis persecuti cu. Nihil facilisi indoctum an vix, ut delectus expetendis vis.</p>
+                        <p>Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea.
+                            Id placerat tacimates definitionem sea, prima quidam vim no.
+                            Duo nobis persecuti cu. Nihil facilisi indoctum an vix, ut delectus expetendis vis.</p>
                         <div class="follow_us">
                             <ul>
                                 <li>Follow us</li>
@@ -130,7 +142,8 @@
                         <div id="message-newsletter"></div>
                         <form method="post" action="assets/newsletter.php" name="newsletter_form" id="newsletter_form">
                             <div class="form-group">
-                                <input type="email" name="email_newsletter" id="email_newsletter" class="form-control" placeholder="Your email">
+                                <input type="email" name="email_newsletter" id="email_newsletter"
+                                    class="form-control" placeholder="Your email">
                                 <input type="submit" value="Submit" id="submit-newsletter">
                             </div>
                         </form>
@@ -196,10 +209,19 @@
                     <i class="icon_lock_alt"></i>
                 </div>
                 <input type="hidden" name="user_type" value="user">
-                <div class="text-center"><input type="button" value="Log In" class="btn_1 full-width" onclick="signin()"></div>
-                <div class="text-center">
-                    Don’t have an account? <a href="register.html">Sign up</a>
-                </div>
+
+                
+                @if( session('user') )
+                    <div class="text-center"><input type="button" value="Log In" class="btn-secondary full-width btn_1"
+                        disabled></div>
+
+                    <div class="text-center"><input type="button" value="Log Out" class="btn_1 full-width"
+                        onclick="Logout()"></div>
+                @else
+                    <div class="text-center"><input type="button" value="Log In" class="btn_1 full-width"
+                        onclick="signin()" ></div>
+                @endif
+
             </div>
         </form>
         <!--form -->
@@ -232,6 +254,8 @@
     <script src="{{asset('assets/validate.js')}}"></script>
     <script type="text/javascript" src="jquery.validate.js"></script>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 
     @stack('index.blade-scripts')
     @stack('list.blade-scripts')
@@ -243,16 +267,35 @@
 
     <script>
         function signin(){
-            console.log('here');
             $.ajax({
             url: "{{ route('exist-user') }}",
             type: 'post',
             data: $('#exist_user').serialize(),
             dataType: 'json',
             success: function(res) {
-                if(res == 1){
+                if(res.status == 1){
                     $('#sign-in-dialog').hide();
                     location.reload();
+                }
+                else{
+                    toastr.error( '', 'Failed To Login', {timeOut: 1000});
+                }
+            }
+            });
+        }
+
+        function Logout(){
+            $.ajax({
+            url: "{{ route('logout-user') }}",
+            type: 'get',
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                if(res.status == 1){
+                    location.reload();
+                }
+                else{
+                    toastr.error( '', 'Failed To Logout', {timeOut: 1000});
                 }
             }
             });

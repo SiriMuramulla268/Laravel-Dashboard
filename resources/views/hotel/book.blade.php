@@ -32,13 +32,15 @@
 						</div>
 					</div>
 					<!-- End bs-wizard -->
-					@if(session('room_details'))
-						@if($response['status'] == 'succeeded')
+					@if($response == 'succeeded')
 						<div id="confirm">
 							<h4>Booking Done Sucessfully!</h4>
 							<p>You'll receive a confirmation email at {{ $email }}</p>
 						</div>
-						@endif
+					@else
+						<div>
+							<h4>Booking Transaction Failed</h4>
+						</div>
 					@endif
 				</div>
 			</div>
@@ -46,4 +48,10 @@
 		<!--/hero_in-->
 	</main>
 	<!--/main-->
-    @endsection
+@endsection
+
+	
+
+	
+
+	

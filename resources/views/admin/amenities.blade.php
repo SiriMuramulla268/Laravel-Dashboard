@@ -1,8 +1,8 @@
 @extends('layouts.master')
 @section('title',config('app.name'))
 @section('content')
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+<!-- Content Wrapper. Contains page content -->
+   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -19,12 +19,14 @@
               <div class="card-body">
                 <div class="row">
                     <div class="col-sm-10"><h3>Amenities</h3></div>
-                    <div class="col-sm-2 text-right"><a href="" class="btn btn-primary" data-toggle="modal" onclick="addAmenityModal()"> Add</a></div>
+                    <div class="col-sm-2 text-right">
+                        <a href="" class="btn btn-primary" data-toggle="modal" onclick="addAmenityModal()"> Add</a>
+                    </div>
                 </div>
-                    <br>
+                <br>
                 <table id="table_amenity" class="table table-bordered table-striped">
                   <thead>
-                  <tr>
+                   <tr>
                     <th>Amenity</th>
                     <th>Action</th>
                   </tr>
@@ -40,28 +42,30 @@
           <!-- /.col -->
         </div>
         <!-- /.row -->
-      </div>
+        </div>
       <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
 
-     <!-- Add Hotel -->
-     <div class="modal fade" id="addAmenityModal" tabindex="-1" role="dialog" aria-labelledby="addAmenityModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <!-- Add Hotel -->
+    <div class="modal fade" id="addAmenityModal" tabindex="-1" role="dialog" aria-labelledby="addAmenityModalLabel"
+        aria-hidden="true">
+       <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+           <div class="modal-header">
             <h5 class="modal-title" id="amenityModalLabel">Add Amenity</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+               <span aria-hidden="true">&times;</span>
             </button>
             </div>
             <div class="modal-body">
-            <form id="addamenity" method="POST" autocomplete="off"> 
+            <form id="addamenity" method="POST" autocomplete="off">
                 @csrf
                 <div class="card-body">
                     <div class="form-group">
                         <label for="amenity">Amenity</label><span class="text-danger">*</span>
-                        <Input type="text" class="form-control" id="amenity" name="amenity" placeholder="Enter Amenity Name">
+                        <Input type="text" class="form-control" id="amenity" name="amenity"
+                                placeholder="Enter Amenity Name">
                     </div>
                 </div>
                 <!-- /.card-body -->
@@ -111,8 +115,20 @@
                         document.getElementById("addamenity").reset();
                         toastr.success( '', res.message, {timeOut: 1000});
                         $('#table_amenity').DataTable().ajax.reload();
-                    }else{
+                    }
+                    if(res.status == 0){
+                        $("#addAmenityModal").modal('hide');
+                        document.getElementById("addamenity").reset();
                         toastr.error( '', res.message, {timeOut: 1000});
+                        
+                    }
+                    if(res.status == 2){
+                        toastr.error( '', 'Fail', {timeOut: 1000});
+                    }
+                    else{
+                        for(var i=0;i<res.length;i++){
+                            toastr.error( '', res[i], {timeOut: 1000});
+                        }
                     }
                 }
             });
@@ -124,9 +140,10 @@
         $("#addAmenityModal").modal();
     }
 
-    function deleteAmenity(amenity_id){
+    function deleteAmenity(amenity_id,name){
+        var name = $("input[name=hidden"+amenity_id+"]").val();
         swal({
-            text: "Are you sure you want to delete ?",
+            text: "Are you sure you want to delete " +name +" ?",
             buttons: ['NO', 'YES'],
             dangerMode: true
         })
@@ -144,7 +161,7 @@
                         }else{
                             toastr.error('',res.message, {timeOut: 1000});
                         }
-                	} 
+                	}
                 });
             }
         });

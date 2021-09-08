@@ -16,15 +16,18 @@ class State extends Model
         'status'
     ];
 
-    public function country(){
+    public function country()
+    {
         return $this->belongsTo(Country::class);
     }
 
-    public function city(){
+    public function city()
+    {
         return $this->hasMany(City::class);
     }
 
-    public function hotel(){
+    public function hotel()
+    {
         return $this->hasMany(Hotel::class);
     }
 }

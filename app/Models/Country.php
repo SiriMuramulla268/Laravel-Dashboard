@@ -18,11 +18,13 @@ class Country extends Model
         'status'
     ];
 
-    public function state(){
+    public function state()
+    {
         return $this->hasMany(State::class);
     }
 
-    public function hotel(){
+    public function hotel()
+    {
         return $this->hasMany(Hotel::class);
     }
 }

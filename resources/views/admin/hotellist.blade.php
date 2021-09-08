@@ -19,7 +19,10 @@
               <div class="card-body">
                 <div class="row">
                     <div class="col-sm-11"><h3>Hotels</h3></div>
-                    <div class="col-sm-1"><a href="" class="btn btn-primary" data-toggle="modal" onclick="addHotelModal()"><i class="fa fa-plus"></i> Add</a></div>
+                    <div class="col-sm-1">
+                      <a href="" class="btn btn-primary" data-toggle="modal" onclick="addHotelModal()">
+                        <i class="fa fa-plus"></i> Add</a>
+                    </div>
                 </div>
                     <br>
                 <table id="table_hotel" class="table table-bordered table-striped">
@@ -34,23 +37,8 @@
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach($hotels as $key=>$hotel)
-                    <tr>
-                      <td>{{ $hotel['name'] }}</td>
-                      <td>{{ $hotel['email'] }}</td>
-                      <td>{{ $hotel->country->name }}</td>
-                      <td>{{ $hotel->state->name }}</td>
-                      <td>{{ $hotel->city->name }}</td>
-                      <td class="text-center">
-                        <a href="" type="button" class="btn btn-info" data-toggle="modal" data-target="#viewHotelModal" onclick="viewHotel( {{ $hotel['id'] }} )"><i class="far fa-eye"></i></a>
-                        <a href="" type="button" class="btn btn-success" data-toggle="modal" onclick="editHotel( {{ $hotel['id'] }} )"><i class="fas fa-edit"></i></a>
-                      </td>
-                    </tr>
-                    @endforeach
+                    
                   </tbody>
-                  @if(session('status'))
-                    <span class="text-success" id="status_msg"> {{ session('status') ?? ''  }}</span>
-                  @endif
                 </table>
               </div>
               <!-- /.card-body -->
@@ -66,7 +54,8 @@
     <!-- /.content -->
 
     <!-- Add Hotel -->
-    <div class="modal fade" id="addHotelModal" tabindex="-1" role="dialog" aria-labelledby="addHotelModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addHotelModal" tabindex="-1" role="dialog" aria-labelledby="addHotelModalLabel"
+      aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -76,12 +65,12 @@
             </button>
             </div>
             <div class="modal-body">
-            <form action="{{route('add-hotel')}}" method="POST" id="addhotel" autocomplete="off"> 
+            <form method="POST" id="addhotel" autocomplete="off">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
                     <label for="name">Name</label><span class="text-danger">*</span>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
                   </div>
                   <div class="row">
                     <div class="col-md-6">
@@ -130,19 +119,22 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="mobile">Address</label><span class="text-danger">*</span>
-                        <textarea class="form-control" id="address" name="address" rows="2" placeholder="Enter Address"></textarea>
+                        <textarea class="form-control" id="address" name="address" rows="2"
+                          placeholder="Enter Address"></textarea>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="mobile">Website URL</label><span class="text-danger">*</span>
-                        <textarea class="form-control" id="website_url" name="website_url" rows="2" placeholder="Enter Website URL"></textarea>
+                        <textarea class="form-control" id="website_url" name="website_url" rows="2"
+                          placeholder="Enter Website URL"></textarea>
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="mobile">Description</label><span class="text-danger">*</span>
-                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Description"></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3"
+                      placeholder="Enter Description"></textarea>
                   </div>
                   <div class="form-group">
                     <label class="container_check col-md-6">Featured
@@ -155,7 +147,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Submit </button>
+                  <button id="submit" class="btn-primary btn-submit">Submit </button>
                 </div>
             </form>
             </div>
@@ -164,7 +156,8 @@
 	  </div>
 
     <!-- View Hotel -->
-    <div class="modal fade" id="viewHotelModal" tabindex="-1" role="dialog" aria-labelledby="viewHotelModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewHotelModal" tabindex="-1" role="dialog" aria-labelledby="viewHotelModalLabel"
+      aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -174,7 +167,7 @@
             </button>
             </div>
             <div class="modal-body">
-            <form> 
+            <form>
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-6">
@@ -248,7 +241,7 @@
                   
                   <div class="form-group">
                     <label for="mobile">Rooms</label><span class="text-danger">*</span>
-                    <textarea class="form-control" id="view_website_url" rows="1" disabled="disabled"></textarea>
+                    <textarea class="form-control" id="rooms" rows="1" disabled="disabled"></textarea>
                   </div>
 
                   <div class="row">
@@ -280,6 +273,30 @@
 @push('hotellist.blade-scripts')
 <script>
   $(function () {
+
+    $("#addhotel").validate({
+        rules: {
+          name: "required",
+          email: "required",
+          country: "required",
+          state: "required",
+          city: "required",
+          address: "required",
+          website_url: "required",
+          description: "required",
+        },
+        messages: {
+          name: "required",
+          email: "required",
+          country: "required",
+          state: "required",
+          city: "required",
+          address: "required",
+          website_url: "required",
+          description: "required",
+        }
+    });
+
     $('#table_hotel').DataTable({
         "paging": true,
         "lengthChange": true,
@@ -288,12 +305,44 @@
         "info": true,
         "autoWidth": true,
         "responsive": true,
+        "processing" : true,
+        "serverSide" : true,
+        ajax: "{{ route('get-hotel') }}",
+        columns: [
+            {data: 'name', name: 'name'},
+            {data: 'email', name: 'email'},
+            {data: 'country.name', name: 'country.name'},
+            {data: 'state.name', name: 'state.name'},
+            {data: 'city.name', name: 'city.name'},
+            {data: 'action', name: 'action'},
+        ]
     });
 
-    setTimeout(function(){
-        $('#status_msg').remove();
-    }, 500);
-
+    $("#submit").click(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: "{!! route('add-hotel') !!}",
+            type: 'POST',
+            data: $('#addhotel').serialize(),
+            dataType: 'json',
+            success: function(res) {
+                if(res.status == 1){
+                  $("#addHotelModal").modal('hide');
+                  document.getElementById("addhotel").reset();
+                  toastr.success( '', res.message, {timeOut: 1000});
+                  $('#table_hotel').DataTable().ajax.reload();
+                }
+                if(res.status == 0){
+                  toastr.error( '', 'Fail', {timeOut: 1000});
+                }
+                else{
+                  for(var i=0;i<res.length;i++){
+                    toastr.error( '', res[i], {timeOut: 1000});
+                  }
+                }
+            }
+        });
+    });
   });
 
   function countryChange(){
@@ -339,6 +388,8 @@
   }
 
   function viewHotel(hotel_id){
+    var rooms = '';
+    $("#viewHotelModal").modal();
     $.ajax({
 			url: "{{ route('view-hotel') }}",
 			type: 'get',
@@ -353,6 +404,14 @@
         $('#view_address').val(res[0].address);
         $('#view_description').val(res[0].description);
         $('#view_website_url').val(res[0].website_url);
+        for (var i=0; i<res[0].rooms.length; i++) {
+          if (i > 0) {
+            rooms = rooms + ',  ' + res[0].rooms[i].type;
+          }else {
+            rooms = rooms + res[0].rooms[i].type;
+          }
+        }
+        $('#rooms').val(rooms);
         if(res[0].featured == 1){
           $('input[name=view_featured]').attr('checked', true);
         }
@@ -378,13 +437,13 @@
         $('#country').val(res[0].country_id);
         countryChange();
 
-        setTimeout(function(){ 
-          $('#state').val(res[0].state_id); 
+        setTimeout(function(){
+          $('#state').val(res[0].state_id);
           stateChange();
         }, 500);
 
-        setTimeout(function(){ 
-          $('#city').val(res[0].city_id); 
+        setTimeout(function(){
+          $('#city').val(res[0].city_id);
         }, 600);
         $('#address').val(res[0].address);
         $('#description').val(res[0].description);
@@ -397,7 +456,7 @@
         }
 			}
 		});
-  }  
+  }
 
   function addHotelModal(){
     $('#addModalLabel').html('Add Hotel');
@@ -408,3 +467,4 @@
 
 </script>
 @endpush
+

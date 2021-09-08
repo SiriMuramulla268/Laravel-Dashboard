@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
@@ -40,16 +41,18 @@ class LoginController extends Controller
         // $this->middleware('guest')->except('logout');
     }
    
-    public function authenticate(Request $request){
+    public function authenticate(Request $request)
+    {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             return redirect()->intended('admin/dashboard');
-        }else{
+        }else {
             return redirect('admin');
         }
     }
 
-    public function logOut() {
+    public function logOut()
+    {
         \Auth::logout();
         return redirect('admin');
     }

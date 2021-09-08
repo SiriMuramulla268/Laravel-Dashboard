@@ -121,7 +121,7 @@
 		@else
 		<div class="bg_color_1">
                 <div class="container margin_60_35">
-                    <div class="row"> 
+                    <div class="row">
                         <div class="col-lg-12 text-center">
                         No Rooms Added To Cart. Click <a href="/hotels">Hotels</a>
                         </div>
@@ -142,3 +142,4 @@
 			$('#coupon_code').val('');
 		}
 	</script>
+

@@ -23,7 +23,7 @@
           <div class="col-md-12">
             <!-- general form elements -->
           
-              <h1>Click here to Logout  <a href="logout" class="btn btn-primary">Logout</a> </h1> 
+              <h1>Click here to Logout  <a href="logout" class="btn btn-primary">Logout</a> </h1>
                 
             <!-- /.card -->
           </div>
@@ -43,3 +43,4 @@
   @endsection
 
 @endsection
+

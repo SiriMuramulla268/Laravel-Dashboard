@@ -6,7 +6,8 @@
   <title>@yield('title')</title>
 
   <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../vendors/plugins/fontawesome-free/css/all.min.css">
   <!-- Ionicons -->
@@ -20,9 +21,10 @@
   <link rel="stylesheet" href="../vendors/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../vendors/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
   <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
-
+  
 </head>
 <style>
     /* to show form clientside error in red */
@@ -33,11 +35,14 @@
     /* to remove extra pagination style  */
     .w-5{
         display:none
-    } 
+    }
     .dropdown-toggle{
         height: 40px;
         width: 400px !important;
     }
+    /* input:invalid {
+        border: 2px dashed red;
+    } */
 </style>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -47,7 +52,8 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="index3.html" class="brand-link">
-        <img src="../vendors/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="../vendors/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+            style="opacity: .8">
         <span class="brand-text font-weight-light">Admin  - {{ Auth::user()->name }}</span>
         </a>
 
@@ -88,7 +94,7 @@
                 @endif
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                    Dashboard 
+                    Dashboard
                 </p>
                 </a>
                 
@@ -192,10 +198,10 @@
                 </a>
                 <ul class="nav nav-treeview">
                 <li class="nav-item">
-                @if ($tabname == '#')
-                    <a href="../../admin/bookings" class="nav-link active">
+                @if ($tabname == 'bookings')
+                    <a href="../../admin/bookinglist" class="nav-link active">
                 @else
-                    <a href="../../admin/bookings" class="nav-link">
+                    <a href="../../admin/bookinglist" class="nav-link">
                 @endif
                     <i class="far fa-circle nav-icon"></i>
                     <p>Manage Bookings</p>
@@ -257,6 +263,7 @@
     @stack('userlist.blade-scripts')
     @stack('hotellist.blade-scripts')
     @stack('roomdetails.blade-scripts')
+    @stack('bookinglist.blade-scripts')
     
 </body>
 </html>

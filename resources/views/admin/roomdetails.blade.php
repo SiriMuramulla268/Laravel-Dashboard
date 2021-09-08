@@ -19,7 +19,8 @@
               <div class="card-body">
                 <div class="row">
                     <div class="col-sm-10"><h3>Room Details</h3></div>
-                    <div class="col-sm-2 text-right"><a href="" class="btn btn-primary" data-toggle="modal" onclick="addRoomModal()"> Add Rooms</a></div>
+                    <div class="col-sm-2 text-right"><a href="" class="btn btn-primary" data-toggle="modal"
+                        onclick="addRoomModal()"> Add Rooms</a></div>
                 </div>
                     <br>
                 <table id="table_room" class="table table-bordered table-striped">
@@ -30,36 +31,13 @@
                     <th>Price</th>
                     <th>Adult Price</th>
                     <th>Child Price</th>
-                    <th>Amenities</th>
+                  <th>Amenities</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                      @foreach($rooms as $room)
-                        @php $amenity_name = ''; @endphp
-                        <tr>
-                            <td>{{ $room->hotels->name }}</td>
-                            <td>{{ $room['type'] }}</td>
-                            <td>{{ number_format($room['price']) }}</td>
-                            <td>{{ number_format($room['per_adult_price']) }}</td>
-                            <td>{{ number_format($room['per_child_price']) }}</td>
-                            @foreach($room->amenities as $key=>$amenity)
-                                @php
-                                    if($key > 0)
-                                        $amenity_name = $amenity_name.',';
-                                    $amenity_name = $amenity_name.$amenity->name;
-                                @endphp
-                            @endforeach
-                            <td>{{ $amenity_name }}</td>
-                            <td class="text-center">
-                                <a href="" type="button" class="btn btn-success" data-toggle="modal" onclick="editRoom({{ $room['id'] }});"><i class="fas fa-edit"></i></a>
-                            </td>
-                        </tr>
-                      @endforeach
+                      
                   </tbody>
-                  @if(session('status'))
-                    <span class="text-success" id="status_msg"> {{ session('status') ?? ''  }}</span>
-                  @endif
                 </table>
               </div>
               <!-- /.card-body -->
@@ -74,7 +52,8 @@
     </section>
     <!-- /.content -->
     <!-- Add Hotel -->
-    <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="addRoomModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -84,12 +63,12 @@
             </button>
             </div>
             <div class="modal-body">
-            <form action="{{route('add-room')}}" id="addroom" method="POST" id="addroom" autocomplete="off"> 
+            <form id="addroom" method="POST" id="addroom" autocomplete="off">
                 @csrf
                 <div class="card-body">
                 <div class="form-group">
-                    <label for="type">Hotel</label><span class="text-danger">*</span>
-                    <select class="form-control" id="hotel" name="hotel">
+                    <label for="hotel">Hotel</label><span class="text-danger">*</span>
+                    <select class="form-control" id="hotel" name="hotel" required disabled>
                         <option value="">Select Hotel</option>
                         @foreach($hotels as $hotel)
                             <option value="{{ $hotel->id }}">{{ $hotel->name }}</option>
@@ -99,34 +78,38 @@
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="mobile">Room Type</label><span class="text-danger">*</span>
-                        <Input type="text" class="form-control" id="room_type" name="room_type" placeholder="Enter Room Type">
+                        <label for="room_type">Room Type</label><span class="text-danger">*</span>
+                        <Input type="text" class="form-control" id="room_type" name="room_type"
+                            placeholder="Enter Room Type" required maxlength="50">
                     </div>
                     </div>
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="mobile">Price</label><span class="text-danger">*</span>
-                        <input type="text" class="form-control" id="room_price" name="room_price" placeholder="Enter Room Price">
+                        <label for="room_price">Price</label><span class="text-danger">*</span>
+                        <input type="number" class="form-control" id="room_price" name="room_price"
+                            placeholder="Enter Room Price" required>
                     </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="mobile">Adult Price</label><span class="text-danger">*</span>
-                            <input type="text" class="form-control" id="adult_price" name="adult_price" placeholder="Enter Adult Price">
+                            <label for="adult_price">Adult Price</label><span class="text-danger">*</span>
+                            <input type="number" class="form-control" id="adult_price" name="adult_price"
+                                placeholder="Enter Adult Price" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="mobile">Child Price</label><span class="text-danger">*</span>
-                            <input type="text" class="form-control" id="child_price" name="child_price" placeholder="Enter Child Price">
+                            <label for="child_price">Child Price</label><span class="text-danger">*</span>
+                            <input type="number" class="form-control" id="child_price" name="child_price"
+                                placeholder="Enter Child Price" required>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="mobile">Amenities</label><span class="text-danger">*</span>
-                    <select class="selectpicker" multiple data-live-search="true" name="amenities[]">
+                    <label for="amenities">Amenities</label>
+                    <select class="selectpicker" multiple data-live-search="true" name="amenities[]" required>
                         @foreach($amenities as $amenity)
                             <option value="{{ $amenity->id }}">{{ $amenity->name }}</option>
                         @endforeach
@@ -141,7 +124,7 @@
                 <input type="hidden" id="id" name="id" value="">
                 <!-- /.card-body -->
                 <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Submit </button>
+                <button id="submit"  class="btn-primary btn-submit" >Submit </button>
                 </div>
             </form>
             </div>
@@ -155,6 +138,23 @@
 @push('roomdetails.blade-scripts')
 <script>
     $(function () {
+        $("#addroom").validate({
+            rules: {
+                name: "required",
+                room_type: "required",
+                price: "required",
+                adult_price: "required",
+                child_price: "required",
+            },
+            messages: {
+                name: "Select Hotel",
+                room_type: "Type is required",
+                price: "Type is required",
+                adult_price: "Type is required",
+                child_price: "required",
+            }
+        });
+
         $('#table_room').DataTable({
             "paging": true,
             "lengthChange": true,
@@ -163,16 +163,51 @@
             "info": true,
             "autoWidth": true,
             "responsive": true,
+            "processing" : true,
+            "serverSide" : true,
+            ajax: "{{ route('get-room') }}",
+            columns: [
+                {data: 'hotels.name', name: 'hotels.name'},
+                {data: 'type', name: 'type'},
+                {data: 'price', name: 'price'},
+                {data: 'per_adult_price', name: 'per_adult_price'},
+                {data: 'per_child_price', name: 'per_child_price'},
+                {data: 'amenities', name: 'amenities'},
+                {data: 'action', name: 'action'},
+            ]
         });
 
-        setTimeout(function(){
-            $('#status_msg').remove();
-        }, 500);
-
+        $("#submit").click(function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "{!! route('add-room') !!}",
+                type: 'POST',
+                data: $('#addroom').serialize(),
+                dataType: 'json',
+                success: function(res) {
+                    if(res.status == 1){
+                        $("#addRoomModal").modal('hide');
+                        document.getElementById("addroom").reset();
+                        toastr.success( '', res.message, {timeOut: 1000});
+                        $('#table_room').DataTable().ajax.reload();
+                    }
+                    if(res.status == 0){
+                        toastr.error( '', 'Fail', {timeOut: 1000});
+                    }
+                    else{
+                        for(var i=0;i<res.length;i++){
+                            toastr.error( '', res[i], {timeOut: 1000});
+                        }
+                    }
+                }
+            });
+        });
     });
 
     function addRoomModal(){
         $('#roomModalLabel').html('Add Room');
+        document.getElementById("addroom").reset();
+        $( 'input[type="checkbox"]' ).prop('checked', false);
         $("#addRoomModal").modal();
     }
 
@@ -181,6 +216,7 @@
         $('#id').val(room_id);
         $('#roomModalLabel').html('Edit Room');
         $("#addRoomModal").modal();
+        // $('#hotel').prop('disabled', true);
         document.getElementById("addroom").reset();
         $.ajax({
 			url: "{{ route('view-room') }}",
@@ -199,9 +235,10 @@
                 for(var i=0;i<res.amenities.length;i++){
                    values.push(res.amenities[i].id)
                 }
-                $('.selectpicker').selectpicker('val', values); 
-			}   
+                $('.selectpicker').selectpicker('val', values);
+			}
 		});
     }
 </script>
 @endpush
+

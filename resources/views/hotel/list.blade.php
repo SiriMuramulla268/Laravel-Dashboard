@@ -6,7 +6,7 @@
 		<section class="hero_in hotels">
 			<div class="wrapper">
 				<div class="container">
-					@if(!$hotels->isEmpty())
+					@if(!empty($hotels))
 						<h1 class="fadeInUp"><span></span>Hotels</h1>
 					@else
 						<h1 class="fadeInUp"><span></span>No Hotels Found :(</h1>
@@ -17,17 +17,20 @@
 		<!--/hero_in-->
 		
 		<!-- If Hotels are present -->
-		@if(!$hotels->isEmpty())
+		@if(!empty($hotels))
 			<div class="filters_listing sticky_horizontal">
 				<div class="container">
 					<ul class="clearfix">
 						<li>
 							<div class="switch-field">
-								<input type="radio" id="all" name="listing_filter" value="all" checked data-filter="*" class="selected">
+								<input type="radio" id="all" name="listing_filter" value="all" checked
+									data-filter="*" class="selected">
 								<label for="all">All</label>
-								<input type="radio" id="popular" name="listing_filter" value="popular" data-filter=".popular">
+								<input type="radio" id="popular" name="listing_filter" value="popular"
+									data-filter=".popular">
 								<label for="popular">Popular</label>
-								<input type="radio" id="latest" name="listing_filter" value="latest" data-filter=".latest">
+								<input type="radio" id="latest" name="listing_filter" value="latest"
+									data-filter=".latest">
 								<label for="latest">Latest</label>
 							</div>
 						</li>
@@ -47,10 +50,13 @@
 				<div class="row">
 					<aside class="col-lg-3" id="sidebar">
 						<div id="filters_col">
-							<a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters" id="filters_col_bt">Filters </a>
+							<a data-toggle="collapse" href="#collapseFilters" aria-expanded="false"
+								aria-controls="collapseFilters" id="filters_col_bt">Filters </a>
 							<div class="collapse show" id="collapseFilters">
 								
-								<form action="{{route('hotel-list')}}" id="filter_hotels" method="GET" autocomplete="off" >
+								<form action="{{route('hotel-list')}}" id="filter_hotels" method="GET"
+									autocomplete="off" >
+									@if(!empty($cities))
 									<div class="filter_type" id="cities">
 										<h6><strong>Cities</strong></h6>
 										<ul>
@@ -65,26 +71,32 @@
 															@php
 																$checked = 'checked';
 															@endphp
-														@endif	
+														@endif
 													@endfor
 												@endif
 
 												<li>
-													<label class="container_check" >{{$city['name']}} <small>({{$city['no_of_hotels']}})</small>
-														<input type="checkbox" name="city[]" value="{{$city['id']}}" {{$checked}} >
+													<label class="container_check" >{{$city['name']}}
+														<small>({{$city['no_of_hotels']}})</small>
+														<input type="checkbox" name="city[]" value="{{$city['id']}}"
+															{{$checked}} >
 														<span class="checkmark"></span>
 													</label>
 												</li>
 											@endforeach
 										</ul>
 									</div>
+									@endif
+
 									<div class="filter_type">
 										<div>
 											<h6><strong>Dates</strong></h6>
 											@if(isset($dates))
-												<input class="form-control" type="text" name="dates" id="dates" placeholder="When.." value="{{$dates}}">
+												<input class="form-control" type="text" name="dates" id="dates"
+													placeholder="When.." value="{{$dates}}">
 											@else
-												<input class="form-control" type="text" name="dates" id="dates" placeholder="When.." value="">
+												<input class="form-control" type="text" name="dates" id="dates"
+													placeholder="When.." value="">
 											@endif
 										</div>
 											
@@ -105,7 +117,7 @@
 											</div>
 										</div>
 									</div>
-									<input type="submit" class="btn_search" value="Apply Filter"><br>  
+									<input type="submit" class="btn_search" value="Apply Filter"><br>
 								</form>
 							</div>
 							<!--/collapse -->
@@ -122,14 +134,26 @@
 										<div class="box_grid">
 											<figure>
 												<a href="#0" class="wish_bt"></a>
-												<a class="redirect" href="hotel/{{$hotel['slug']}}/{{ Request::input('dates') ?? '0'}}"><img src="{{asset('img/hotel_1.jpg')}}" class="img-fluid" alt="" width="800" height="533"><div class="read_more"><span>Read more</span></div></a>
+												<a class="redirect"
+													href="hotel/{{$hotel['slug']}}/{{ Request::input('dates')}}">
+													<img src="{{asset('img/hotel_1.jpg')}}" class="img-fluid" alt=""
+													width="800" height="533">
+														<div class="read_more"><span>Read more</span></div>
+												</a>
 												<small>{{$hotel->city->name}}</small>
 											</figure>
 											<div class="wrapper">
-												<div class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></div>
+												<div class="cat_star">
+													<i class="icon_star"></i><i class="icon_star"></i>
+													<i class="icon_star"></i><i class="icon_star"></i>
+												</div>
 												<h3><a href="hotel-detail.html">{{$hotel['name']}}</a></h3>
 												<p>{{$hotel['description']}}</p>
-												<span class="price">Price <strong>{{$hotel->country->currency_symbol}}{{  number_format($hotel->min_price)  }}</strong></span>
+												<span class="price">Price
+													<strong>{{$hotel->country->currency_symbol}}
+														{{  number_format($hotel->min_price)  }}
+													</strong>
+												</span>
 											</div>
 										</div>
 									</div>
@@ -151,7 +175,7 @@
 					<!-- /isotope-wrapper -->
 					</div>
 					<!-- /col -->
-				</div>		
+				</div>
 			</div>
 			<!-- /container -->
 			
@@ -237,8 +261,7 @@
 			'city[]': "Choose City",
 			dates: "Choose Dates",
 		}
-		}); 
-
+		});
 	});
 	</script>
 	@endpush

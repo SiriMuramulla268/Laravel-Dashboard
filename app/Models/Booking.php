@@ -18,15 +18,18 @@ class Booking extends Model
         'booking_status'
     ];
 
-    public function bookingDetail(){
+    public function bookingDetail()
+    {
         return $this->hasMany(BookingDetail::class);
     }
 
-    public function hotel(){
+    public function hotel()
+    {
         return $this->belongsTo(Hotel::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

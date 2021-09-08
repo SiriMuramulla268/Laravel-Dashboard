@@ -17,7 +17,8 @@ class RoomAmenity extends Model
         'amenity_id'
     ];
 
-    public function room(){
+    public function room()
+    {
         return $this->belongsTo(Room::class);
     }
 }

@@ -29,7 +29,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{route('add-user')}}" method="POST" id="adduser" autocomplete="off"> 
+              <form action="{{route('add-user')}}" method="POST" id="adduser" autocomplete="off" >
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
@@ -42,7 +42,8 @@
                   </div>
                   <div class="form-group">
                     <label for="password">Password</label><span class="text-danger">*</span>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                    <input type="password" class="form-control" id="password" name="password"
+                      placeholder="Enter password">
                   </div>
                   <div class="form-group">
                     <label for="type">Type</label><span class="text-danger">*</span>
@@ -55,7 +56,8 @@
                   </div>
                   <div class="form-group">
                     <label for="mobile">Mobile</label><span class="text-danger">*</span>
-                    <input type="number" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile">
+                    <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile"
+                      maxlength="10">
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -65,7 +67,9 @@
                     <span class="text-success"> {{ session('status') ?? ''  }}</span>
                   @endif
                 </div>
-                
+                @if (session('error'))
+                      <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
               </form>
             </div>
             <!-- /.card -->
@@ -95,7 +99,7 @@
                 minlength: 6
             },
             type: "required",
-            mobile: {   
+            mobile: {
                 required: true,
                 minlength: 10
             },
@@ -113,7 +117,8 @@
             },
             type: "Type is required",
         }
-    }); 
+    });
   });
 </script>
 @endpush
+

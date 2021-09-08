@@ -21,11 +21,13 @@ class BookingDetail extends Model
         'child'
     ];
 
-    public function booking(){
+    public function booking()
+    {
         return $this->belongsTo(Booking::class);
     }
 
-    public function rooms(){
+    public function rooms()
+    {
         return $this->belongsTo(Room::class, 'room_id');
     }
 }

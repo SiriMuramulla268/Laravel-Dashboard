@@ -6,71 +6,70 @@
 		<section class="hero_in general">
 			<div class="wrapper">
 				<div class="container">
-					@if(!$bookings->isEmpty())
+					@if(session('user'))
 					<h1 class="fadeInUp"><span></span>{{ $user->name }}</h1>
 					@endif
-				</div> 
+				</div>
 			</div>
 		</section>
 		<!--/hero_in-->
 
 		<div class="container margin_60_35">
-        @if(!$bookings->isEmpty())
-			<div class="row">
-                @foreach($bookings as $data)
-					@php
-						$response = json_decode(str_replace("Stripe\Charge JSON: ",'',$data->response),true);
-						$transaction_no = $response['balance_transaction'];
-					@endphp
-                <div class="col-lg-6">
-					<article class="blog wow fadeIn">
-						<div class="row no-gutters">
-							<div class="col-lg-5">
-								<figure>
-									<a href="hotel/{{$data->hotel->slug}}/0"><img src="{{asset('img/blog-1.jpg')}}" alt="">
-										<div class="preview"><span>Read more</span></div>
-									</a>
-								</figure>
-							</div>
-							<div class="col-lg-7">
-								<div class="post_info">
-									<span><small><strong>Transaction - {{ $transaction_no }}</strong></small></span>
-									<h3>{{ $data->hotel->name }}</h3>
-                                    <p>
-									Check In - {{ $data->bookingDetail[0]->check_in }}<br>
-									Check Out - {{ $data->bookingDetail[0]->check_out }}<br>
-									Adults - {{ $data->bookingDetail[0]->adult }}<br>
-									Total - {{ $data->hotel->country->currency_symbol }}{{ number_format($data->total) }}	
-									</p>
-                                    
-									<!-- <ul>
-										<li>
-											<div class="thumb"><img src="{{asset('img/thumb_blog.jpg')}}" alt=""></div> {{ $data->user->name }}
-										</li>
-										<li></li>
-									</ul> -->
+		@if(session('user'))
+			@if(!empty($bookings))
+				<div class="row">
+					@foreach($bookings as $data)
+						
+					<div class="col-lg-6">
+						<article class="blog wow fadeIn">
+							<div class="row no-gutters">
+								<div class="col-lg-5">
+									<figure>
+										<a href="hotel/{{$data->hotel->slug}}/0"><img src="{{asset('img/blog-1.jpg')}}" alt="">
+											<div class="preview"><span>Read more</span></div>
+										</a>
+									</figure>
+								</div>
+								<div class="col-lg-7">
+									<div class="post_info">
+										<span><small><strong>Transaction No- {{ $data->response }}</strong></small></span>
+										<h3>{{ $data->hotel->name }}</h3>
+										<p>
+										Check In - {{ $data->bookingDetail[0]->check_in }}<br>
+										Check Out - {{ $data->bookingDetail[0]->check_out }}<br>
+										Adults - {{ $data->bookingDetail[0]->adult }}<br>
+										Total - {{ $data->hotel->country->currency_symbol }}{{ number_format($data->total) }}
+										</p>
+									</div>
 								</div>
 							</div>
-						</div>
-					</article>
-					<!-- /article -->
+						</article>
+						<!-- /article -->
+					</div>
+					@endforeach
 				</div>
-                @endforeach
+				<div class="row">
+					<div class="col-8"></div>
+					<div class="col-4">
+						{{ $bookings->links() }}
+					</div>
+				</div>
+				<!-- /row -->
+			@else
+				<div class="row">
+					<div class="col-lg-12 text-center">
+					No Bookings Found.
+					</div>
+				</div>
+			@endif
+		@else
+		
+			<div class="row">
+				<div class="col-lg-12 text-center">
+				No Bookings Found.
+				</div>
 			</div>
-            <div class="row">
-                <div class="col-8"></div>
-                <div class="col-4">
-                    {{ $bookings->links() }}
-                </div>
-            </div>
-			<!-- /row -->
-        @else
-            <div class="row"> 
-                <div class="col-lg-12 text-center">
-                No Bookings Found.
-                </div>
-            </div>
-        @endif
+		@endif
 		</div>
 		<!-- /container -->
 	</main>

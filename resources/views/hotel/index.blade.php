@@ -72,13 +72,15 @@
 						<div class="box_grid">
 							<figure>
 								<a href="#0" class="wish_bt"></a>
-								<a href="hotel/{{$hotel['slug']}}"><img src="{{asset('img/hotel_1.jpg')}}" class="img-fluid" alt="" alt="" >
+								<a href="hotel/{{$hotel['slug']}}"><img src="{{asset('img/hotel_1.jpg')}}"
+									class="img-fluid" alt="" alt="" >
 								<div class="read_more"><span>Read more</span></div></a>
 								<small class="score"><strong>8.9</strong></small>
 							</figure>
 							<div class="wrapper">
 								<div class="cat_star">
-									<i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i>
+									<i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i>
+									<i class="icon_star"></i>
 								</div>
 								
 								<h3>{{$hotel['name']}}</h3>
@@ -106,7 +108,8 @@
 						<div class="block-vertical"></div>
 						<div class="box_1">
 							<h3>Enjoy a GREAT travel with us</h3>
-							<p>Ius cu tamquam persequeris, eu veniam apeirian platonem qui, id aliquip voluptatibus pri. Ei mea primis ornatus disputationi. Menandri erroribus cu per, duo solet congue ut. </p>
+							<p>Ius cu tamquam persequeris, eu veniam apeirian platonem qui, id aliquip voluptatibus pri.
+								Ei mea primis ornatus disputationi. Menandri erroribus cu per, duo solet congue ut. </p>
 							<a href="#0" class="btn_1 rounded">Read more</a>
 						</div>
 					</div>
@@ -147,7 +150,7 @@
 			'city[]': "Choose City",
 			dates: "Choose Dates",
 		}
-	}); 
+	});
 	</script>
 @endpush
 

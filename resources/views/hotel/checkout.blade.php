@@ -38,16 +38,27 @@
         <!--/hero_in-->
 
         @if(session('_token') == $token)
+
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+            
             <div class="bg_color_1">
                 <div class="container margin_60_35">
-                    <form id="booking" method="post" action="{{ route('booking') }}"  class="require-validation" data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}">
+                    <form id="booking" method="post" action="{{ route('booking') }}"  class="require-validation"
+                        data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}">
                     @csrf
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="box_cart">
-                            <div class="message">
-                                <p>Exisitng Customer? <a href="#sign-in-dialog" id="sign-in" class="login" title="Sign In">Click here to login</a></p>
-                            </div>
+                             
+                            @if( !session('user') )
+                                <div class="message">
+                                    <p>Exisitng Customer? <a href="#sign-in-dialog" id="sign-in" class="login"
+                                        title="Sign In">Click here to login</a></p>
+                                </div>
+                            @endif
+
                             <div class="form_title">
                                 <h3><strong>1</strong>Your Details</h3>
                             </div>
@@ -56,15 +67,20 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" id="name_booking" name="name_booking" value="{{ Session::has('user')? Session::get('user')['name'] : '' }}">
+                                        <input type="text" class="form-control" id="name_booking"
+                                        name="name_booking"
+                                        value="{{ Session::has('user')? Session::get('user')['name'] : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="email" id="email_booking" name="email_booking" class="form-control" value="{{ Session::has('user')? Session::get('user')['email'] : '' }}">
+                                        <input type="email" id="email_booking"
+                                        name="email_booking" class="form-control"
+                                        value="{{ Session::has('user')? Session::get('user')['email'] : '' }}">
                                     </div>
                                 </div>
+                                <input type="hidden" name="type" value="user">
                             </div>
                             @if(session()->has('user'))
                             @else
@@ -72,7 +88,9 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label>Password</label>
-                                        <input type="text" id="password_booking" name="password_booking" class="form-control" value="" placeholder="Password is required for new user">
+                                        <input type="text" id="password_booking" name="password_booking"
+                                        class="form-control" value=""
+                                        placeholder="Password is required for new user">
                                     </div>
                                 </div>
                             </div>
@@ -81,13 +99,17 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Mobile</label>
-                                        <input type="text" id="telephone_booking" name="telephone_booking" class="form-control" value="{{ Session::has('user')? Session::get('user')['mobile'] : '' }}">
+                                        <input type="text" id="telephone_booking"
+                                            name="telephone_booking" class="form-control"
+                                            value="{{ Session::has('user')? Session::get('user')['mobile'] : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text" id="address_booking" name="address_booking" class="form-control" value="{{ Session::has('user')? Session::get('user')['address'] : '' }}">
+                                        <input type="text" id="address_booking"
+                                            name="address_booking" class="form-control"
+                                            value="{{ Session::has('user')? Session::get('user')['address'] : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -101,13 +123,15 @@
                             <div class="step">
                                 <div class="form-group">
                                 <label>Name on card</label>
-                                <input type="text" class="form-control" id="name_card_booking" name="name_card_booking">
+                                <input type="text" class="form-control" id="name_card_booking"
+                                    name="name_card_booking">
                             </div>
                             <div class="row">
                                 <div class="col-md-6 col-sm-12">
                                     <div class="form-group">
                                         <label>Card number</label>
-                                        <input type="text" id="card_number" name="card_number" class="form-control card-number" autocomplete="off">
+                                        <input type="text" id="card_number" name="card_number"
+                                            class="form-control card-number" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-12">
@@ -120,12 +144,14 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" id="expire_month" name="expire_month" class="form-control card-expiry-month" placeholder="MM">
+                                                <input type="text" id="expire_month" name="expire_month"
+                                                    class="form-control card-expiry-month" placeholder="MM">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" id="expire_year" name="expire_year" class="form-control card-expiry-year" placeholder="Year">
+                                                <input type="text" id="expire_year" name="expire_year"
+                                                    class="form-control card-expiry-year" placeholder="Year">
                                             </div>
                                         </div>
                                     </div>
@@ -136,11 +162,14 @@
                                         <div class="row">
                                             <div class="col-4">
                                                 <div class="form-group">
-                                                    <input type="text" id="cvv" name="cvv" class="form-control card-cvc" placeholder="CVV">
+                                                    <input type="text" id="cvv" name="cvv"
+                                                    class="form-control card-cvc" placeholder="CVV">
                                                 </div>
                                             </div>
                                             <div class="col-8">
-                                                <img src="{{asset('img/icon_ccv.gif')}}" width="50" height="29" alt="ccv"><small>Last 3 digits</small>
+                                                <img src="{{asset('img/icon_ccv.gif')}}" width="50" height="29"
+                                                alt="ccv">
+                                                <small>Last 3 digits</small>
                                             </div>
                                         </div>
                                     </div>
@@ -194,19 +223,22 @@
                                     <div class="col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label>City</label>
-                                            <input type="text" id="city_booking" name="city_booking" class="form-control">
+                                            <input type="text" id="city_booking" name="city_booking"
+                                            class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-6">
                                         <div class="form-group">
                                             <label>State</label>
-                                            <input type="text" id="state_booking" name="state_booking" class="form-control">
+                                            <input type="text" id="state_booking" name="state_booking"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-6">
                                         <div class="form-group">
                                             <label>Postal code</label>
-                                            <input type="text" id="postal_code" name="postal_code" class="form-control">
+                                            <input type="text" id="postal_code" name="postal_code"
+                                            class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -220,18 +252,22 @@
                         <aside class="col-lg-4" id="sidebar">
                             <div class="box_detail">
                                 <div class="text-center">
-                                <h5 class="p-3 mb-2 bg-info text-white">{{session('room_details')[0]['hotels']['name']}}</h5>
+                                <h5 class="p-3 mb-2 bg-info text-white">
+                                    {{session('room_details')[0]['hotels']['name']}}
+                                </h5>
                                 </div>
                                 <br>
                                 <div id="total_cart">
-                                    Total <span class="float-right">{{session('currency')}}{{ number_format(session('total'),2) }}</span>
+                                    Total
+                                    <span class="float-right">
+                                        {{session('currency')}}{{ number_format(session('total'),2) }}
+                                    </span>
                                 </div>
                                 <ul class="cart_details">
                                     <li>From <span>{{session('check_in')}}</span></li>
                                     <li>To <span>{{session('check_out')}}</span></li>
                                     <li>Adults <span>{{session('adult')}}</span></li>
                                 </ul>
-                                <!-- <a href="/cart3" class="btn_1 full-width purchase">Purchase</a> <i class="fa fa-spinner fa-spin"></i>-->
                                 <button type="submit" id="purchase" class="add_top_30 btn_1 full-width purchase">
                                 Proceed To Book</button>
                             </div>
@@ -245,7 +281,7 @@
         @else
             <div class="bg_color_1">
                 <div class="container margin_60_35">
-                    <div class="row"> 
+                    <div class="row">
                         <div class="col-lg-12 text-center">
                         Session Expired
                         </div>
@@ -302,9 +338,6 @@
                 
             var $form         = $(".require-validation");
             $('form.require-validation').bind('submit', function(e) {
-                
-                
-
                 var $form         = $(".require-validation"),
                 inputSelector = ['input[type=email]', 'input[type=password]',
                                     'input[type=text]', 'input[type=file]',
@@ -344,7 +377,7 @@
                         .find('.alert')
                         .text(response.error.message);
                 } else {
-                    $('#purchase').html('<span class="spinner-border spinner-border-sm"></span>  Booking Processing...');
+                $('#purchase').html('<span class="spinner-border spinner-border-sm"></span>  Booking Processing...');
                     /* token contains id, last4, and card type */
                     var token = response['id'];
                     $form.find('input[type=text]').empty();
@@ -355,5 +388,8 @@
         });
     </script>
 @endpush
+
+
+
 
    
