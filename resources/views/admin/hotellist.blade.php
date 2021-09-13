@@ -143,7 +143,7 @@
                     <label class="container_check col-md-5">Status
                         <input type="checkbox" id="status" name="status">
                     </label>
-				        </div>
+                </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -153,7 +153,7 @@
             </div>
         </div>
         </div>
-	  </div>
+    </div>
 
     <!-- View Hotel -->
     <div class="modal fade" id="viewHotelModal" tabindex="-1" role="dialog" aria-labelledby="viewHotelModalLabel"
@@ -264,7 +264,7 @@
             </div>
         </div>
         </div>
-	  </div>
+    </div>
 
   </div>
   <!-- /.content-wrapper -->
@@ -346,13 +346,13 @@
   });
 
   function countryChange(){
-		var country_id = $('#country').val();
+    var country_id = $('#country').val();
     $.ajax({
-			url: "{{ route('state-by-country') }}",
-			type: 'get',
+      url: "{{ route('state-by-country') }}",
+      type: 'get',
       data: { id: country_id },
-			dataType: 'json',
-			success: function(res){
+      dataType: 'json',
+      success: function(res){
         $("#state").empty();
         if(res.length > 0){
           $("#state").append("<option value=''>Select State</option>");
@@ -362,18 +362,18 @@
         }else{
           $("#state").append("<option value=''>No State</option>");
         }
-			}
-		});
-	}
+      }
+    });
+  }
 
   function stateChange(){
     var state_id = $('#state').val();
     $.ajax({
-			url: "{{ route('city-by-state') }}",
-			type: 'get',
+      url: "{{ route('city-by-state') }}",
+      type: 'get',
       data: { id: state_id },
-			dataType: 'json',
-			success: function(res){
+      dataType: 'json',
+      success: function(res){
         $("#city").empty();
         if(res.length > 0){
           $("#city").append("<option value=''>Select City</option>");
@@ -383,19 +383,19 @@
         }else{
           $("#city").append("<option value=''>No City</option>");
         }
-			}
-		});
+      }
+    });
   }
 
   function viewHotel(hotel_id){
     var rooms = '';
     $("#viewHotelModal").modal();
     $.ajax({
-			url: "{{ route('view-hotel') }}",
-			type: 'get',
+      url: "{{ route('view-hotel') }}",
+      type: 'get',
       data: { id: hotel_id },
-			dataType: 'json',
-			success: function(res){
+      dataType: 'json',
+      success: function(res){
         $('#view_name').val(res[0].name);
         $('#view_email').val(res[0].email);
         $('#view_country').val(res[0].country_id);
@@ -418,8 +418,8 @@
         if(res[0].status == 1){
           $('input[name=view_status]').attr('checked', true);
         }
-			}
-		});
+      }
+    });
   }
 
   function editHotel(hotel_id){
@@ -427,11 +427,11 @@
     $('#addModalLabel').html('Edit Hotel');
     document.getElementById("addhotel").reset();
     $.ajax({
-			url: "{{ route('view-hotel') }}",
-			type: 'get',
+      url: "{{ route('view-hotel') }}",
+      type: 'get',
       data: { id: hotel_id },
-			dataType: 'json',
-			success: function(res){
+      dataType: 'json',
+      success: function(res){
         $('#name').val(res[0].name);
         $('#email').val(res[0].email);
         $('#country').val(res[0].country_id);
@@ -454,8 +454,8 @@
         if(res[0].status == 1){
           $('input[name=status]').attr('checked', true);
         }
-			}
-		});
+      }
+    });
   }
 
   function addHotelModal(){
@@ -467,4 +467,3 @@
 
 </script>
 @endpush
-

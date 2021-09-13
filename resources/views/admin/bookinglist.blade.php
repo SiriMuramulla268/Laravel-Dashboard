@@ -26,6 +26,7 @@
                   <tr>
                     <th>Booking ID</th>
                     <th>Hotel</th>
+                    <th>User</th>
                     <th>Check-In</th>
                     <th>Check-Out</th>
                     <th>Amount</th>
@@ -96,7 +97,7 @@
             </div>
         </div>
         </div>
-	  </div>
+      </div>
 
 @endsection
 
@@ -117,6 +118,7 @@
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'hotel.name', name: 'hotel.name'},
+                {data: 'user.name', name: 'user.name'},
                 {data: 'check_in', name: 'check_in'},
                 {data: 'check_out',name: 'check_out'},
                 {data: 'total',name: 'total'},

@@ -150,18 +150,18 @@
         .then(function(value) {
             if(value == true){
                 $.ajax({
-                	url: "{{ route('delete-amenity') }}",
-                	type: 'get',
+                    url: "{{ route('delete-amenity') }}",
+                    type: 'get',
                     data: { id: amenity_id },
-                	dataType: 'json',
-                	success: function(res){
+                    dataType: 'json',
+                    success: function(res){
                         if(res.status == 1){
                             toastr.success('', res.message, {timeOut: 1000});
                             $('#table_amenity').DataTable().ajax.reload();
                         }else{
                             toastr.error('',res.message, {timeOut: 1000});
                         }
-                	}
+                    }
                 });
             }
         });

@@ -388,8 +388,3 @@
         });
     </script>
 @endpush
-
-
-
-
-   

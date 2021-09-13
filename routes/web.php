@@ -20,7 +20,7 @@ Auth::routes();
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/', function () {
         return view('admin/adminlogin');
-    });
+    })->name('admin-login');
     Route::post('/logins',[LoginController::class, 'authenticate'])->name('logins');
     Route::get('/logout',[LoginController::class, 'logOut']);
     Route::get('/userform', function () {

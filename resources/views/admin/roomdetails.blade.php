@@ -219,11 +219,11 @@
         // $('#hotel').prop('disabled', true);
         document.getElementById("addroom").reset();
         $.ajax({
-			url: "{{ route('view-room') }}",
-			type: 'get',
+            url: "{{ route('view-room') }}",
+            type: 'get',
             data: { id: room_id },
-			dataType: 'json',
-			success: function(res){
+            dataType: 'json',
+            success: function(res){
                 $('#hotel').val(res.hotel);
                 $('#room_type').val(res.data.type);
                 $('#room_price').val(res.data.price);
@@ -236,9 +236,8 @@
                    values.push(res.amenities[i].id)
                 }
                 $('.selectpicker').selectpicker('val', values);
-			}
-		});
+            }
+        });
     }
 </script>
 @endpush
-

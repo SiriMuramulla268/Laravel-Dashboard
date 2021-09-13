@@ -383,6 +383,7 @@ class AdminController extends Controller
     public function getbookings(Request $request)
     {
         $getBookings = Booking::with(['hotel', 'user', 'bookingDetail'])->orderBy('id', 'DESC')->get();
+        
         if ($getBookings) {
           return Datatables::of($getBookings)
             ->addIndexColumn()

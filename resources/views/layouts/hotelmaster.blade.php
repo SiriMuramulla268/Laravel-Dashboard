@@ -22,7 +22,7 @@
     <!-- BASE CSS -->
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
-	<link href="{{asset('css/vendors.css')}}" rel="stylesheet">
+    <link href="{{asset('css/vendors.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- ALTERNATIVE COLORS CSS -->
@@ -186,7 +186,7 @@
                 </div>
             </div>
         </footer>
-	    <!--/footer-->
+        <!--/footer-->
        
     </div>
 
@@ -230,8 +230,8 @@
     
 
     <div id="toTop"></div><!-- Back to top button -->
-	
-	<!-- COMMON SCRIPTS -->
+    
+    <!-- COMMON SCRIPTS -->
     <script src="{{asset('js/common_scripts.js')}}"></script>
     <script src="{{asset('js/main.js')}}"></script>
     
@@ -241,13 +241,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 
     <!-- SPECIFIC SCRIPTS -->
-	<!-- <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6Vck_vRXDPR8ILH8ZLOeGSEz_n4YR0mU"></script> -->
+    <!-- <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6Vck_vRXDPR8ILH8ZLOeGSEz_n4YR0mU"></script> -->
 
-	<script src="{{asset('js/mapmarker.jquery.js')}}"></script>
-	<script src="{{asset('js/mapmarker_func.jquery.js')}}"></script>
+    <script src="{{asset('js/mapmarker.jquery.js')}}"></script>
+    <script src="{{asset('js/mapmarker_func.jquery.js')}}"></script>
     <!-- Map -->
     <!-- <script src="{{asset('js/map_single_hotel.js')}}"></script>
-	<script src="{{asset('js/infobox.js')}}"></script>
+    <script src="{{asset('js/infobox.js')}}"></script>
      -->
    
     <!-- Datepicker -->
@@ -263,7 +263,7 @@
     @stack('checkout.blade-scripts')
    
     <!-- INPUT QUANTITY  -->
-	<script src="{{asset('js/input_qty.js')}}"></script>
+    <script src="{{asset('js/input_qty.js')}}"></script>
 
     <script>
         function signin(){
@@ -304,4 +304,3 @@
 </body>
 
 </html>
-
